@@ -14,8 +14,9 @@ import { Separator } from "@/components/ui/separator";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import Image from 'next/image';
-import { CreditCard, ShoppingCart, Wallet, Phone, IndianRupee } from "lucide-react";
+import { ShoppingCart, Phone, IndianRupee, MapPin } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
+import { Input } from "./ui/input";
 
 const cartItems = [
     { name: 'Biryani Non Veg (Full)', price: 200, quantity: 1, imageId: 'biryani-non-veg' },
@@ -85,19 +86,16 @@ export default function Cart() {
                     </div>
                 </div>
                 <Separator />
+                 <div>
+                    <h4 className="font-medium mb-4">Delivery Location</h4>
+                    <div className="relative">
+                        <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                        <Input type="text" placeholder="Enter your full address" className="pl-10" />
+                    </div>
+                </div>
                 <div>
                   <h4 className="font-medium mb-4">Payment Method</h4>
                    <RadioGroup defaultValue="cod" className="grid grid-cols-1 gap-4">
-                    <Label htmlFor="card" className="flex items-center gap-4 rounded-md border p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer">
-                      <RadioGroupItem value="card" id="card" />
-                      <CreditCard className="h-5 w-5" />
-                      <span>Card Payment</span>
-                    </Label>
-                    <Label htmlFor="wallet" className="flex items-center gap-4 rounded-md border p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer">
-                      <RadioGroupItem value="wallet" id="wallet" />
-                      <Wallet className="h-5 w-5" />
-                      <span>Digital Wallets</span>
-                    </Label>
                      <Label htmlFor="phone" className="flex items-center gap-4 rounded-md border p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer">
                       <RadioGroupItem value="phone" id="phone" />
                       <Phone className="h-5 w-5" />
