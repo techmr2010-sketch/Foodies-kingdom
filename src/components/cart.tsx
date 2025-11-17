@@ -15,7 +15,7 @@ import { Separator } from "@/components/ui/separator";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import Image from 'next/image';
-import { ShoppingCart, Phone, IndianRupee, MapPin, Trash2 } from "lucide-react";
+import { ShoppingCart, Phone, IndianRupee, Trash2 } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import { Input } from "./ui/input";
 import { useToast } from '@/hooks/use-toast';
@@ -181,18 +181,7 @@ export default function Cart({ children }: { children?: React.ReactNode }) {
                         </div>
                     </div>
                     <Separator />
-                     {paymentMethod === 'cod' && (
-                        <div>
-                            <h4 className="font-medium mb-2">Your Name</h4>
-                            <Input
-                                type="text"
-                                placeholder="Enter your name"
-                                value={customerName}
-                                onChange={(e) => setCustomerName(e.target.value)}
-                                required
-                            />
-                        </div>
-                    )}
+                     
                     <div>
                         <h4 className="font-medium mb-2">Delivery Location</h4>
                         <div className="flex gap-2">
@@ -210,6 +199,18 @@ export default function Cart({ children }: { children?: React.ReactNode }) {
                             </Button>
                         </div>
                     </div>
+                     {paymentMethod === 'cod' && (
+                        <div>
+                            <h4 className="font-medium mb-2">Your Name</h4>
+                            <Input
+                                type="text"
+                                placeholder="Enter your name"
+                                value={customerName}
+                                onChange={(e) => setCustomerName(e.target.value)}
+                                required
+                            />
+                        </div>
+                    )}
                     <div>
                     <h4 className="font-medium mb-4">Payment Method</h4>
                     <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod} className="grid grid-cols-1 gap-4">
