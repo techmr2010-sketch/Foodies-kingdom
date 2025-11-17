@@ -3,6 +3,7 @@ import Hero from '@/components/hero';
 import Recommendations from '@/components/recommendations';
 import MenuDisplay from '@/components/menu-display';
 import Footer from '@/components/footer';
+import Partners from '@/components/partners';
 
 export default function Home() {
   return (
@@ -12,6 +13,7 @@ export default function Home() {
         <Hero />
         <Recommendations />
         <MenuDisplay />
+        <Partners />
       </main>
       <Footer />
     </div>

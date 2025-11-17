@@ -21,6 +21,9 @@ export default function Header() {
             <Button variant="link" asChild>
               <Link href="#recommendations">For You</Link>
             </Button>
+            <Button variant="link" asChild>
+              <Link href="#partners">Partners</Link>
+            </Button>
              <Button variant="link" asChild>
               <Link href="#">Track Order</Link>
             </Button>

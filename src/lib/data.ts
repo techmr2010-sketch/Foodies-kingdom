@@ -10,6 +10,8 @@ export type MenuItem = {
   category: string[];
   options: MenuItemOption[];
   imageId: string;
+  location?: string;
+  restaurant?: string;
 };
 
 export const menuData: MenuItem[] = [
@@ -23,6 +25,8 @@ export const menuData: MenuItem[] = [
       { name: 'Full', price: 200 },
     ],
     imageId: 'biryani-non-veg',
+    location: 'Moolchand, New Delhi',
+    restaurant: 'Biryani Blues',
   },
   {
     id: '2',
@@ -34,6 +38,8 @@ export const menuData: MenuItem[] = [
       { name: 'Full', price: 150 },
     ],
     imageId: 'biryani-veg',
+    location: 'Moolchand, New Delhi',
+    restaurant: 'Biryani Blues',
   },
   {
     id: '3',
@@ -45,6 +51,8 @@ export const menuData: MenuItem[] = [
       { name: 'Full', price: 120 },
     ],
     imageId: 'fried-rice',
+    location: 'Moolchand, New Delhi',
+    restaurant: 'Wok Hei',
   },
   {
     id: '4',
@@ -56,6 +64,8 @@ export const menuData: MenuItem[] = [
       { name: 'Full', price: 280 },
     ],
     imageId: 'chicken-fried-rice',
+    location: 'Moolchand, New Delhi',
+    restaurant: 'Wok Hei',
   },
   {
     id: '5',
@@ -67,6 +77,8 @@ export const menuData: MenuItem[] = [
       { name: 'Full', price: 100 },
     ],
     imageId: 'momos-veg-steam',
+    restaurant: 'Momo Magic',
+    location: 'Lajpat Nagar, New Delhi',
   },
   {
     id: '6',
@@ -78,6 +90,8 @@ export const menuData: MenuItem[] = [
       { name: 'Full', price: 110 },
     ],
     imageId: 'momos-veg-fry',
+    restaurant: 'Momo Magic',
+    location: 'Lajpat Nagar, New Delhi',
   },
   {
     id: '7',
@@ -89,6 +103,8 @@ export const menuData: MenuItem[] = [
       { name: 'Full', price: 120 },
     ],
     imageId: 'momos-non-veg-steam',
+    restaurant: 'Momo Magic',
+    location: 'Lajpat Nagar, New Delhi',
   },
   {
     id: '8',
@@ -100,6 +116,8 @@ export const menuData: MenuItem[] = [
       { name: 'Full', price: 130 },
     ],
     imageId: 'momos-non-veg-fry',
+    restaurant: 'Momo Magic',
+    location: 'Lajpat Nagar, New Delhi',
   },
   {
     id: '9',
@@ -111,6 +129,8 @@ export const menuData: MenuItem[] = [
       { name: '2 Piece', price: 90 },
     ],
     imageId: 'roll-veg',
+    restaurant: 'Roll Express',
+    location: 'Hauz Khas, New Delhi',
   },
   {
     id: '10',
@@ -122,6 +142,8 @@ export const menuData: MenuItem[] = [
       { name: '2 Piece', price: 110 },
     ],
     imageId: 'roll-egg',
+    restaurant: 'Roll Express',
+    location: 'Hauz Khas, New Delhi',
   },
   {
     id: '11',
@@ -133,6 +155,8 @@ export const menuData: MenuItem[] = [
       { name: 'Full', price: 100 },
     ],
     imageId: 'french-fries',
+    restaurant: 'Snack Shack',
+    location: 'Connaught Place, New Delhi',
   },
   {
     id: '12',
@@ -144,6 +168,8 @@ export const menuData: MenuItem[] = [
       { name: 'Full', price: 140 },
     ],
     imageId: 'chilly-potato',
+    restaurant: 'Wok Hei',
+    location: 'Moolchand, New Delhi',
   },
   {
     id: '13',
@@ -155,6 +181,8 @@ export const menuData: MenuItem[] = [
       { name: 'Full', price: 160 },
     ],
     imageId: 'honey-chilly-potato',
+    restaurant: 'Wok Hei',
+    location: 'Moolchand, New Delhi',
   },
   {
     id: '14',
@@ -166,6 +194,8 @@ export const menuData: MenuItem[] = [
       { name: 'Full', price: 140 },
     ],
     imageId: 'noodles',
+    restaurant: 'Wok Hei',
+    location: 'Moolchand, New Delhi',
   },
   {
     id: '15',
@@ -177,6 +207,8 @@ export const menuData: MenuItem[] = [
       { name: 'Full', price: 80 },
     ],
     imageId: 'maggi',
+    restaurant: 'Snack Shack',
+    location: 'Connaught Place, New Delhi',
   },
   {
     id: '16',
@@ -188,6 +220,8 @@ export const menuData: MenuItem[] = [
       { name: '2 Pieces', price: 30 },
     ],
     imageId: 'samosa',
+    restaurant: 'Snack Shack',
+    location: 'Connaught Place, New Delhi',
   },
   {
     id: '17',
@@ -199,9 +233,19 @@ export const menuData: MenuItem[] = [
       { name: '2 Pieces', price: 30 },
     ],
     imageId: 'bread-pakoda',
+    restaurant: 'Snack Shack',
+    location: 'Connaught Place, New Delhi',
   },
 ];
 
 export const foodCategories = [
   'all', 'veg', 'non-veg', 'biryani', 'rice', 'momos', 'roll', 'snack', 'main course'
-]
+];
+
+export const restaurantPartners = [
+    { name: 'Biryani Blues', location: 'Moolchand, New Delhi', specialty: 'Biryani' },
+    { name: 'Wok Hei', location: 'Moolchand, New Delhi', specialty: 'Chinese' },
+    { name: 'Momo Magic', location: 'Lajpat Nagar, New Delhi', specialty: 'Momos' },
+    { name: 'Roll Express', location: 'Hauz Khas, New Delhi', specialty: 'Rolls' },
+    { name: 'Snack Shack', location: 'Connaught Place, New Delhi', specialty: 'Snacks' },
+];

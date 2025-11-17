@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import type { MenuItem } from '@/lib/data';
-import { Leaf, Drumstick, PlusCircle, MapPin } from 'lucide-react';
+import { Leaf, Drumstick, PlusCircle, MapPin, Building } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 
 type MenuItemCardProps = {
@@ -16,7 +16,7 @@ type MenuItemCardProps = {
 export default function MenuItemCard({ item }: MenuItemCardProps) {
   const { toast } = useToast();
   const image = PlaceHolderImages.find(img => img.id === item.imageId);
-  const isLocal = ['1', '2', '3', '4'].includes(item.id); // Mock logic for local restaurant
+  const isLocal = item.location === 'Moolchand, New Delhi';
 
   const handleAddToCart = () => {
     toast({
@@ -54,6 +54,12 @@ export default function MenuItemCard({ item }: MenuItemCardProps) {
       </CardHeader>
       <CardContent className="p-4 flex-grow">
         <CardTitle className="text-xl mb-2 font-headline">{item.name}</CardTitle>
+        {item.restaurant && (
+          <div className="flex items-center text-sm text-muted-foreground mb-2">
+            <Building className="h-4 w-4 mr-2" />
+            <span>{item.restaurant}</span>
+          </div>
+        )}
         <div className="text-sm text-muted-foreground space-y-1">
           {item.options.map(option => (
             <div key={option.name} className="flex justify-between items-center">
