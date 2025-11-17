@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import type { MenuItem } from '@/lib/data';
-import { Leaf, Drumstick, PlusCircle, MapPin, Building } from 'lucide-react';
+import { Leaf, Drumstick, PlusCircle, MapPin, Building, IndianRupee } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 
 type MenuItemCardProps = {
@@ -64,7 +64,7 @@ export default function MenuItemCard({ item }: MenuItemCardProps) {
           {item.options.map(option => (
             <div key={option.name} className="flex justify-between items-center">
               <span>{option.name}</span>
-              <span className="font-semibold text-foreground">₹{option.price}</span>
+              <span className="font-semibold text-foreground flex items-center"><IndianRupee className="h-4 w-4 mr-1" />{option.price}</span>
             </div>
           ))}
         </div>

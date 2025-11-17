@@ -14,7 +14,7 @@ import { Separator } from "@/components/ui/separator";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import Image from 'next/image';
-import { CreditCard, ShoppingCart, Wallet, Phone } from "lucide-react";
+import { CreditCard, ShoppingCart, Wallet, Phone, IndianRupee } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 
 const cartItems = [
@@ -62,7 +62,7 @@ export default function Cart() {
                                 <p className="text-sm text-muted-foreground">Qty: {item.quantity}</p>
                             </div>
                         </div>
-                        <p className="font-medium">₹{item.price * item.quantity}</p>
+                        <p className="font-medium flex items-center"><IndianRupee className="h-4 w-4 mr-1" />{item.price * item.quantity}</p>
                     </div>
                 ))}
             </div>
@@ -73,7 +73,7 @@ export default function Cart() {
                 <div className="space-y-2">
                     <div className="flex justify-between">
                         <p className="text-muted-foreground">Subtotal</p>
-                        <p>₹{subtotal.toFixed(2)}</p>
+                        <p className="flex items-center"><IndianRupee className="h-4 w-4 mr-1" />{subtotal.toFixed(2)}</p>
                     </div>
                     <div className="flex justify-between">
                         <p className="text-muted-foreground">Delivery</p>
@@ -81,7 +81,7 @@ export default function Cart() {
                     </div>
                     <div className="flex justify-between font-bold text-lg">
                         <p>Total</p>
-                        <p>₹{total.toFixed(2)}</p>
+                        <p className="flex items-center"><IndianRupee className="h-5 w-5 mr-1" />{total.toFixed(2)}</p>
                     </div>
                 </div>
                 <Separator />
