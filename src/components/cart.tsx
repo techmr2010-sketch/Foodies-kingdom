@@ -15,17 +15,15 @@ import { Separator } from "@/components/ui/separator";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import Image from 'next/image';
-import { ShoppingCart, Phone, IndianRupee, MapPin } from "lucide-react";
+import { ShoppingCart, Phone, IndianRupee, MapPin, Trash2 } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import { Input } from "./ui/input";
 import { useToast } from '@/hooks/use-toast';
+import { useCart } from '@/context/cart-context';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
 
-const cartItems = [
-    { name: 'Biryani Non Veg (Full)', price: 200, quantity: 1, imageId: 'biryani-non-veg' },
-    { name: 'Momos Veg Fry (Half)', price: 60, quantity: 1, imageId: 'momos-veg-fry' },
-];
-
-export default function Cart() {
+export default function Cart({ children }: { children?: React.ReactNode }) {
+    const { cartItems, removeFromCart, clearCart } = useCart();
     const { toast } = useToast();
     const [deliveryAddress, setDeliveryAddress] = useState('');
     const [addressSubmitted, setAddressSubmitted] = useState(false);
@@ -67,7 +65,7 @@ export default function Cart() {
             return;
         }
 
-        const orderDetails = cartItems.map(item => `${item.quantity} x ${item.name}`).join('\n');
+        const orderDetails = cartItems.map(item => `${item.quantity} x ${item.name} (${item.option})`).join('\n');
         const message = `New Order from Foodie Kingdom:\n\nItems:\n${orderDetails}\n\nTotal: ₹${total.toFixed(2)}\n\nDelivery Address: ${deliveryAddress}\n\nPayment Method: ${paymentMethod === 'cod' ? 'Cash on Delivery' : 'Prepaid'}`;
         const encodedMessage = encodeURIComponent(message);
         const ownerWhatsappUrl = `https://wa.me/919310364770?text=${encodedMessage}`;
@@ -82,7 +80,12 @@ export default function Cart() {
             title: "Order Placed!",
             description: "Your order details have been sent. The delivery partner will coordinate with you.",
         });
+        clearCart();
+        setAddressSubmitted(false);
+        setDeliveryAddress('');
     };
+    
+    const totalQuantity = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
     <Sheet>
@@ -90,13 +93,14 @@ export default function Cart() {
         <Button variant="ghost" size="icon" className="relative">
           <ShoppingCart className="h-6 w-6" />
           <span className="sr-only">Open Cart</span>
-          {cartItems.length > 0 && (
+          {totalQuantity > 0 && (
             <div className="absolute top-0 right-0 -mt-1 -mr-1 flex items-center justify-center h-5 w-5 rounded-full bg-primary text-primary-foreground text-xs font-bold">
-                {cartItems.reduce((acc, item) => acc + item.quantity, 0)}
+                {totalQuantity}
             </div>
           )}
         </Button>
       </SheetTrigger>
+      {children}
       <SheetContent className="w-[400px] sm:w-[540px] flex flex-col">
         <SheetHeader>
           <SheetTitle>Your Order</SheetTitle>
@@ -104,27 +108,36 @@ export default function Cart() {
             Review your items and proceed to checkout.
           </SheetDescription>
         </SheetHeader>
-        <div className="flex-grow overflow-y-auto pr-4">
+        <div className="flex-grow overflow-y-auto pr-4 -mr-4">
             {cartItems.length > 0 ? (
                 <div className="space-y-4">
-                    {cartItems.map((item) => (
-                        <div key={item.name} className="flex items-center justify-between">
-                            <div className="flex items-center gap-4">
-                                <Image 
-                                    src={`https://picsum.photos/seed/${item.imageId}/100/100`}
-                                    alt={item.name}
-                                    width={64}
-                                    height={64}
-                                    className="rounded-md object-cover"
-                                />
-                                <div>
-                                    <p className="font-medium">{item.name}</p>
-                                    <p className="text-sm text-muted-foreground">Qty: {item.quantity}</p>
+                    {cartItems.map((item) => {
+                        const image = PlaceHolderImages.find(img => img.id === item.imageId);
+                        return (
+                            <div key={item.id} className="flex items-center justify-between">
+                                <div className="flex items-center gap-4">
+                                    {image && <Image 
+                                        src={image.imageUrl}
+                                        alt={item.name}
+                                        width={64}
+                                        height={64}
+                                        className="rounded-md object-cover"
+                                    />}
+                                    <div>
+                                        <p className="font-medium">{item.name}</p>
+                                        <p className="text-sm text-muted-foreground">{item.option}</p>
+                                        <p className="text-sm text-muted-foreground">Qty: {item.quantity}</p>
+                                    </div>
+                                </div>
+                                <div className='flex items-center gap-2'>
+                                    <p className="font-medium flex items-center"><IndianRupee className="h-4 w-4 mr-1" />{item.price * item.quantity}</p>
+                                    <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground" onClick={() => removeFromCart(item.id)}>
+                                        <Trash2 className="h-4 w-4" />
+                                    </Button>
                                 </div>
                             </div>
-                            <p className="font-medium flex items-center"><IndianRupee className="h-4 w-4 mr-1" />{item.price * item.quantity}</p>
-                        </div>
-                    ))}
+                        )
+                    })}
                 </div>
             ) : (
                 <div className="flex flex-col items-center justify-center h-full text-center">

@@ -16,6 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { useState } from 'react';
+import { useCart } from '@/context/cart-context';
 
 type MenuItemCardProps = {
   item: MenuItem;
@@ -23,14 +24,21 @@ type MenuItemCardProps = {
 
 export default function MenuItemCard({ item }: MenuItemCardProps) {
   const { toast } = useToast();
+  const { addToCart } = useCart();
   const image = PlaceHolderImages.find(img => img.id === item.imageId);
   const isLocal = item.location === 'Moolchand, New Delhi';
   const [selectedOption, setSelectedOption] = useState(item.options[0]);
 
   const handleAddToCart = () => {
-    // In a real app, you would add this to a global cart state.
-    // For now, we just show a toast.
-    console.log('Added to cart:', { ...item, selectedOption });
+    const cartItem = {
+        id: `${item.id}-${selectedOption.name}`,
+        name: item.name,
+        price: selectedOption.price,
+        quantity: 1,
+        imageId: item.imageId,
+        option: selectedOption.name
+    }
+    addToCart(cartItem);
     toast({
       title: "Added to cart!",
       description: `${item.name} (${selectedOption.name}) has been added to your order.`,
