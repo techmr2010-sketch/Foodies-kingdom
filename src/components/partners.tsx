@@ -1,8 +1,8 @@
 'use client';
 
-import { restaurantPartners } from '@/lib/data';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { Building, MapPin, Utensils } from 'lucide-react';
+import { restaurantPartners, deliveryPartners } from '@/lib/data';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from './ui/card';
+import { Building, MapPin, Utensils, User, Phone, Bike } from 'lucide-react';
 
 export default function Partners() {
   return (
@@ -16,6 +16,7 @@ export default function Partners() {
           <Card key={partner.name} className="flex flex-col">
             <CardHeader>
               <CardTitle className="font-headline text-xl">{partner.name}</CardTitle>
+               {partner.owner !== 'N/A' && <CardDescription>Owner: {partner.owner}</CardDescription>}
             </CardHeader>
             <CardContent className="space-y-2 text-muted-foreground">
               <div className="flex items-center">
@@ -25,6 +26,28 @@ export default function Partners() {
               <div className="flex items-center">
                 <Utensils className="h-4 w-4 mr-2" />
                 <span>Specialty: {partner.specialty}</span>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+         {deliveryPartners.map((partner) => (
+          <Card key={partner.name} className="flex flex-col bg-secondary/50">
+            <CardHeader>
+              <CardTitle className="font-headline text-xl">Delivery Partner</CardTitle>
+              <CardDescription>Our trusted delivery professional.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-2 text-muted-foreground">
+              <div className="flex items-center">
+                <User className="h-4 w-4 mr-2" />
+                <span>{partner.name}</span>
+              </div>
+              <div className="flex items-center">
+                <Phone className="h-4 w-4 mr-2" />
+                <span>{partner.phone}</span>
+              </div>
+              <div className="flex items-center">
+                <Bike className="h-4 w-4 mr-2" />
+                <span className='capitalize'>{partner.vehicle}</span>
               </div>
             </CardContent>
           </Card>

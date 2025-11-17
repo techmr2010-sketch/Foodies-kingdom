@@ -6,15 +6,16 @@ import {
   SheetDescription,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
-  SheetFooter
+  SheetFooter,
+  SheetTrigger
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import Image from 'next/image';
-import { CreditCard, ShoppingCart, Wallet } from "lucide-react";
+import { CreditCard, ShoppingCart, Wallet, Phone } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 
 const cartItems = [
     { name: 'Biryani Non Veg (Full)', price: 200, quantity: 1, imageId: 'biryani-non-veg' },
@@ -97,6 +98,11 @@ export default function Cart() {
                       <Wallet className="h-5 w-5" />
                       <span>Digital Wallets</span>
                     </Label>
+                     <Label htmlFor="phone" className="flex items-center gap-4 rounded-md border p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer">
+                      <RadioGroupItem value="phone" id="phone" />
+                      <Phone className="h-5 w-5" />
+                      <span>Pay by Phone (+91 93103 64770)</span>
+                    </Label>
                     <Label htmlFor="cod" className="flex items-center gap-4 rounded-md border p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer">
                       <RadioGroupItem value="cod" id="cod" />
                       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-banknote"><rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg>
@@ -104,6 +110,13 @@ export default function Cart() {
                     </Label>
                   </RadioGroup>
                 </div>
+                <Alert>
+                    <Phone className="h-4 w-4" />
+                    <AlertTitle>Delivery Contact</AlertTitle>
+                    <AlertDescription>
+                        To coordinate your delivery, please call Mohit at <strong>8178480946</strong>.
+                    </AlertDescription>
+                </Alert>
                 <Button className="w-full text-lg" size="lg">Place Order</Button>
             </div>
         </SheetFooter>
