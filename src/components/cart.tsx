@@ -28,7 +28,7 @@ export default function Cart({ children }: { children?: React.ReactNode }) {
     const [customerName, setCustomerName] = useState('');
     const [deliveryAddress, setDeliveryAddress] = useState('');
     const [addressSubmitted, setAddressSubmitted] = useState(false);
-    const [paymentMethod, setPaymentMethod] = useState('cod');
+    const [paymentMethod, setPaymentMethod] = useState('phone');
 
     const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
     const deliveryFee = 0; // Free delivery!
@@ -57,30 +57,34 @@ export default function Cart({ children }: { children?: React.ReactNode }) {
     }
 
     const handlePlaceOrder = () => {
-        if (!addressSubmitted) {
-            toast({
+        if (paymentMethod === 'cod' && (!customerName || !deliveryAddress)) {
+             toast({
+                variant: "destructive",
+                title: "Information Missing",
+                description: "Please enter your name and address for Cash on Delivery.",
+            });
+            return;
+        }
+
+        if (paymentMethod !== 'cod' && !addressSubmitted) {
+             toast({
                 variant: "destructive",
                 title: "Address Not Submitted",
                 description: "Please submit your delivery address first.",
             });
             return;
         }
-        
-        if (paymentMethod === 'cod' && !customerName) {
-            toast({
-                variant: "destructive",
-                title: "Name Missing",
-                description: "Please enter your name for Cash on Delivery.",
-            });
-            return;
-        }
+
 
         const orderDetails = cartItems.map(item => `${item.quantity} x ${item.name} (${item.option})`).join('\n');
-        
-        const paymentMethodText = paymentMethod === 'cod' ? 'Cash on Delivery' : 'Prepaid';
-        const customerNameText = paymentMethod === 'cod' ? `Customer Name: ${customerName}\n` : '';
+        let message;
 
-        const message = `New Order from Foodie Kingdom:\n\n${customerNameText}Items:\n${orderDetails}\n\nTotal: ₹${total.toFixed(2)}\n\nDelivery Address: ${deliveryAddress}\n\nPayment Method: ${paymentMethodText}`;
+        if (paymentMethod === 'cod') {
+             message = `New COD Order from Foodie Kingdom:\n\nCustomer Name: ${customerName}\nAddress: ${deliveryAddress}\n\nItems:\n${orderDetails}\n\nTotal: ₹${total.toFixed(2)}\n\nPayment Method: Cash on Delivery`;
+        } else {
+             message = `New Order from Foodie Kingdom:\n\nItems:\n${orderDetails}\n\nTotal: ₹${total.toFixed(2)}\n\nDelivery Address: ${deliveryAddress}\n\nPayment Method: Prepaid (UPI)`;
+        }
+       
         const encodedMessage = encodeURIComponent(message);
         const ownerWhatsappUrl = `https://wa.me/919310364770?text=${encodedMessage}`;
 
@@ -181,61 +185,80 @@ export default function Cart({ children }: { children?: React.ReactNode }) {
                         </div>
                     </div>
                     <Separator />
-                     
+                    
                     <div>
-                        <h4 className="font-medium mb-2">Delivery Location</h4>
-                        <div className="flex gap-2">
-                            <Input 
-                                type="text" 
-                                placeholder="Enter your full address" 
-                                className="flex-grow" 
-                                value={deliveryAddress}
-                                onChange={(e) => setDeliveryAddress(e.target.value)}
-                                required
-                                disabled={addressSubmitted}
-                            />
-                             <Button onClick={handleAddressSubmit} disabled={addressSubmitted}>
-                                {addressSubmitted ? 'Submitted' : 'Submit'}
+                        <h4 className="font-medium mb-4">Payment Method</h4>
+                        <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod} className="grid grid-cols-1 gap-4">
+                            <Label htmlFor="phone" className="flex items-center gap-4 rounded-md border p-4 cursor-pointer hover:bg-accent hover:text-accent-foreground has-[input:checked]:bg-accent has-[input:checked]:text-accent-foreground">
+                                <RadioGroupItem value="phone" id="phone" />
+                                <Phone className="h-5 w-5" />
+                                <span>Pay by Phone (UPI)</span>
+                            </Label>
+                            <Label htmlFor="cod" className="flex items-center gap-4 rounded-md border p-4 cursor-pointer hover:bg-accent hover:text-accent-foreground has-[input:checked]:bg-accent has-[input:checked]:text-accent-foreground">
+                                <RadioGroupItem value="cod" id="cod" />
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-banknote"><rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg>
+                                <span>Cash on Delivery</span>
+                            </Label>
+                        </RadioGroup>
+                    </div>
+
+                    {paymentMethod === 'cod' ? (
+                        <div className="space-y-4">
+                             <div>
+                                <h4 className="font-medium mb-2">Your Name</h4>
+                                <Input
+                                    type="text"
+                                    placeholder="Enter your name"
+                                    value={customerName}
+                                    onChange={(e) => setCustomerName(e.target.value)}
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <h4 className="font-medium mb-2">Delivery Address</h4>
+                                <Input
+                                    type="text"
+                                    placeholder="Enter your full address"
+                                    value={deliveryAddress}
+                                    onChange={(e) => setDeliveryAddress(e.target.value)}
+                                    required
+                                />
+                            </div>
+                            <Button className="w-full text-lg" size="lg" onClick={handlePlaceOrder}>
+                                Submit and Place COD Order
                             </Button>
                         </div>
-                    </div>
-                     {paymentMethod === 'cod' && (
-                        <div>
-                            <h4 className="font-medium mb-2">Your Name</h4>
-                            <Input
-                                type="text"
-                                placeholder="Enter your name"
-                                value={customerName}
-                                onChange={(e) => setCustomerName(e.target.value)}
-                                required
-                            />
+                    ) : (
+                        <div className='space-y-4'>
+                            <div>
+                                <h4 className="font-medium mb-2">Delivery Location</h4>
+                                <div className="flex gap-2">
+                                    <Input 
+                                        type="text" 
+                                        placeholder="Enter your full address" 
+                                        className="flex-grow" 
+                                        value={deliveryAddress}
+                                        onChange={(e) => setDeliveryAddress(e.target.value)}
+                                        required
+                                        disabled={addressSubmitted}
+                                    />
+                                    <Button onClick={handleAddressSubmit} disabled={addressSubmitted}>
+                                        {addressSubmitted ? 'Submitted' : 'Submit'}
+                                    </Button>
+                                </div>
+                            </div>
+                             <Alert>
+                                <Phone className="h-4 w-4" />
+                                <AlertTitle>Delivery Contact</AlertTitle>
+                                <AlertDescription>
+                                    To coordinate your delivery, please call Mohit at <strong>8178480946</strong>.
+                                </AlertDescription>
+                            </Alert>
+                            <Button className="w-full text-lg" size="lg" onClick={handlePlaceOrder} disabled={!addressSubmitted}>
+                                Proceed to Pay with UPI
+                            </Button>
                         </div>
                     )}
-                    <div>
-                    <h4 className="font-medium mb-4">Payment Method</h4>
-                    <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod} className="grid grid-cols-1 gap-4">
-                        <Label htmlFor="phone" className={`flex items-center gap-4 rounded-md border p-4 hover:bg-accent hover:text-accent-foreground has-[input:checked]:bg-accent has-[input:checked]:text-accent-foreground ${!addressSubmitted ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}>
-                        <RadioGroupItem value="phone" id="phone" disabled={!addressSubmitted} />
-                        <Phone className="h-5 w-5" />
-                        <span>Pay by Phone (UPI)</span>
-                        </Label>
-                        <Label htmlFor="cod" className={`flex items-center gap-4 rounded-md border p-4 hover:bg-accent hover:text-accent-foreground has-[input:checked]:bg-accent has-[input:checked]:text-accent-foreground ${!addressSubmitted ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}>
-                        <RadioGroupItem value="cod" id="cod" disabled={!addressSubmitted}/>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-banknote"><rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg>
-                        <span>Cash on Delivery</span>
-                        </Label>
-                    </RadioGroup>
-                    </div>
-                    <Alert>
-                        <Phone className="h-4 w-4" />
-                        <AlertTitle>Delivery Contact</AlertTitle>
-                        <AlertDescription>
-                            To coordinate your delivery, please call Mohit at <strong>8178480946</strong>.
-                        </AlertDescription>
-                    </Alert>
-                    <Button className="w-full text-lg" size="lg" onClick={handlePlaceOrder} disabled={!addressSubmitted}>
-                    Place Order
-                    </Button>
                 </div>
             </SheetFooter>
         )}
