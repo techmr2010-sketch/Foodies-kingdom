@@ -1,3 +1,112 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "hero",
+      "description": "A vibrant collage of various delicious food items.",
+      "imageUrl": "https://images.unsplash.com/photo-1713288971605-92a285c20f56?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxmb29kJTIwY29sbGFnZXxlbnwwfHx8fDE3NjMzNzk4NzR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "food collage"
+    },
+    {
+      "id": "biryani-non-veg",
+      "description": "Aromatic non-vegetarian biryani.",
+      "imageUrl": "https://images.unsplash.com/photo-1691170979035-27e5ec943205?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxiaXJ5YW5pJTIwY2hpY2tlbnxlbnwwfHx8fDE3NjMzODMwNTh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "biryani chicken"
+    },
+    {
+      "id": "biryani-veg",
+      "description": "Flavorful vegetable biryani.",
+      "imageUrl": "https://images.unsplash.com/photo-1707339088654-117df66bd55c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxiaXJ5YW5pJTIwdmVnZXRhYmxlfGVufDB8fHx8MTc2MzM4MzA1OHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "biryani vegetable"
+    },
+    {
+      "id": "fried-rice",
+      "description": "Simple and delicious fried rice.",
+      "imageUrl": "https://images.unsplash.com/photo-1512058533999-106ee01bf777?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxmcmllZCUyMHJpY2V8ZW58MHx8fHwxNzYzMzI4ODE2fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "fried rice"
+    },
+    {
+      "id": "chicken-fried-rice",
+      "description": "Savory chicken fried rice.",
+      "imageUrl": "https://images.unsplash.com/photo-1564671165093-20688ff1fffa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8Y2hpY2tlbiUyMHJpY2V8ZW58MHx8fHwxNzYzMzUzNzk5fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "chicken rice"
+    },
+    {
+      "id": "momos-veg-steam",
+      "description": "Steamed vegetable momos.",
+      "imageUrl": "https://images.unsplash.com/photo-1653769342321-7e7a356e6dfc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxtb21vcyUyMGR1bXBsaW5nfGVufDB8fHx8MTc2MzM4MzA1OHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "momos dumpling"
+    },
+    {
+      "id": "momos-veg-fry",
+      "description": "Fried vegetable momos.",
+      "imageUrl": "https://images.unsplash.com/photo-1602928630997-6aed5b819677?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxtb21vcyUyMGZyaWVkfGVufDB8fHx8MTc2MzM4MzA1OHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "momos fried"
+    },
+    {
+      "id": "momos-non-veg-steam",
+      "description": "Steamed chicken momos.",
+      "imageUrl": "https://images.unsplash.com/photo-1706543051894-879487d26f4f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxtb21vcyUyMGNoaWNrZW58ZW58MHx8fHwxNzYzMzgzMDU4fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "momos chicken"
+    },
+    {
+      "id": "momos-non-veg-fry",
+      "description": "Fried chicken momos.",
+      "imageUrl": "https://images.unsplash.com/photo-1627799370307-9b2a689bb94f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8bW9tb3MlMjBmcmllZCUyMGNoaWNrZW58ZW58MHx8fHwxNzYzMzgzMDU4fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "momos fried chicken"
+    },
+    {
+      "id": "roll-veg",
+      "description": "Crispy vegetable roll.",
+      "imageUrl": "https://images.unsplash.com/photo-1618406854423-ef169758d6a6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxzcHJpbmclMjByb2xsfGVufDB8fHx8MTc2MzMzMDAxNnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "spring roll"
+    },
+    {
+      "id": "roll-egg",
+      "description": "Hearty egg roll.",
+      "imageUrl": "https://images.unsplash.com/photo-1559962954-b92f15ab1b27?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxlZ2clMjByb2xsfGVufDB8fHx8MTc2MzM4MzA1OHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "egg roll"
+    },
+    {
+      "id": "french-fries",
+      "description": "Golden french fries.",
+      "imageUrl": "https://images.unsplash.com/photo-1630384060421-cb20d0e0649d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxmcmVuY2glMjBmcmllc3xlbnwwfHx8fDE3NjMzMjM3MTV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "french fries"
+    },
+    {
+      "id": "chilly-potato",
+      "description": "Spicy chilly potato.",
+      "imageUrl": "https://images.unsplash.com/photo-1726514733355-02fe48ae6795?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxjaGlsbGklMjBwb3RhdG98ZW58MHx8fHwxNzYzMzgzMDU4fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "chilli potato"
+    },
+    {
+      "id": "honey-chilly-potato",
+      "description": "Sweet and spicy honey chilly potato.",
+      "imageUrl": "https://images.unsplash.com/photo-1730793680129-300f76284e20?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxob25leSUyMHBvdGF0b3xlbnwwfHx8fDE3NjMzODAwMDF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "honey potato"
+    },
+    {
+      "id": "noodles",
+      "description": "Stir-fried noodles.",
+      "imageUrl": "https://images.unsplash.com/photo-1609690963718-0b55905aef78?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxub29kbGVzJTIwdmVnfGVufDB8fHx8MTc2MzM4MzA1OHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "noodles veg"
+    },
+    {
+      "id": "maggi",
+      "description": "Instant Maggi noodles.",
+      "imageUrl": "https://images.unsplash.com/photo-1685209743819-dab6a8a853e7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxtYWdnaSUyMG5vb2RsZXN8ZW58MHx8fHwxNzYzMzgzMDU4fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "maggi noodles"
+    },
+    {
+      "id": "samosa",
+      "description": "Crispy fried samosas.",
+      "imageUrl": "https://images.unsplash.com/photo-1627670381055-487000952cb0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzYW1vc2ElMjBzbmFja3xlbnwwfHx8fDE3NjMzODMwNTh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "samosa snack"
+    },
+    {
+      "id": "bread-pakoda",
+      "description": "Fried bread pakoda.",
+      "imageUrl": "https://images.unsplash.com/photo-1605189361149-8db06ad7baf6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxicmVhZCUyMHBha29yYXxlbnwwfHx8fDE3NjMzODMwNTh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "bread pakora"
+    }
+  ]
 }
