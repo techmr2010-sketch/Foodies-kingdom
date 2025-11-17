@@ -22,12 +22,13 @@ import { useToast } from '@/hooks/use-toast';
 
 const cartItems = [
     { name: 'Biryani Non Veg (Full)', price: 200, quantity: 1, imageId: 'biryani-non-veg' },
-    { name: 'Momos Veg Fry (Half)', price: 60, quantity: 2, imageId: 'momos-veg-fry' },
+    { name: 'Momos Veg Fry (Half)', price: 60, quantity: 1, imageId: 'momos-veg-fry' },
 ];
 
 export default function Cart() {
     const { toast } = useToast();
     const [deliveryAddress, setDeliveryAddress] = useState('');
+    const [addressSubmitted, setAddressSubmitted] = useState(false);
     const [paymentMethod, setPaymentMethod] = useState('cod');
 
     const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
@@ -35,7 +36,7 @@ export default function Cart() {
     const total = subtotal + deliveryFee;
     const upiLink = `upi://pay?pa=9310364770@paytm&pn=Foodie%20Kingdom&am=${total.toFixed(2)}&cu=INR`;
     
-    const handlePlaceOrder = () => {
+    const handleAddressSubmit = () => {
         if (!deliveryAddress) {
             toast({
                 variant: "destructive",
@@ -44,17 +45,38 @@ export default function Cart() {
             });
             return;
         }
+        
+        const message = `Delivery Address: ${deliveryAddress}`;
+        const encodedMessage = encodeURIComponent(message);
+        const whatsappUrl = `https://wa.me/918178480946?text=${encodedMessage}`;
+        window.open(whatsappUrl, '_blank');
+        setAddressSubmitted(true);
+        toast({
+            title: "Address Submitted",
+            description: "Your delivery address has been sent to the delivery partner.",
+        });
+    }
+
+    const handlePlaceOrder = () => {
+        if (!addressSubmitted) {
+            toast({
+                variant: "destructive",
+                title: "Address Not Submitted",
+                description: "Please submit your delivery address first.",
+            });
+            return;
+        }
 
         const orderDetails = cartItems.map(item => `${item.quantity} x ${item.name}`).join('\n');
         const message = `New Order from Foodie Kingdom:\n\nItems:\n${orderDetails}\n\nTotal: ₹${total.toFixed(2)}\n\nDelivery Address: ${deliveryAddress}\n\nPayment Method: ${paymentMethod === 'cod' ? 'Cash on Delivery' : 'Prepaid'}`;
         const encodedMessage = encodeURIComponent(message);
-        const whatsappUrl = `https://wa.me/918178480946?text=${encodedMessage}`;
+        const ownerWhatsappUrl = `https://wa.me/919310364770?text=${encodedMessage}`;
 
         if (paymentMethod === 'phone') {
             window.location.href = upiLink;
         }
         
-        window.open(whatsappUrl, '_blank');
+        window.open(ownerWhatsappUrl, '_blank');
         
         toast({
             title: "Order Placed!",
@@ -68,9 +90,11 @@ export default function Cart() {
         <Button variant="ghost" size="icon" className="relative">
           <ShoppingCart className="h-6 w-6" />
           <span className="sr-only">Open Cart</span>
-          <div className="absolute top-0 right-0 -mt-1 -mr-1 flex items-center justify-center h-5 w-5 rounded-full bg-primary text-primary-foreground text-xs font-bold">
-            {cartItems.length}
-          </div>
+          {cartItems.length > 0 && (
+            <div className="absolute top-0 right-0 -mt-1 -mr-1 flex items-center justify-center h-5 w-5 rounded-full bg-primary text-primary-foreground text-xs font-bold">
+                {cartItems.reduce((acc, item) => acc + item.quantity, 0)}
+            </div>
+          )}
         </Button>
       </SheetTrigger>
       <SheetContent className="w-[400px] sm:w-[540px] flex flex-col">
@@ -81,86 +105,99 @@ export default function Cart() {
           </SheetDescription>
         </SheetHeader>
         <div className="flex-grow overflow-y-auto pr-4">
-            <div className="space-y-4">
-                {cartItems.map((item) => (
-                    <div key={item.name} className="flex items-center justify-between">
-                        <div className="flex items-center gap-4">
-                             <Image 
-                                src={`https://picsum.photos/seed/${item.imageId}/100/100`}
-                                alt={item.name}
-                                width={64}
-                                height={64}
-                                className="rounded-md object-cover"
-                            />
-                            <div>
-                                <p className="font-medium">{item.name}</p>
-                                <p className="text-sm text-muted-foreground">Qty: {item.quantity}</p>
+            {cartItems.length > 0 ? (
+                <div className="space-y-4">
+                    {cartItems.map((item) => (
+                        <div key={item.name} className="flex items-center justify-between">
+                            <div className="flex items-center gap-4">
+                                <Image 
+                                    src={`https://picsum.photos/seed/${item.imageId}/100/100`}
+                                    alt={item.name}
+                                    width={64}
+                                    height={64}
+                                    className="rounded-md object-cover"
+                                />
+                                <div>
+                                    <p className="font-medium">{item.name}</p>
+                                    <p className="text-sm text-muted-foreground">Qty: {item.quantity}</p>
+                                </div>
                             </div>
+                            <p className="font-medium flex items-center"><IndianRupee className="h-4 w-4 mr-1" />{item.price * item.quantity}</p>
                         </div>
-                        <p className="font-medium flex items-center"><IndianRupee className="h-4 w-4 mr-1" />{item.price * item.quantity}</p>
-                    </div>
-                ))}
-            </div>
+                    ))}
+                </div>
+            ) : (
+                <div className="flex flex-col items-center justify-center h-full text-center">
+                    <ShoppingCart className="h-16 w-16 text-muted-foreground" />
+                    <p className="mt-4 text-lg font-semibold">Your cart is empty</p>
+                    <p className="text-muted-foreground">Add some items from the menu to get started.</p>
+                </div>
+            )}
         </div>
-        <SheetFooter className="mt-auto">
-            <div className="w-full space-y-4">
-                <Separator />
-                <div className="space-y-2">
-                    <div className="flex justify-between">
-                        <p className="text-muted-foreground">Subtotal</p>
-                        <p className="flex items-center"><IndianRupee className="h-4 w-4 mr-1" />{subtotal.toFixed(2)}</p>
+        {cartItems.length > 0 && (
+            <SheetFooter className="mt-auto">
+                <div className="w-full space-y-4">
+                    <Separator />
+                    <div className="space-y-2">
+                        <div className="flex justify-between">
+                            <p className="text-muted-foreground">Subtotal</p>
+                            <p className="flex items-center"><IndianRupee className="h-4 w-4 mr-1" />{subtotal.toFixed(2)}</p>
+                        </div>
+                        <div className="flex justify-between">
+                            <p className="text-muted-foreground">Delivery</p>
+                            <p className="text-primary font-semibold">FREE</p>
+                        </div>
+                        <div className="flex justify-between font-bold text-lg">
+                            <p>Total</p>
+                            <p className="flex items-center"><IndianRupee className="h-5 w-5 mr-1" />{total.toFixed(2)}</p>
+                        </div>
                     </div>
-                    <div className="flex justify-between">
-                        <p className="text-muted-foreground">Delivery</p>
-                        <p className="text-primary font-semibold">FREE</p>
+                    <Separator />
+                    <div>
+                        <h4 className="font-medium mb-2">Delivery Location</h4>
+                        <div className="flex gap-2">
+                            <Input 
+                                type="text" 
+                                placeholder="Enter your full address" 
+                                className="flex-grow" 
+                                value={deliveryAddress}
+                                onChange={(e) => setDeliveryAddress(e.target.value)}
+                                required
+                                disabled={addressSubmitted}
+                            />
+                             <Button onClick={handleAddressSubmit} disabled={addressSubmitted}>
+                                {addressSubmitted ? 'Submitted' : 'Submit'}
+                            </Button>
+                        </div>
                     </div>
-                    <div className="flex justify-between font-bold text-lg">
-                        <p>Total</p>
-                        <p className="flex items-center"><IndianRupee className="h-5 w-5 mr-1" />{total.toFixed(2)}</p>
+                    <div>
+                    <h4 className="font-medium mb-4">Payment Method</h4>
+                    <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod} className="grid grid-cols-1 gap-4">
+                        <Label htmlFor="phone" className={`flex items-center gap-4 rounded-md border p-4 hover:bg-accent hover:text-accent-foreground has-[input:checked]:bg-accent has-[input:checked]:text-accent-foreground ${!addressSubmitted ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}>
+                        <RadioGroupItem value="phone" id="phone" disabled={!addressSubmitted} />
+                        <Phone className="h-5 w-5" />
+                        <span>Pay by Phone (UPI)</span>
+                        </Label>
+                        <Label htmlFor="cod" className={`flex items-center gap-4 rounded-md border p-4 hover:bg-accent hover:text-accent-foreground has-[input:checked]:bg-accent has-[input:checked]:text-accent-foreground ${!addressSubmitted ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}>
+                        <RadioGroupItem value="cod" id="cod" disabled={!addressSubmitted}/>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-banknote"><rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg>
+                        <span>Cash on Delivery</span>
+                        </Label>
+                    </RadioGroup>
                     </div>
+                    <Alert>
+                        <Phone className="h-4 w-4" />
+                        <AlertTitle>Delivery Contact</AlertTitle>
+                        <AlertDescription>
+                            To coordinate your delivery, please call Mohit at <strong>8178480946</strong>.
+                        </AlertDescription>
+                    </Alert>
+                    <Button className="w-full text-lg" size="lg" onClick={handlePlaceOrder} disabled={!addressSubmitted}>
+                    Place Order
+                    </Button>
                 </div>
-                <Separator />
-                 <div>
-                    <h4 className="font-medium mb-4">Delivery Location</h4>
-                    <div className="relative">
-                        <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                        <Input 
-                            type="text" 
-                            placeholder="Enter your full address" 
-                            className="pl-10" 
-                            value={deliveryAddress}
-                            onChange={(e) => setDeliveryAddress(e.target.value)}
-                            required
-                        />
-                    </div>
-                </div>
-                <div>
-                  <h4 className="font-medium mb-4">Payment Method</h4>
-                   <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod} className="grid grid-cols-1 gap-4">
-                     <Label htmlFor="phone" className="flex items-center gap-4 rounded-md border p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer has-[input:checked]:bg-accent has-[input:checked]:text-accent-foreground">
-                      <RadioGroupItem value="phone" id="phone" />
-                      <Phone className="h-5 w-5" />
-                      <span>Pay by Phone (UPI)</span>
-                    </Label>
-                    <Label htmlFor="cod" className="flex items-center gap-4 rounded-md border p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer has-[input:checked]:bg-accent has-[input:checked]:text-accent-foreground">
-                      <RadioGroupItem value="cod" id="cod" />
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-banknote"><rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg>
-                      <span>Cash on Delivery</span>
-                    </Label>
-                  </RadioGroup>
-                </div>
-                <Alert>
-                    <Phone className="h-4 w-4" />
-                    <AlertTitle>Delivery Contact</AlertTitle>
-                    <AlertDescription>
-                        To coordinate your delivery, please call Mohit at <strong>8178480946</strong>.
-                    </AlertDescription>
-                </Alert>
-                <Button className="w-full text-lg" size="lg" onClick={handlePlaceOrder}>
-                  Place Order
-                </Button>
-            </div>
-        </SheetFooter>
+            </SheetFooter>
+        )}
       </SheetContent>
     </Sheet>
   );

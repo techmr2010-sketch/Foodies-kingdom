@@ -8,6 +8,14 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import type { MenuItem } from '@/lib/data';
 import { Leaf, Drumstick, PlusCircle, MapPin, Building, IndianRupee } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { useState } from 'react';
 
 type MenuItemCardProps = {
   item: MenuItem;
@@ -17,11 +25,15 @@ export default function MenuItemCard({ item }: MenuItemCardProps) {
   const { toast } = useToast();
   const image = PlaceHolderImages.find(img => img.id === item.imageId);
   const isLocal = item.location === 'Moolchand, New Delhi';
+  const [selectedOption, setSelectedOption] = useState(item.options[0]);
 
   const handleAddToCart = () => {
+    // In a real app, you would add this to a global cart state.
+    // For now, we just show a toast.
+    console.log('Added to cart:', { ...item, selectedOption });
     toast({
       title: "Added to cart!",
-      description: `${item.name} has been added to your order.`,
+      description: `${item.name} (${selectedOption.name}) has been added to your order.`,
     });
   };
 
@@ -60,13 +72,25 @@ export default function MenuItemCard({ item }: MenuItemCardProps) {
             <span>{item.restaurant}</span>
           </div>
         )}
-        <div className="text-sm text-muted-foreground space-y-1">
-          {item.options.map(option => (
-            <div key={option.name} className="flex justify-between items-center">
-              <span>{option.name}</span>
-              <span className="font-semibold text-foreground flex items-center"><IndianRupee className="h-4 w-4 mr-1" />{option.price}</span>
-            </div>
-          ))}
+         <div className="flex justify-between items-center mt-4">
+          <Select defaultValue={selectedOption.name} onValueChange={(value) => {
+            const newOption = item.options.find(o => o.name === value);
+            if (newOption) setSelectedOption(newOption);
+          }}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Select size" />
+            </SelectTrigger>
+            <SelectContent>
+              {item.options.map(option => (
+                <SelectItem key={option.name} value={option.name}>
+                  {option.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <span className="font-semibold text-lg text-foreground flex items-center">
+            <IndianRupee className="h-5 w-5 mr-1" />{selectedOption.price}
+          </span>
         </div>
       </CardContent>
       <CardFooter className="p-4 pt-0">
