@@ -53,6 +53,9 @@ export default function Header() {
                 <DropdownMenuItem asChild>
                   <Link href="/account">Order History</Link>
                 </DropdownMenuItem>
+                 <DropdownMenuItem asChild>
+                  <Link href="/account">Payment</Link>
+                </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link href="/help">Help Centre</Link>
                 </DropdownMenuItem>

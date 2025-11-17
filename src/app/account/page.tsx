@@ -1,11 +1,17 @@
+
+'use client';
+
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { IndianRupee } from 'lucide-react';
+import { IndianRupee, ChevronLeft, Send } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { ChevronLeft } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useState } from 'react';
+import { useToast } from '@/hooks/use-toast';
 
 const previousOrders = [
   {
@@ -30,6 +36,27 @@ const previousOrders = [
 ];
 
 export default function AccountPage() {
+  const [amount, setAmount] = useState('');
+  const { toast } = useToast();
+
+  const handleQuickPay = () => {
+    const paymentAmount = parseFloat(amount);
+    if (!paymentAmount || paymentAmount <= 0) {
+      toast({
+        variant: 'destructive',
+        title: 'Invalid Amount',
+        description: 'Please enter a valid amount to pay.',
+      });
+      return;
+    }
+    const upiLink = `upi://pay?pa=9310364770@paytm&pn=Foodie%20Kingdom&am=${paymentAmount.toFixed(2)}&cu=INR`;
+    window.location.href = upiLink;
+    toast({
+      title: 'Redirecting to UPI',
+      description: `Opening payment app to pay ₹${paymentAmount.toFixed(2)}.`,
+    });
+  };
+
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
@@ -40,34 +67,68 @@ export default function AccountPage() {
                     <ChevronLeft />
                 </Link>
             </Button>
-            <h1 className="text-3xl font-bold font-headline ml-4">Order History</h1>
+            <h1 className="text-3xl font-bold font-headline ml-4">My Account</h1>
         </div>
         
-        <div className="space-y-6">
-          {previousOrders.map((order) => (
-            <Card key={order.id}>
-              <CardHeader className="flex flex-row justify-between items-start">
-                <div>
-                  <CardTitle>Order {order.id}</CardTitle>
-                  <CardDescription>Date: {new Date(order.date).toLocaleDateString()}</CardDescription>
+        <div className="grid md:grid-cols-2 gap-8">
+            <div>
+                <h2 className="text-2xl font-bold font-headline mb-4">Order History</h2>
+                <div className="space-y-6">
+                {previousOrders.map((order) => (
+                    <Card key={order.id}>
+                    <CardHeader className="flex flex-row justify-between items-start">
+                        <div>
+                        <CardTitle>Order {order.id}</CardTitle>
+                        <CardDescription>Date: {new Date(order.date).toLocaleDateString()}</CardDescription>
+                        </div>
+                        <div className="text-right">
+                            <p className="font-bold text-lg flex items-center justify-end"><IndianRupee className="h-5 w-5 mr-1" />{order.total.toFixed(2)}</p>
+                            <p className="text-sm text-green-600 font-semibold">{order.status}</p>
+                        </div>
+                    </CardHeader>
+                    <CardContent>
+                        <Separator className="my-4" />
+                        <ul className="space-y-2">
+                        {order.items.map((item, index) => (
+                            <li key={index} className="flex justify-between text-muted-foreground">
+                            <span>{item.quantity} x {item.name}</span>
+                            </li>
+                        ))}
+                        </ul>
+                    </CardContent>
+                    </Card>
+                ))}
                 </div>
-                <div className="text-right">
-                    <p className="font-bold text-lg flex items-center justify-end"><IndianRupee className="h-5 w-5 mr-1" />{order.total.toFixed(2)}</p>
-                    <p className="text-sm text-green-600 font-semibold">{order.status}</p>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <Separator className="my-4" />
-                <ul className="space-y-2">
-                  {order.items.map((item, index) => (
-                    <li key={index} className="flex justify-between text-muted-foreground">
-                      <span>{item.quantity} x {item.name}</span>
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
-          ))}
+            </div>
+            <div>
+                <h2 className="text-2xl font-bold font-headline mb-4">Quick Payment</h2>
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Make a UPI Payment</CardTitle>
+                        <CardDescription>
+                            Enter the amount you wish to pay. We'll redirect you to your UPI app.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="amount">Amount (₹)</Label>
+                            <Input 
+                                id="amount"
+                                type="number" 
+                                placeholder="Enter amount" 
+                                value={amount}
+                                onChange={(e) => setAmount(e.target.value)}
+                            />
+                        </div>
+                         <p className="text-sm text-muted-foreground">
+                            You will be asked to pay to UPI ID: <span className="font-semibold text-foreground">9310364770@paytm</span>
+                        </p>
+                        <Button onClick={handleQuickPay} className="w-full">
+                           <Send className="mr-2 h-4 w-4" /> Proceed to Pay
+                        </Button>
+                    </CardContent>
+                </Card>
+            </div>
         </div>
       </main>
       <Footer />
