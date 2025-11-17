@@ -7,20 +7,24 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
 import { ChevronLeft } from 'lucide-react';
 
 export default function HelpPage() {
-  const { toast } = useToast();
-
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    toast({
-      title: 'Query Submitted!',
-      description: 'We have received your message and will get back to you shortly.',
-    });
-    (event.target as HTMLFormElement).reset();
+    const form = event.currentTarget;
+    const name = (form.elements.namedItem('name') as HTMLInputElement).value;
+    const email = (form.elements.namedItem('email') as HTMLInputElement).value;
+    const orderId = (form.elements.namedItem('orderId') as HTMLInputElement).value;
+    const message = (form.elements.namedItem('message') as HTMLTextAreaElement).value;
+
+    const query = `Query from Foodie Kingdom:\nName: ${name}\nEmail: ${email}\nOrder ID: ${orderId || 'N/A'}\nMessage: ${message}`;
+    const encodedQuery = encodeURIComponent(query);
+    const whatsappUrl = `https://wa.me/919310364770?text=${encodedQuery}`;
+    
+    window.open(whatsappUrl, '_blank');
+    form.reset();
   };
 
   return (
@@ -40,7 +44,7 @@ export default function HelpPage() {
           <CardHeader>
             <CardTitle>Contact Us</CardTitle>
             <CardDescription>
-              Have a question or need assistance? Fill out the form below.
+              Have a question or need assistance? Fill out the form below and we'll get back to you via WhatsApp.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -61,7 +65,7 @@ export default function HelpPage() {
                 <Label htmlFor="message">Your Query</Label>
                 <Textarea id="message" placeholder="How can we help you?" required />
               </div>
-              <Button type="submit" className="w-full">Submit Query</Button>
+              <Button type="submit" className="w-full">Send on WhatsApp</Button>
             </form>
           </CardContent>
         </Card>

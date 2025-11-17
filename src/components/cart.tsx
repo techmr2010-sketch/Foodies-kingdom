@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import {
   Sheet,
   SheetContent,
@@ -17,6 +18,7 @@ import Image from 'next/image';
 import { ShoppingCart, Phone, IndianRupee, MapPin } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import { Input } from "./ui/input";
+import { useToast } from '@/hooks/use-toast';
 
 const cartItems = [
     { name: 'Biryani Non Veg (Full)', price: 200, quantity: 1, imageId: 'biryani-non-veg' },
@@ -24,10 +26,41 @@ const cartItems = [
 ];
 
 export default function Cart() {
+    const { toast } = useToast();
+    const [deliveryAddress, setDeliveryAddress] = useState('');
+    const [paymentMethod, setPaymentMethod] = useState('cod');
+
     const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
     const deliveryFee = 0; // Free delivery!
     const total = subtotal + deliveryFee;
     const upiLink = `upi://pay?pa=9310364770@paytm&pn=Foodie%20Kingdom&am=${total.toFixed(2)}&cu=INR`;
+    
+    const handlePlaceOrder = () => {
+        if (!deliveryAddress) {
+            toast({
+                variant: "destructive",
+                title: "Address Missing",
+                description: "Please enter your delivery address.",
+            });
+            return;
+        }
+
+        const orderDetails = cartItems.map(item => `${item.quantity} x ${item.name}`).join('\n');
+        const message = `New Order from Foodie Kingdom:\n\nItems:\n${orderDetails}\n\nTotal: ₹${total.toFixed(2)}\n\nDelivery Address: ${deliveryAddress}\n\nPayment Method: ${paymentMethod === 'cod' ? 'Cash on Delivery' : 'Prepaid'}`;
+        const encodedMessage = encodeURIComponent(message);
+        const whatsappUrl = `https://wa.me/918178480946?text=${encodedMessage}`;
+
+        if (paymentMethod === 'phone') {
+            window.location.href = upiLink;
+        }
+        
+        window.open(whatsappUrl, '_blank');
+        
+        toast({
+            title: "Order Placed!",
+            description: "Your order details have been sent. The delivery partner will coordinate with you.",
+        });
+    };
 
   return (
     <Sheet>
@@ -91,16 +124,23 @@ export default function Cart() {
                     <h4 className="font-medium mb-4">Delivery Location</h4>
                     <div className="relative">
                         <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                        <Input type="text" placeholder="Enter your full address" className="pl-10" />
+                        <Input 
+                            type="text" 
+                            placeholder="Enter your full address" 
+                            className="pl-10" 
+                            value={deliveryAddress}
+                            onChange={(e) => setDeliveryAddress(e.target.value)}
+                            required
+                        />
                     </div>
                 </div>
                 <div>
                   <h4 className="font-medium mb-4">Payment Method</h4>
-                   <RadioGroup defaultValue="cod" className="grid grid-cols-1 gap-4">
+                   <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod} className="grid grid-cols-1 gap-4">
                      <Label htmlFor="phone" className="flex items-center gap-4 rounded-md border p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer has-[input:checked]:bg-accent has-[input:checked]:text-accent-foreground">
                       <RadioGroupItem value="phone" id="phone" />
                       <Phone className="h-5 w-5" />
-                      <span>Pay by Phone</span>
+                      <span>Pay by Phone (UPI)</span>
                     </Label>
                     <Label htmlFor="cod" className="flex items-center gap-4 rounded-md border p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer has-[input:checked]:bg-accent has-[input:checked]:text-accent-foreground">
                       <RadioGroupItem value="cod" id="cod" />
@@ -116,8 +156,8 @@ export default function Cart() {
                         To coordinate your delivery, please call Mohit at <strong>8178480946</strong>.
                     </AlertDescription>
                 </Alert>
-                <Button className="w-full text-lg" size="lg" asChild>
-                  <a href={upiLink}>Place Order</a>
+                <Button className="w-full text-lg" size="lg" onClick={handlePlaceOrder}>
+                  Place Order
                 </Button>
             </div>
         </SheetFooter>
