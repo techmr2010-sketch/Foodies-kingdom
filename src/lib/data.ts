@@ -246,9 +246,7 @@ export const restaurantPartners = [
     { name: 'Biryani Blues', location: 'Moolchand, New Delhi', specialty: 'Biryani', owner: 'N/A' },
     { name: 'Wok Hei', location: 'Moolchand, New Delhi', specialty: 'Chinese', owner: 'N/A' },
     { name: 'Momo Magic', location: 'Lajpat Nagar, New Delhi', specialty: 'Momos', owner: 'N/A' },
-    { name: 'Roll Express', location: 'Hauz Khas, New Delhi', specialty: 'Rolls', owner: 'N/A' },
-    { name: 'Snack Shack', location: 'Connaught Place, New Delhi', specialty: 'Snacks', owner: 'N/A' },
-    { name: 'Foodies', location: 'Saket, New Delhi', specialty: 'Multi-cuisine', owner: 'Prem' },
+    { name: 'Foodies', location: 'Andrews Ganj, Near Moolchand Metro Station', specialty: 'Multi-cuisine', owner: 'Prem' },
 ];
 
 export const deliveryPartners = [
