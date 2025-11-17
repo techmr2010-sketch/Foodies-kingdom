@@ -25,6 +25,7 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 export default function Cart({ children }: { children?: React.ReactNode }) {
     const { cartItems, removeFromCart, clearCart } = useCart();
     const { toast } = useToast();
+    const [customerName, setCustomerName] = useState('');
     const [deliveryAddress, setDeliveryAddress] = useState('');
     const [addressSubmitted, setAddressSubmitted] = useState(false);
     const [paymentMethod, setPaymentMethod] = useState('cod');
@@ -64,9 +65,22 @@ export default function Cart({ children }: { children?: React.ReactNode }) {
             });
             return;
         }
+        
+        if (paymentMethod === 'cod' && !customerName) {
+            toast({
+                variant: "destructive",
+                title: "Name Missing",
+                description: "Please enter your name for Cash on Delivery.",
+            });
+            return;
+        }
 
         const orderDetails = cartItems.map(item => `${item.quantity} x ${item.name} (${item.option})`).join('\n');
-        const message = `New Order from Foodie Kingdom:\n\nItems:\n${orderDetails}\n\nTotal: ₹${total.toFixed(2)}\n\nDelivery Address: ${deliveryAddress}\n\nPayment Method: ${paymentMethod === 'cod' ? 'Cash on Delivery' : 'Prepaid'}`;
+        
+        const paymentMethodText = paymentMethod === 'cod' ? 'Cash on Delivery' : 'Prepaid';
+        const customerNameText = paymentMethod === 'cod' ? `Customer Name: ${customerName}\n` : '';
+
+        const message = `New Order from Foodie Kingdom:\n\n${customerNameText}Items:\n${orderDetails}\n\nTotal: ₹${total.toFixed(2)}\n\nDelivery Address: ${deliveryAddress}\n\nPayment Method: ${paymentMethodText}`;
         const encodedMessage = encodeURIComponent(message);
         const ownerWhatsappUrl = `https://wa.me/919310364770?text=${encodedMessage}`;
 
@@ -83,6 +97,7 @@ export default function Cart({ children }: { children?: React.ReactNode }) {
         clearCart();
         setAddressSubmitted(false);
         setDeliveryAddress('');
+        setCustomerName('');
     };
     
     const totalQuantity = cartItems.reduce((acc, item) => acc + item.quantity, 0);
@@ -166,6 +181,18 @@ export default function Cart({ children }: { children?: React.ReactNode }) {
                         </div>
                     </div>
                     <Separator />
+                     {paymentMethod === 'cod' && (
+                        <div>
+                            <h4 className="font-medium mb-2">Your Name</h4>
+                            <Input
+                                type="text"
+                                placeholder="Enter your name"
+                                value={customerName}
+                                onChange={(e) => setCustomerName(e.target.value)}
+                                required
+                            />
+                        </div>
+                    )}
                     <div>
                         <h4 className="font-medium mb-2">Delivery Location</h4>
                         <div className="flex gap-2">
