@@ -7,7 +7,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetFooter,
-  SheetTrigger
+  SheetTrigger,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -27,6 +27,7 @@ export default function Cart() {
     const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
     const deliveryFee = 0; // Free delivery!
     const total = subtotal + deliveryFee;
+    const upiLink = `upi://pay?pa=9310364770@paytm&pn=Foodie%20Kingdom&am=${total.toFixed(2)}&cu=INR`;
 
   return (
     <Sheet>
@@ -96,12 +97,12 @@ export default function Cart() {
                 <div>
                   <h4 className="font-medium mb-4">Payment Method</h4>
                    <RadioGroup defaultValue="cod" className="grid grid-cols-1 gap-4">
-                     <Label htmlFor="phone" className="flex items-center gap-4 rounded-md border p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer">
+                     <Label htmlFor="phone" className="flex items-center gap-4 rounded-md border p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer has-[input:checked]:bg-accent has-[input:checked]:text-accent-foreground">
                       <RadioGroupItem value="phone" id="phone" />
                       <Phone className="h-5 w-5" />
-                      <span>Pay by Phone (+91 93103 64770)</span>
+                      <span>Pay by Phone</span>
                     </Label>
-                    <Label htmlFor="cod" className="flex items-center gap-4 rounded-md border p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer">
+                    <Label htmlFor="cod" className="flex items-center gap-4 rounded-md border p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer has-[input:checked]:bg-accent has-[input:checked]:text-accent-foreground">
                       <RadioGroupItem value="cod" id="cod" />
                       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-banknote"><rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg>
                       <span>Cash on Delivery</span>
@@ -115,7 +116,9 @@ export default function Cart() {
                         To coordinate your delivery, please call Mohit at <strong>8178480946</strong>.
                     </AlertDescription>
                 </Alert>
-                <Button className="w-full text-lg" size="lg">Place Order</Button>
+                <Button className="w-full text-lg" size="lg" asChild>
+                  <a href={upiLink}>Place Order</a>
+                </Button>
             </div>
         </SheetFooter>
       </SheetContent>

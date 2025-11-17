@@ -1,7 +1,15 @@
 import Link from 'next/link';
-import { ChefHat } from 'lucide-react';
+import { ChefHat, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Cart from '@/components/cart';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export default function Header() {
   return (
@@ -24,11 +32,26 @@ export default function Header() {
             <Button variant="link" asChild>
               <Link href="#partners">Partners</Link>
             </Button>
-             <Button variant="link" asChild>
-              <Link href="#">Track Order</Link>
-            </Button>
           </nav>
           <Cart />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <User className="h-6 w-6" />
+                <span className="sr-only">Open user menu</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
+                <Link href="/account">Order History</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/help">Help Centre</Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </header>
