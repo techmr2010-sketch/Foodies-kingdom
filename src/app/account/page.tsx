@@ -5,13 +5,25 @@ import Header from '@/components/header';
 import Footer from '@/components/footer';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { IndianRupee, ChevronLeft, Send } from 'lucide-react';
+import { IndianRupee, ChevronLeft, Send, Home } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+  DialogClose,
+} from "@/components/ui/dialog";
+import { Textarea } from '@/components/ui/textarea';
+
 
 const previousOrders = [
   {
@@ -46,6 +58,9 @@ const formatDate = (dateString: string) => {
 export default function AccountPage() {
   const [amount, setAmount] = useState('');
   const { toast } = useToast();
+  const [codName, setCodName] = useState('');
+  const [codAddress, setCodAddress] = useState('');
+  const [codOrder, setCodOrder] = useState('');
 
   const handleQuickPay = () => {
     const paymentAmount = parseFloat(amount);
@@ -64,6 +79,33 @@ export default function AccountPage() {
       description: `Opening payment app to pay ₹${paymentAmount.toFixed(2)}.`,
     });
   };
+
+  const handleCodSubmit = () => {
+    if (!codName || !codAddress || !codOrder) {
+      toast({
+        variant: "destructive",
+        title: "Information Missing",
+        description: "Please fill in all the details for the COD order.",
+      });
+      return;
+    }
+    const message = `New COD Order from Foodie Kingdom:\n\nCustomer Name: ${codName}\nAddress: ${codAddress}\n\nOrder Details:\n${codOrder}`;
+    const encodedMessage = encodeURIComponent(message);
+    const ownerWhatsappUrl = `https://wa.me/919310364770?text=${encodedMessage}`;
+
+    window.open(ownerWhatsappUrl, '_blank');
+
+    toast({
+        title: "COD Order Placed!",
+        description: "Your order details have been sent.",
+    });
+
+    // Close the dialog and clear fields
+    document.getElementById('close-cod-dialog')?.click();
+    setCodName('');
+    setCodAddress('');
+    setCodOrder('');
+  }
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -109,7 +151,7 @@ export default function AccountPage() {
                 </div>
             </div>
             <div>
-                <h2 className="text-2xl font-bold font-headline mb-4">Quick Payment</h2>
+                <h2 className="text-2xl font-bold font-headline mb-4">Payments</h2>
                 <Card>
                     <CardHeader>
                         <CardTitle>Make a UPI Payment</CardTitle>
@@ -138,6 +180,57 @@ export default function AccountPage() {
                         <Button onClick={handleQuickPay} className="w-full">
                            <Send className="mr-2 h-4 w-4" /> Proceed to Pay
                         </Button>
+                    </CardContent>
+                </Card>
+                 <Card className="mt-8">
+                    <CardHeader>
+                        <CardTitle>Cash on Delivery</CardTitle>
+                        <CardDescription>
+                            Prefer to pay on delivery? Place your order here.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <Dialog>
+                            <DialogTrigger asChild>
+                                <Button variant="secondary" className="w-full">
+                                    <Home className="mr-2 h-4 w-4" /> Place COD Order
+                                </Button>
+                            </DialogTrigger>
+                            <DialogContent className="sm:max-w-[425px]">
+                                <DialogHeader>
+                                <DialogTitle>Cash on Delivery Order</DialogTitle>
+                                <DialogDescription>
+                                    Enter your details below. This will be sent to us via WhatsApp.
+                                </DialogDescription>
+                                </DialogHeader>
+                                <div className="grid gap-4 py-4">
+                                <div className="grid grid-cols-4 items-center gap-4">
+                                    <Label htmlFor="cod-name" className="text-right">
+                                    Name
+                                    </Label>
+                                    <Input id="cod-name" value={codName} onChange={(e) => setCodName(e.target.value)} className="col-span-3" placeholder="Your full name" />
+                                </div>
+                                <div className="grid grid-cols-4 items-center gap-4">
+                                    <Label htmlFor="cod-address" className="text-right">
+                                    Address
+                                    </Label>
+                                    <Input id="cod-address" value={codAddress} onChange={(e) => setCodAddress(e.target.value)} className="col-span-3" placeholder="Your full delivery address"/>
+                                </div>
+                                <div className="grid grid-cols-4 items-center gap-4">
+                                    <Label htmlFor="cod-order" className="text-right">
+                                        Order
+                                    </Label>
+                                    <Textarea id="cod-order" value={codOrder} onChange={(e) => setCodOrder(e.target.value)} className="col-span-3" placeholder="e.g., 1x Full Biryani, 2x Half Momos" />
+                                </div>
+                                </div>
+                                <DialogFooter>
+                                  <DialogClose asChild>
+                                    <Button type="button" variant="ghost" id="close-cod-dialog">Cancel</Button>
+                                  </DialogClose>
+                                <Button type="button" onClick={handleCodSubmit}>Submit Order</Button>
+                                </DialogFooter>
+                            </DialogContent>
+                        </Dialog>
                     </CardContent>
                 </Card>
             </div>
