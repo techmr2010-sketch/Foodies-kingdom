@@ -15,7 +15,7 @@ import { Separator } from "@/components/ui/separator";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import Image from 'next/image';
-import { ShoppingCart, Phone, IndianRupee, Trash2 } from "lucide-react";
+import { ShoppingCart, Phone, IndianRupee, Trash2, Send } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import { Input } from "./ui/input";
 import { useToast } from '@/hooks/use-toast';
@@ -224,9 +224,6 @@ export default function Cart({ children }: { children?: React.ReactNode }) {
                                     required
                                 />
                             </div>
-                            <Button className="w-full text-lg" size="lg" onClick={handlePlaceOrder}>
-                                Submit and Place COD Order
-                            </Button>
                         </div>
                     ) : (
                         <div className='space-y-4'>
@@ -254,11 +251,17 @@ export default function Cart({ children }: { children?: React.ReactNode }) {
                                     To coordinate your delivery, please call Mohit at <strong>8178480946</strong>.
                                 </AlertDescription>
                             </Alert>
-                            <Button className="w-full text-lg" size="lg" onClick={handlePlaceOrder} disabled={!addressSubmitted}>
-                                Proceed to Pay with UPI
-                            </Button>
                         </div>
                     )}
+                    <Button 
+                        className="w-full text-lg" 
+                        size="lg" 
+                        onClick={handlePlaceOrder} 
+                        disabled={(paymentMethod === 'phone' && !addressSubmitted)}
+                    >
+                        <Send className="mr-2 h-4 w-4" />
+                        {paymentMethod === 'cod' ? 'Place COD Order' : 'Proceed to Pay'}
+                    </Button>
                 </div>
             </SheetFooter>
         )}
