@@ -111,14 +111,18 @@ export default function AccountPage() {
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <div className="space-y-2">
-                            <Label htmlFor="amount">Amount (₹)</Label>
-                            <Input 
-                                id="amount"
-                                type="number" 
-                                placeholder="Enter amount" 
-                                value={amount}
-                                onChange={(e) => setAmount(e.target.value)}
-                            />
+                            <Label htmlFor="amount">Amount</Label>
+                            <div className="relative">
+                                <IndianRupee className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                                <Input 
+                                    id="amount"
+                                    type="number" 
+                                    placeholder="Enter amount" 
+                                    value={amount}
+                                    onChange={(e) => setAmount(e.target.value)}
+                                    className="pl-10"
+                                />
+                            </div>
                         </div>
                          <p className="text-sm text-muted-foreground">
                             You will be asked to pay to UPI ID: <span className="font-semibold text-foreground">9310364770@paytm</span>
