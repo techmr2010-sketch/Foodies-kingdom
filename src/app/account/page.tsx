@@ -35,6 +35,14 @@ const previousOrders = [
   },
 ];
 
+const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+}
+
 export default function AccountPage() {
   const [amount, setAmount] = useState('');
   const { toast } = useToast();
@@ -79,7 +87,7 @@ export default function AccountPage() {
                     <CardHeader className="flex flex-row justify-between items-start">
                         <div>
                         <CardTitle>Order {order.id}</CardTitle>
-                        <CardDescription>Date: {new Date(order.date).toLocaleDateString()}</CardDescription>
+                        <CardDescription>Date: {formatDate(order.date)}</CardDescription>
                         </div>
                         <div className="text-right">
                             <p className="font-bold text-lg flex items-center justify-end"><IndianRupee className="h-5 w-5 mr-1" />{order.total.toFixed(2)}</p>
