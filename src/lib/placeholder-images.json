@@ -9,7 +9,7 @@
     {
       "id": "biryani-non-veg",
       "description": "Aromatic non-vegetarian biryani.",
-      "imageUrl": "https://images.unsplash.com/photo-1589302168068-964664d93dc0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjaGlja2VuJTIwYmlyeWFuaXxlbnwwfHx8fDE3NjM0MDgwMjd8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1565557623262-b51c2513a641?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxjaGlja2VuJTIwYmlyeWFuaXxlbnwwfHx8fDE3NjM0MDgwMjd8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "chicken biryani"
     },
     {
@@ -39,7 +39,7 @@
     {
       "id": "momos-veg-fry",
       "description": "Fried vegetable momos.",
-      "imageUrl": "https://images.unsplash.com/photo-1596392019483-33de80a0499d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxmcmllZCUyMHZlZ2V0YWJsZSUyMGR1bXBsaW5nc3xlbnwwfHx8fDE3NjM0MDgxNTB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1673910543952-32115f8002a7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxmcmllZCUyMHZlZ2V0YWJsZSUyMGR1bXBsaW5nc3xlbnwwfHx8fDE3NjM0MDgxNTB8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "fried dumplings"
     },
     {
