@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -15,12 +16,23 @@ import { Separator } from "@/components/ui/separator";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import Image from 'next/image';
-import { ShoppingCart, Phone, IndianRupee, Trash2, Send } from "lucide-react";
+import { ShoppingCart, Phone, IndianRupee, Trash2, Send, Home } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import { Input } from "./ui/input";
 import { useToast } from '@/hooks/use-toast';
 import { useCart } from '@/context/cart-context';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+  DialogClose,
+} from "@/components/ui/dialog";
+import { Textarea } from './ui/textarea';
 
 export default function Cart({ children }: { children?: React.ReactNode }) {
     const { cartItems, removeFromCart, clearCart } = useCart();
@@ -188,7 +200,7 @@ export default function Cart({ children }: { children?: React.ReactNode }) {
                     
                     <div>
                         <h4 className="font-medium mb-4">Payment Method</h4>
-                        <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod} className="grid grid-cols-1 gap-4">
+                         <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod} className="grid grid-cols-1 gap-4">
                             <Label htmlFor="phone" className="flex items-center gap-4 rounded-md border p-4 cursor-pointer hover:bg-accent hover:text-accent-foreground has-[input:checked]:bg-accent has-[input:checked]:text-accent-foreground">
                                 <RadioGroupItem value="phone" id="phone" />
                                 <Phone className="h-5 w-5" />
@@ -257,7 +269,7 @@ export default function Cart({ children }: { children?: React.ReactNode }) {
                         className="w-full text-lg" 
                         size="lg" 
                         onClick={handlePlaceOrder} 
-                        disabled={(paymentMethod === 'phone' && !addressSubmitted)}
+                        disabled={(paymentMethod === 'phone' && !addressSubmitted) && cartItems.length > 0}
                     >
                         <Send className="mr-2 h-4 w-4" />
                         {paymentMethod === 'cod' ? 'Place COD Order' : 'Proceed to Pay'}

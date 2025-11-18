@@ -192,7 +192,7 @@ export default function AccountPage() {
                     <CardContent>
                         <Dialog>
                             <DialogTrigger asChild>
-                                <Button variant="secondary" className="w-full">
+                                <Button variant="outline" className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
                                     <Home className="mr-2 h-4 w-4" /> Place COD Order
                                 </Button>
                             </DialogTrigger>
