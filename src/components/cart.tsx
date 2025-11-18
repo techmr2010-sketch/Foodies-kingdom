@@ -33,6 +33,7 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { Textarea } from './ui/textarea';
+import { Icons } from './icons';
 
 export default function Cart({ children }: { children?: React.ReactNode }) {
     const { cartItems, removeFromCart, clearCart } = useCart();
@@ -201,10 +202,17 @@ export default function Cart({ children }: { children?: React.ReactNode }) {
                     <div>
                         <h4 className="font-medium mb-4">Payment Method</h4>
                          <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod} className="grid grid-cols-1 gap-4">
-                            <Label htmlFor="phone" className="flex items-center gap-4 rounded-md border p-4 cursor-pointer hover:bg-accent hover:text-accent-foreground has-[input:checked]:bg-accent has-[input:checked]:text-accent-foreground">
-                                <RadioGroupItem value="phone" id="phone" />
-                                <Phone className="h-5 w-5" />
-                                <span>Pay by Phone (UPI)</span>
+                            <Label htmlFor="phone" className="flex flex-col gap-4 rounded-md border p-4 cursor-pointer hover:bg-accent hover:text-accent-foreground has-[input:checked]:bg-accent has-[input:checked]:text-accent-foreground">
+                                <div className="flex items-center gap-4">
+                                    <RadioGroupItem value="phone" id="phone" />
+                                    <Phone className="h-5 w-5" />
+                                    <span>Pay by Phone (UPI)</span>
+                                </div>
+                                <div className="flex items-center justify-center gap-4 pl-8">
+                                    <Icons.paytm className="h-6" />
+                                    <Icons.gpay className="h-6" />
+                                    <Icons.phonepe className="h-6" />
+                                </div>
                             </Label>
                             <Label htmlFor="cod" className="flex items-center gap-4 rounded-md border p-4 cursor-pointer hover:bg-accent hover:text-accent-foreground has-[input:checked]:bg-accent has-[input:checked]:text-accent-foreground">
                                 <RadioGroupItem value="cod" id="cod" />

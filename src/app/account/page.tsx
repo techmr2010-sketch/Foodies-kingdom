@@ -10,7 +10,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import {
   Dialog,
@@ -23,6 +23,7 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { Textarea } from '@/components/ui/textarea';
+import { Icons } from '@/components/icons';
 
 
 const previousOrders = [
@@ -49,10 +50,8 @@ const previousOrders = [
 
 const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const year = date.getFullYear();
-    return `${day}/${month}/${year}`;
+    const options: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'numeric', year: 'numeric' };
+    return new Intl.DateTimeFormat('en-IN', options).format(date);
 }
 
 export default function AccountPage() {
@@ -61,6 +60,12 @@ export default function AccountPage() {
   const [codName, setCodName] = useState('');
   const [codAddress, setCodAddress] = useState('');
   const [codOrder, setCodOrder] = useState('');
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
 
   const handleQuickPay = () => {
     const paymentAmount = parseFloat(amount);
@@ -124,7 +129,7 @@ export default function AccountPage() {
             <div>
                 <h2 className="text-2xl font-bold font-headline mb-4">Order History</h2>
                 <div className="space-y-6">
-                {previousOrders.map((order) => (
+                {isClient && previousOrders.map((order) => (
                     <Card key={order.id}>
                     <CardHeader className="flex flex-row justify-between items-start">
                         <div>
@@ -173,6 +178,11 @@ export default function AccountPage() {
                                     className="pl-10"
                                 />
                             </div>
+                        </div>
+                        <div className="flex items-center justify-center gap-4">
+                            <Icons.paytm className="h-6" />
+                            <Icons.gpay className="h-6" />
+                            <Icons.phonepe className="h-6" />
                         </div>
                          <p className="text-sm text-muted-foreground">
                             You will be asked to pay to UPI ID: <span className="font-semibold text-foreground">9310364770@paytm</span>
