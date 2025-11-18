@@ -9,8 +9,8 @@
     {
       "id": "biryani-non-veg",
       "description": "Aromatic non-vegetarian biryani.",
-      "imageUrl": "https://images.unsplash.com/photo-1691170979035-27e5ec943205?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxiaXJ5YW5pJTIwY2hpY2tlbnxlbnwwfHx8fDE3NjMzODMwNTh8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "biryani chicken"
+      "imageUrl": "https://images.unsplash.com/photo-1589302168068-964664d93dc0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjaGlja2VuJTIwYmlyeWFuaXxlbnwwfHx8fDE3NjM0MDgwMjd8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "chicken biryani"
     },
     {
       "id": "biryani-veg",
@@ -39,8 +39,8 @@
     {
       "id": "momos-veg-fry",
       "description": "Fried vegetable momos.",
-      "imageUrl": "https://images.unsplash.com/photo-1602928630997-6aed5b819677?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxtb21vcyUyMGZyaWVkfGVufDB8fHx8MTc2MzM4MzA1OHww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "momos fried"
+      "imageUrl": "https://images.unsplash.com/photo-1596392019483-33de80a0499d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxmcmllZCUyMHZlZ2V0YWJsZSUyMGR1bXBsaW5nc3xlbnwwfHx8fDE3NjM0MDgxNTB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "fried dumplings"
     },
     {
       "id": "momos-non-veg-steam",
@@ -51,8 +51,8 @@
     {
       "id": "momos-non-veg-fry",
       "description": "Fried chicken momos.",
-      "imageUrl": "https://images.unsplash.com/photo-1627799370307-9b2a689bb94f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8bW9tb3MlMjBmcmllZCUyMGNoaWNrZW58ZW58MHx8fHwxNzYzMzgzMDU4fDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "momos fried chicken"
+      "imageUrl": "https://images.unsplash.com/photo-1627799370307-9b2a689bb94f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxmcmllZCUyMGNoaWNrZW4lMjBkdW1wbGluZ3N8ZW58MHx8fHwxNzYzNDA4MTg1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "fried chicken dumplings"
     },
     {
       "id": "roll-veg",
