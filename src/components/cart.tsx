@@ -36,16 +36,14 @@ import { Textarea } from './ui/textarea';
 import { Icons } from './icons';
 
 export default function Cart({ children }: { children?: React.ReactNode }) {
-    const { cartItems, removeFromCart, clearCart } = useCart();
+    const { cartItems, removeFromCart, clearCart, getCartItemDetails } = useCart();
     const { toast } = useToast();
     const [customerName, setCustomerName] = useState('');
     const [deliveryAddress, setDeliveryAddress] = useState('');
     const [addressSubmitted, setAddressSubmitted] = useState(false);
     const [paymentMethod, setPaymentMethod] = useState('phone');
 
-    const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
-    const deliveryFee = 0; // Free delivery!
-    const total = subtotal + deliveryFee;
+    const {subtotal, total} = getCartItemDetails();
     const upiLink = `upi://pay?pa=9310364770@paytm&pn=Foodie%20Kingdom&am=${total.toFixed(2)}&cu=INR`;
     
     const handleAddressSubmit = () => {
@@ -57,17 +55,22 @@ export default function Cart({ children }: { children?: React.ReactNode }) {
             });
             return;
         }
+
+        const orderDetails = cartItems.map(item => `${item.quantity} x ${item.name} (${item.option})`).join('\n');
         
-        const message = `Delivery Address: ${deliveryAddress}`;
+        const message = `New Order from Foodie Kingdom:\n\nItems:\n${orderDetails}\n\nTotal: ₹${total.toFixed(2)}\n\nDelivery Address: ${deliveryAddress}\n\nPayment Method: Prepaid (UPI)`;
         const encodedMessage = encodeURIComponent(message);
-        const whatsappUrl = `https://wa.me/918178480946?text=${encodedMessage}`;
-        window.open(whatsappUrl, '_blank');
+        
+        // This sends the order details and address to the delivery partner
+        const deliveryWhatsappUrl = `https://wa.me/918178480946?text=${encodedMessage}`;
+        window.open(deliveryWhatsappUrl, '_blank');
+
         setAddressSubmitted(true);
+        
         toast({
             title: "Address Submitted",
-            description: "Your delivery address has been sent. You can now proceed to pay.",
+            description: "Your order has been sent to the delivery partner. Please proceed to pay.",
         });
-        
     }
 
     const handlePlaceOrder = () => {
@@ -89,19 +92,24 @@ export default function Cart({ children }: { children?: React.ReactNode }) {
             return;
         }
 
-
         const orderDetails = cartItems.map(item => `${item.quantity} x ${item.name} (${item.option})`).join('\n');
         let message;
+        let ownerWhatsappUrl;
 
         if (paymentMethod === 'cod') {
              message = `New COD Order from Foodie Kingdom:\n\nCustomer Name: ${customerName}\nAddress: ${deliveryAddress}\n\nItems:\n${orderDetails}\n\nTotal: ₹${total.toFixed(2)}\n\nPayment Method: Cash on Delivery`;
+             const encodedMessage = encodeURIComponent(message);
+             // Send COD order to both owner and delivery partner
+             ownerWhatsappUrl = `https://wa.me/919310364770?text=${encodedMessage}`;
+             const deliveryWhatsappUrl = `https://wa.me/918178480946?text=${encodedMessage}`;
+             window.open(deliveryWhatsappUrl, '_blank');
         } else {
-             message = `New Order from Foodie Kingdom:\n\nItems:\n${orderDetails}\n\nTotal: ₹${total.toFixed(2)}\n\nDelivery Address: ${deliveryAddress}\n\nPayment Method: Prepaid (UPI)`;
+             message = `Payment confirmation for order:\n\nItems:\n${orderDetails}\n\nTotal: ₹${total.toFixed(2)}\n\nDelivery Address: ${deliveryAddress}`;
+             const encodedMessage = encodeURIComponent(message);
+             // Send only payment confirmation to the owner
+             ownerWhatsappUrl = `https://wa.me/919310364770?text=${encodedMessage}`;
         }
        
-        const encodedMessage = encodeURIComponent(message);
-        const ownerWhatsappUrl = `https://wa.me/919310364770?text=${encodedMessage}`;
-
         if (paymentMethod === 'phone') {
             window.location.href = upiLink;
         }
@@ -268,7 +276,7 @@ export default function Cart({ children }: { children?: React.ReactNode }) {
                                 <Phone className="h-4 w-4" />
                                 <AlertTitle>Delivery Contact</AlertTitle>
                                 <AlertDescription>
-                                    To coordinate your delivery, please call Mohit at <strong>8178480946</strong>.
+                                    After submitting your address, please call Mohit at <strong>8178480946</strong> to confirm.
                                 </AlertDescription>
                             </Alert>
                         </div>
@@ -293,3 +301,4 @@ export default function Cart({ children }: { children?: React.ReactNode }) {
     
 
     
+
