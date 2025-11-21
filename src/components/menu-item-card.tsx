@@ -1,3 +1,4 @@
+
 'use client';
 
 import Image from 'next/image';
@@ -31,10 +32,9 @@ export default function MenuItemCard({ item }: MenuItemCardProps) {
 
   const handleAddToCart = () => {
     const cartItem = {
-        id: `${item.id}-${selectedOption.name}`,
+        menuItemId: item.id,
         name: item.name,
         price: selectedOption.price,
-        quantity: 1,
         imageId: item.imageId,
         option: selectedOption.name
     }

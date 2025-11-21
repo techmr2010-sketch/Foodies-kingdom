@@ -1,9 +1,11 @@
+
 'use client';
 
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 type CartItem = {
-    id: string;
+    id: string; // A unique ID for the cart item, e.g., `${menuItemId}-${optionName}`
+    menuItemId: string; // The original ID of the menu item
     name: string;
     price: number;
     quantity: number;
@@ -13,7 +15,7 @@ type CartItem = {
 
 type CartContextType = {
   cartItems: CartItem[];
-  addToCart: (item: CartItem) => void;
+  addToCart: (item: Omit<CartItem, 'id' | 'quantity'> & { quantity?: number }) => void;
   removeFromCart: (id: string) => void;
   clearCart: () => void;
 };
@@ -23,15 +25,16 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
-  const addToCart = (item: CartItem) => {
+  const addToCart = (item: Omit<CartItem, 'id' | 'quantity'> & { quantity?: number }) => {
+    const cartItemId = `${item.menuItemId}-${item.option}`;
     setCartItems(prevItems => {
-      const existingItem = prevItems.find(i => i.id === item.id);
+      const existingItem = prevItems.find(i => i.id === cartItemId);
       if (existingItem) {
         return prevItems.map(i =>
-          i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
+          i.id === cartItemId ? { ...i, quantity: i.quantity + (item.quantity || 1) } : i
         );
       }
-      return [...prevItems, { ...item, quantity: 1 }];
+      return [...prevItems, { ...item, id: cartItemId, quantity: item.quantity || 1 }];
     });
   };
 

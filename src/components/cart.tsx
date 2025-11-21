@@ -65,8 +65,9 @@ export default function Cart({ children }: { children?: React.ReactNode }) {
         setAddressSubmitted(true);
         toast({
             title: "Address Submitted",
-            description: "Your delivery address has been sent to the delivery partner.",
+            description: "Your delivery address has been sent. You can now proceed to pay.",
         });
+        
     }
 
     const handlePlaceOrder = () => {
@@ -276,7 +277,7 @@ export default function Cart({ children }: { children?: React.ReactNode }) {
                         className="w-full text-lg" 
                         size="lg" 
                         onClick={handlePlaceOrder} 
-                        disabled={(paymentMethod === 'phone' && !addressSubmitted) && cartItems.length > 0}
+                        disabled={paymentMethod === 'phone' && !addressSubmitted && cartItems.length > 0}
                     >
                         <Send className="mr-2 h-4 w-4" />
                         {paymentMethod === 'cod' ? 'Place COD Order' : 'Proceed to Pay'}
