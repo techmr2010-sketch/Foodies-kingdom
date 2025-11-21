@@ -65,7 +65,6 @@ export default function Cart({ children }: { children?: React.ReactNode }) {
         window.open(deliveryWhatsappUrl, '_blank');
 
         setAddressSubmitted(true);
-        setDeliveryAddress(''); // Clear address field after submission
         
         toast({
             title: "Address Submitted",
@@ -268,8 +267,8 @@ export default function Cart({ children }: { children?: React.ReactNode }) {
                                         required
                                         disabled={addressSubmitted}
                                     />
-                                    <Button onClick={handleAddressSubmit} disabled={addressSubmitted}>
-                                        {addressSubmitted ? 'Submitted' : 'Submit'}
+                                    <Button onClick={handleAddressSubmit}>
+                                        Submit
                                     </Button>
                                 </div>
                             </div>
@@ -298,6 +297,8 @@ export default function Cart({ children }: { children?: React.ReactNode }) {
     </Sheet>
   );
 }
+
+    
 
     
 
