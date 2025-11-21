@@ -214,7 +214,7 @@ export default function Cart({ children }: { children?: React.ReactNode }) {
                                     <Icons.phonepe className="h-6" />
                                 </div>
                             </Label>
-                            <Label htmlFor="cod" className="flex items-center gap-4 rounded-md border p-4 cursor-pointer hover:bg-accent hover:text-accent-foreground has-[input:checked]:bg-accent has-[input:checked]:text-accent-foreground">
+                            <Label htmlFor="cod" className="flex items-center gap-4 rounded-md border p-4 cursor-pointer hover:bg-accent hover:text-accent-foreground has-[input:checked]:bg-accent has-[input-checked]:text-accent-foreground bg-amber-100">
                                 <RadioGroupItem value="cod" id="cod" />
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-banknote"><rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg>
                                 <span>Cash on Delivery</span>
@@ -257,10 +257,9 @@ export default function Cart({ children }: { children?: React.ReactNode }) {
                                         value={deliveryAddress}
                                         onChange={(e) => setDeliveryAddress(e.target.value)}
                                         required
-                                        disabled={addressSubmitted}
                                     />
-                                    <Button onClick={handleAddressSubmit} disabled={addressSubmitted}>
-                                        {addressSubmitted ? 'Submitted' : 'Submit'}
+                                    <Button onClick={handleAddressSubmit}>
+                                        Submit
                                     </Button>
                                 </div>
                             </div>
@@ -289,5 +288,7 @@ export default function Cart({ children }: { children?: React.ReactNode }) {
     </Sheet>
   );
 }
+
+    
 
     
