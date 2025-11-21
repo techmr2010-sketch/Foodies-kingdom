@@ -61,11 +61,11 @@ export default function Cart({ children }: { children?: React.ReactNode }) {
         const message = `New Order from Foodie Kingdom:\n\nItems:\n${orderDetails}\n\nTotal: ₹${total.toFixed(2)}\n\nDelivery Address: ${deliveryAddress}\n\nPayment Method: Prepaid (UPI)`;
         const encodedMessage = encodeURIComponent(message);
         
-        // This sends the order details and address to the delivery partner
         const deliveryWhatsappUrl = `https://wa.me/918178480946?text=${encodedMessage}`;
         window.open(deliveryWhatsappUrl, '_blank');
 
         setAddressSubmitted(true);
+        setDeliveryAddress(''); // Clear address field after submission
         
         toast({
             title: "Address Submitted",
@@ -266,9 +266,10 @@ export default function Cart({ children }: { children?: React.ReactNode }) {
                                         value={deliveryAddress}
                                         onChange={(e) => setDeliveryAddress(e.target.value)}
                                         required
+                                        disabled={addressSubmitted}
                                     />
-                                    <Button onClick={handleAddressSubmit}>
-                                        Submit
+                                    <Button onClick={handleAddressSubmit} disabled={addressSubmitted}>
+                                        {addressSubmitted ? 'Submitted' : 'Submit'}
                                     </Button>
                                 </div>
                             </div>
@@ -297,5 +298,7 @@ export default function Cart({ children }: { children?: React.ReactNode }) {
     </Sheet>
   );
 }
+
+    
 
     
