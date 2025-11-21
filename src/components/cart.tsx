@@ -69,7 +69,7 @@ export default function Cart({ children }: { children?: React.ReactNode }) {
         
         toast({
             title: "Address Submitted",
-            description: "Your order has been sent to the delivery partner. Please proceed to pay.",
+            description: "Your order has been sent. Please proceed to pay.",
         });
     }
 
