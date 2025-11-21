@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -247,9 +248,8 @@ export default function CartPage() {
                                                     value={deliveryAddress}
                                                     onChange={(e) => setDeliveryAddress(e.target.value)}
                                                     required
-                                                    disabled={addressSubmitted}
                                                 />
-                                                <Button onClick={handleAddressSubmit} disabled={addressSubmitted}>
+                                                <Button onClick={handleAddressSubmit}>
                                                     Submit
                                                 </Button>
                                             </div>
@@ -290,4 +290,5 @@ export default function CartPage() {
         <Footer />
     </div>
   );
-}
+
+    
