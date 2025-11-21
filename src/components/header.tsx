@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ChefHat, User } from 'lucide-react';
+import { ChefHat, User, ShoppingCart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Cart from '@/components/cart';
 import {
@@ -10,7 +10,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { SheetTrigger } from './ui/sheet';
 
 export default function Header() {
   return (
@@ -25,43 +24,43 @@ export default function Header() {
         <div className="flex items-center gap-2">
           <nav className="hidden md:flex gap-4">
             <Button variant="link" asChild>
-              <Link href="#menu">Menu</Link>
+              <Link href="/#menu">Menu</Link>
             </Button>
             <Button variant="link" asChild>
-              <Link href="#recommendations">For You</Link>
+              <Link href="/#recommendations">For You</Link>
             </Button>
             <Button variant="link" asChild>
-              <Link href="#partners">Partners</Link>
+              <Link href="/#partners">Partners</Link>
             </Button>
           </nav>
-          <Cart>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon">
-                  <User className="h-6 w-6" />
-                  <span className="sr-only">Open user menu</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                 <SheetTrigger asChild>
-                  <DropdownMenuItem>
-                    Cart
-                  </DropdownMenuItem>
-                </SheetTrigger>
-                <DropdownMenuItem asChild>
-                  <Link href="/account">Order History</Link>
-                </DropdownMenuItem>
-                 <DropdownMenuItem asChild>
-                  <Link href="/account">Payment</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/help">Help Centre</Link>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </Cart>
+          <Cart />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <User className="h-6 w-6" />
+                <span className="sr-only">Open user menu</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+               <DropdownMenuItem asChild>
+                <Link href="/cart">
+                  <ShoppingCart className="mr-2 h-4 w-4" />
+                  <span>Cart</span>
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/account">Order History</Link>
+              </DropdownMenuItem>
+               <DropdownMenuItem asChild>
+                <Link href="/account">Payment</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/help">Help Centre</Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </header>
