@@ -299,6 +299,3 @@ export default function Cart({ children }: { children?: React.ReactNode }) {
 }
 
     
-
-    
-
