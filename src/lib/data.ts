@@ -1,3 +1,4 @@
+
 export type MenuItemOption = {
   name: string;
   price: number;
@@ -218,6 +219,14 @@ export const menuData: MenuItem[] = [
     options: [
       { name: '1 Piece', price: 20 },
       { name: '2 Pieces', price: 30 },
+      { name: '3 Pieces', price: 40 },
+      { name: '4 Pieces', price: 50 },
+      { name: '5 Pieces', price: 60 },
+      { name: '6 Pieces', price: 70 },
+      { name: '7 Pieces', price: 80 },
+      { name: '8 Pieces', price: 90 },
+      { name: '9 Pieces', price: 100 },
+      { name: '10 Pieces', price: 100 },
     ],
     imageId: 'samosa',
     restaurant: 'Snack Shack',
