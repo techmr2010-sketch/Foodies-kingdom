@@ -23,7 +23,6 @@ export default function CartPage() {
     const { cartItems, removeFromCart, clearCart, getCartItemDetails } = useCart();
     const { toast } = useToast();
     const [customerName, setCustomerName] = useState('');
-    const [deliveryAddress, setDeliveryAddress] = useState('');
     const [paymentMethod, setPaymentMethod] = useState('phone');
 
     const {subtotal, total} = getCartItemDetails();
@@ -38,21 +37,12 @@ export default function CartPage() {
             return;
         }
 
-        if (!deliveryAddress) {
-            toast({
-                variant: "destructive",
-                title: "Address Missing",
-                description: "Please enter your delivery address.",
-            });
-            return;
-        }
-
         const orderDetails = cartItems.map(item => `${item.quantity} x ${item.name} (${item.option})`).join('\n');
         let message;
         let ownerWhatsappUrl;
         
         const upiLink = `upi://pay?pa=9310364770@paytm&pn=Foodie%20Kingdom&am=${total.toFixed(2)}&cu=INR`;
-        const deliveryWhatsappUrl = `https://wa.me/918178480946?text=${encodeURIComponent(`New Order from Foodie Kingdom:\n\nItems:\n${orderDetails}\n\nTotal: ₹${total.toFixed(2)}\n\nDelivery Address: ${deliveryAddress}\n\nPayment Method: Prepaid (UPI)`)}`;
+        const deliveryWhatsappUrl = `https://wa.me/918178480946?text=${encodeURIComponent(`New Order from Foodie Kingdom:\n\nItems:\n${orderDetails}\n\nTotal: ₹${total.toFixed(2)}\n\nPayment Method: Prepaid (UPI)`)}`;
 
         if (paymentMethod === 'cod') {
              if (!customerName) {
@@ -63,7 +53,7 @@ export default function CartPage() {
                 });
                 return;
              }
-             message = `New COD Order from Foodie Kingdom:\n\nCustomer Name: ${customerName}\nAddress: ${deliveryAddress}\n\nItems:\n${orderDetails}\n\nTotal: ₹${total.toFixed(2)}\n\nPayment Method: Cash on Delivery`;
+             message = `New COD Order from Foodie Kingdom:\n\nCustomer Name: ${customerName}\n\nItems:\n${orderDetails}\n\nTotal: ₹${total.toFixed(2)}\n\nPayment Method: Cash on Delivery`;
              const encodedMessage = encodeURIComponent(message);
              ownerWhatsappUrl = `https://wa.me/919310364770?text=${encodedMessage}`;
              const deliveryCodWhatsappUrl = `https://wa.me/918178480946?text=${encodedMessage}`;
@@ -73,7 +63,7 @@ export default function CartPage() {
              window.open(deliveryWhatsappUrl, '_blank');
 
              // Then prepare message for owner and redirect to UPI
-             message = `Payment confirmation for order:\n\nItems:\n${orderDetails}\n\nTotal: ₹${total.toFixed(2)}\n\nDelivery Address: ${deliveryAddress}`;
+             message = `Payment confirmation for order:\n\nItems:\n${orderDetails}\n\nTotal: ₹${total.toFixed(2)}`;
              const encodedMessage = encodeURIComponent(message);
              ownerWhatsappUrl = `https://wa.me/919310364770?text=${encodedMessage}`;
         }
@@ -90,7 +80,6 @@ export default function CartPage() {
         });
         
         clearCart();
-        setDeliveryAddress('');
         setCustomerName('');
     };
 
@@ -210,20 +199,9 @@ export default function CartPage() {
                                             />
                                         </div>
                                     )}
-                                    <div>
-                                        <Label htmlFor="delivery-address" className="mb-2 block">Delivery Address</Label>
-                                        <Input
-                                            id="delivery-address"
-                                            type="text"
-                                            placeholder="Enter your full address"
-                                            value={deliveryAddress}
-                                            onChange={(e) => setDeliveryAddress(e.target.value)}
-                                            required
-                                        />
-                                         <p className="text-sm text-muted-foreground mt-2">
-                                            By clicking on the button Procced to Pay you will directly go to the deliviery boy whatshapp no. Then you wiil enter your full address and click on send Button
-                                        </p>
-                                    </div>
+                                    <p className="text-sm text-muted-foreground mt-2">
+                                        By clicking on the button Procced to Pay you will directly go to the deliviery boy whatshapp no. Then you wiil enter your full address and click on send Button
+                                    </p>
                                 </div>
                                 
                                 <Button 
@@ -254,3 +232,4 @@ export default function CartPage() {
   );
 
     
+
