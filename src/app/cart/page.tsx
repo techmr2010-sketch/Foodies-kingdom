@@ -248,8 +248,9 @@ export default function CartPage() {
                                                     value={deliveryAddress}
                                                     onChange={(e) => setDeliveryAddress(e.target.value)}
                                                     required
+                                                    disabled={cartItems.length === 0}
                                                 />
-                                                <Button onClick={handleAddressSubmit}>
+                                                <Button onClick={handleAddressSubmit} disabled={!deliveryAddress || cartItems.length === 0}>
                                                     Submit
                                                 </Button>
                                             </div>
@@ -267,7 +268,7 @@ export default function CartPage() {
                                     className="w-full text-lg" 
                                     size="lg" 
                                     onClick={handlePlaceOrder} 
-                                    disabled={(paymentMethod === 'phone' && !addressSubmitted && cartItems.length > 0) || (paymentMethod === 'cod' && (!customerName || !deliveryAddress))}
+                                    disabled={(paymentMethod === 'phone' && !addressSubmitted && cartItems.length > 0) || (paymentMethod === 'cod' && (!customerName || !deliveryAddress)) || cartItems.length === 0}
                                 >
                                     <Send className="mr-2 h-4 w-4" />
                                     {paymentMethod === 'cod' ? 'Place COD Order' : 'Proceed to Pay'}
@@ -290,5 +291,7 @@ export default function CartPage() {
         <Footer />
     </div>
   );
+
+    
 
     
