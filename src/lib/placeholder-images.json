@@ -39,8 +39,8 @@
     {
       "id": "momos-veg-fry",
       "description": "Fried vegetable momos.",
-      "imageUrl": "https://storage.googleapis.com/aifirebase-7996c.appspot.com/user_images/i_will_add_the_image_you_pr_f36750.jpeg",
-      "imageHint": "fried dumplings"
+      "imageUrl": "https://storage.googleapis.com/aifirebase-7996c.appspot.com/user_images/paste_this_photo_at_the_momos_b84310.jpeg",
+      "imageHint": "fried momos"
     },
     {
       "id": "momos-non-veg-steam",
@@ -51,7 +51,7 @@
     {
       "id": "momos-non-veg-fry",
       "description": "Fried chicken momos.",
-      "imageUrl": "https://storage.googleapis.com/aifirebase-7996c.appspot.com/user_images/i_will_add_the_image_you_pr_f36750.jpeg",
+      "imageUrl": "https://storage.googleapis.com/aifirebase-7996c.appspot.com/user_images/add_thi_photo_at_the_momos_f_93e993.jpeg",
       "imageHint": "fried chicken dumplings"
     },
     {
@@ -63,7 +63,7 @@
     {
       "id": "roll-egg",
       "description": "Hearty egg roll.",
-      "imageUrl": "https://storage.googleapis.com/aifirebase-7996c.appspot.com/user_images/i_ll_update_the_image_for_th_809b43.jpeg",
+      "imageUrl": "https://storage.googleapis.com/aifirebase-7996c.appspot.com/user_images/add_this_image_at_the_egg_rol_5a4439.jpeg",
       "imageHint": "egg roll"
     },
     {
