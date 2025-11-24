@@ -221,7 +221,7 @@ export default function CartPage() {
                                             required
                                         />
                                          <p className="text-sm text-muted-foreground mt-2">
-                                            By Clicking on the button procced to pay you will directly go to the deliviery boy whatshapp no. then you click on send Buuton
+                                            By clicking on the button Procced to Pay you will directly go to the deliviery boy whatshapp no. Then you wiil enter your full address and click on send Button
                                         </p>
                                     </div>
                                 </div>
