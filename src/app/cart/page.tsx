@@ -24,13 +24,20 @@ export default function CartPage() {
     const { toast } = useToast();
     const [customerName, setCustomerName] = useState('');
     const [deliveryAddress, setDeliveryAddress] = useState('');
-    const [addressSubmitted, setAddressSubmitted] = useState(false);
     const [paymentMethod, setPaymentMethod] = useState('phone');
 
     const {subtotal, total} = getCartItemDetails();
-    const upiLink = `upi://pay?pa=9310364770@paytm&pn=Foodie%20Kingdom&am=${total.toFixed(2)}&cu=INR`;
     
-    const handleAddressSubmit = () => {
+    const handlePlaceOrder = () => {
+        if (cartItems.length === 0) {
+             toast({
+                variant: "destructive",
+                title: "Cart is Empty",
+                description: "Please add items to your cart before placing an order.",
+            });
+            return;
+        }
+
         if (!deliveryAddress) {
             toast({
                 variant: "destructive",
@@ -41,55 +48,33 @@ export default function CartPage() {
         }
 
         const orderDetails = cartItems.map(item => `${item.quantity} x ${item.name} (${item.option})`).join('\n');
-        
-        const message = `New Order from Foodie Kingdom:\n\nItems:\n${orderDetails}\n\nTotal: ₹${total.toFixed(2)}\n\nDelivery Address: ${deliveryAddress}\n\nPayment Method: Prepaid (UPI)`;
-        const encodedMessage = encodeURIComponent(message);
-        
-        const deliveryWhatsappUrl = `https://wa.me/918178480946?text=${encodedMessage}`;
-        window.open(deliveryWhatsappUrl, '_blank');
-
-        setAddressSubmitted(true);
-        
-        toast({
-            title: "Address Submitted",
-            description: "Your order has been sent. Please proceed to pay.",
-        });
-    }
-
-    const handlePlaceOrder = () => {
-        if (paymentMethod === 'cod' && (!customerName || !deliveryAddress)) {
-             toast({
-                variant: "destructive",
-                title: "Information Missing",
-                description: "Please enter your name and address for Cash on Delivery.",
-            });
-            return;
-        }
-
-        if (paymentMethod !== 'cod' && !addressSubmitted) {
-             toast({
-                variant: "destructive",
-                title: "Address Not Submitted",
-                description: "Please submit your delivery address first.",
-            });
-            return;
-        }
-
-        const orderDetails = cartItems.map(item => `${item.quantity} x ${item.name} (${item.option})`).join('\n');
         let message;
         let ownerWhatsappUrl;
+        
+        const upiLink = `upi://pay?pa=9310364770@paytm&pn=Foodie%20Kingdom&am=${total.toFixed(2)}&cu=INR`;
+        const deliveryWhatsappUrl = `https://wa.me/918178480946?text=${encodeURIComponent(`New Order from Foodie Kingdom:\n\nItems:\n${orderDetails}\n\nTotal: ₹${total.toFixed(2)}\n\nDelivery Address: ${deliveryAddress}\n\nPayment Method: Prepaid (UPI)`)}`;
 
         if (paymentMethod === 'cod') {
+             if (!customerName) {
+                toast({
+                    variant: "destructive",
+                    title: "Name Missing",
+                    description: "Please enter your name for Cash on Delivery.",
+                });
+                return;
+             }
              message = `New COD Order from Foodie Kingdom:\n\nCustomer Name: ${customerName}\nAddress: ${deliveryAddress}\n\nItems:\n${orderDetails}\n\nTotal: ₹${total.toFixed(2)}\n\nPayment Method: Cash on Delivery`;
              const encodedMessage = encodeURIComponent(message);
-             // Send COD order to both owner and delivery partner
              ownerWhatsappUrl = `https://wa.me/919310364770?text=${encodedMessage}`;
-             const deliveryWhatsappUrl = `https://wa.me/918178480946?text=${encodedMessage}`;
-             window.open(deliveryWhatsappUrl, '_blank');
+             const deliveryCodWhatsappUrl = `https://wa.me/918178480946?text=${encodedMessage}`;
+             window.open(deliveryCodWhatsappUrl, '_blank');
         } else {
+             // For UPI, first send to delivery partner
+             window.open(deliveryWhatsappUrl, '_blank');
+
+             // Then prepare message for owner and redirect to UPI
              message = `Payment confirmation for order:\n\nItems:\n${orderDetails}\n\nTotal: ₹${total.toFixed(2)}\n\nDelivery Address: ${deliveryAddress}`;
              const encodedMessage = encodeURIComponent(message);
-             // Send only payment confirmation to the owner
              ownerWhatsappUrl = `https://wa.me/919310364770?text=${encodedMessage}`;
         }
        
@@ -103,8 +88,8 @@ export default function CartPage() {
             title: "Order Placed!",
             description: "Your order details have been sent. The delivery partner will coordinate with you.",
         });
+        
         clearCart();
-        setAddressSubmitted(false);
         setDeliveryAddress('');
         setCustomerName('');
     };
@@ -210,8 +195,9 @@ export default function CartPage() {
                                     </Label>
                                 </RadioGroup>
 
-                                {paymentMethod === 'cod' ? (
-                                    <div className="space-y-4">
+                                
+                                <div className="space-y-4">
+                                    {paymentMethod === 'cod' && (
                                         <div>
                                             <Label htmlFor="cod-name" className="mb-2 block">Your Name</Label>
                                             <Input
@@ -223,52 +209,25 @@ export default function CartPage() {
                                                 required
                                             />
                                         </div>
-                                        <div>
-                                            <Label htmlFor="cod-address" className="mb-2 block">Delivery Address</Label>
-                                            <Input
-                                                id="cod-address"
-                                                type="text"
-                                                placeholder="Enter your full address"
-                                                value={deliveryAddress}
-                                                onChange={(e) => setDeliveryAddress(e.target.value)}
-                                                required
-                                            />
-                                        </div>
+                                    )}
+                                    <div>
+                                        <Label htmlFor="delivery-address" className="mb-2 block">Delivery Address</Label>
+                                        <Input
+                                            id="delivery-address"
+                                            type="text"
+                                            placeholder="Enter your full address"
+                                            value={deliveryAddress}
+                                            onChange={(e) => setDeliveryAddress(e.target.value)}
+                                            required
+                                        />
                                     </div>
-                                ) : (
-                                    <div className='space-y-4'>
-                                        <div>
-                                            <Label htmlFor="upi-address" className="mb-2 block">Delivery Location</Label>
-                                            <div className="flex gap-2">
-                                                <Input 
-                                                    id="upi-address"
-                                                    type="text" 
-                                                    placeholder="Enter your full address" 
-                                                    className="flex-grow" 
-                                                    value={deliveryAddress}
-                                                    onChange={(e) => setDeliveryAddress(e.target.value)}
-                                                    required
-                                                    disabled={cartItems.length === 0}
-                                                />
-                                                <Button onClick={handleAddressSubmit} disabled={!deliveryAddress || cartItems.length === 0}>
-                                                    Submit
-                                                </Button>
-                                            </div>
-                                        </div>
-                                        <Alert>
-                                            <Phone className="h-4 w-4" />
-                                            <AlertTitle>Delivery Contact</AlertTitle>
-                                            <AlertDescription>
-                                                After submitting your address, please call Mohit at <strong>8178480946</strong> to confirm.
-                                            </AlertDescription>
-                                        </Alert>
-                                    </div>
-                                )}
+                                </div>
+                                
                                 <Button 
                                     className="w-full text-lg" 
                                     size="lg" 
                                     onClick={handlePlaceOrder} 
-                                    disabled={(paymentMethod === 'phone' && !addressSubmitted && cartItems.length > 0) || (paymentMethod === 'cod' && (!customerName || !deliveryAddress)) || cartItems.length === 0}
+                                    disabled={cartItems.length === 0 || !deliveryAddress || (paymentMethod === 'cod' && !customerName)}
                                 >
                                     <Send className="mr-2 h-4 w-4" />
                                     {paymentMethod === 'cod' ? 'Place COD Order' : 'Proceed to Pay'}
@@ -291,7 +250,5 @@ export default function CartPage() {
         <Footer />
     </div>
   );
-
-    
 
     
