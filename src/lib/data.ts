@@ -122,12 +122,14 @@ export const menuData: MenuItem[] = [
   },
   {
     id: '9',
-    name: 'Roll Veg',
+    name: 'Veg Roll',
     type: 'veg',
     category: ['roll', 'veg', 'snack'],
     options: [
-      { name: '1 Piece', price: 50 },
-      { name: '2 Piece', price: 90 },
+      { name: '1 Piece', price: 30 },
+      { name: '2 Pieces', price: 60 },
+      { name: '3 Pieces', price: 90 },
+      { name: '4 Pieces', price: 100 },
     ],
     imageId: 'roll-veg',
     restaurant: 'Roll Express',
