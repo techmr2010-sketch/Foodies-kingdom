@@ -39,8 +39,8 @@
     {
       "id": "momos-veg-fry",
       "description": "Fried vegetable momos.",
-      "imageUrl": "https://images.unsplash.com/photo-1627762588821-6c24300d3536?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      "imageHint": "fried dumplings"
+      "imageUrl": "https://images.unsplash.com/photo-1674332448041-e940a43d9a5b?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "imageHint": "fried momos"
     },
     {
       "id": "momos-non-veg-steam",
@@ -63,7 +63,7 @@
     {
       "id": "roll-egg",
       "description": "Hearty egg roll.",
-      "imageUrl": "https://storage.googleapis.com/aifirebase-7996c.appspot.com/user_images/i_will_add_the_image_you_pr_f36750.jpeg",
+      "imageUrl": "https://images.unsplash.com/photo-1629813904944-87f58b093339?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       "imageHint": "egg roll"
     },
     {
