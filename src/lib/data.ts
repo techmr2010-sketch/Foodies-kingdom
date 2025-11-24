@@ -137,12 +137,14 @@ export const menuData: MenuItem[] = [
   },
   {
     id: '10',
-    name: 'Roll Egg',
+    name: 'Egg Roll',
     type: 'non-veg',
     category: ['roll', 'non-veg', 'snack'],
     options: [
       { name: '1 Piece', price: 60 },
-      { name: '2 Piece', price: 110 },
+      { name: '2 Pieces', price: 110 },
+      { name: '3 Pieces', price: 150 },
+      { name: '4 Pieces', price: 200 },
     ],
     imageId: 'roll-egg',
     restaurant: 'Roll Express',
