@@ -5,7 +5,7 @@ import Header from '@/components/header';
 import Footer from '@/components/footer';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { IndianRupee, ChevronLeft, Send, Home } from 'lucide-react';
+import { IndianRupee, ChevronLeft, Send, Home, MapPin } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -61,9 +61,46 @@ export default function AccountPage() {
   const [codAddress, setCodAddress] = useState('');
   const [codOrder, setCodOrder] = useState('');
   const [isClient, setIsClient] = useState(false);
+  const [location, setLocation] = useState<{ latitude: number; longitude: number } | null>(null);
+  const [locationError, setLocationError] = useState<string | null>(null);
+
+  const requestLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setLocation({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          });
+          setLocationError(null);
+          toast({
+            title: 'Location Captured',
+            description: 'Your location has been successfully captured.',
+          });
+        },
+        (error) => {
+          setLocationError(error.message);
+          toast({
+            variant: 'destructive',
+            title: 'Location Error',
+            description: 'Could not get your location. Please enable location services.',
+          });
+        }
+      );
+    } else {
+      setLocationError('Geolocation is not supported by this browser.');
+      toast({
+        variant: 'destructive',
+        title: 'Location Error',
+        description: 'Geolocation is not supported by this browser.',
+      });
+    }
+  };
+
 
   useEffect(() => {
     setIsClient(true);
+    requestLocation();
   }, []);
 
 
@@ -94,7 +131,14 @@ export default function AccountPage() {
       });
       return;
     }
-    const message = `New COD Order from Foodie Kingdom:\n\nCustomer Name: ${codName}\nAddress: ${codAddress}\n\nOrder Details:\n${codOrder}`;
+    let message = `New COD Order from Foodie Kingdom:\n\nCustomer Name: ${codName}\nAddress: ${codAddress}\n\nOrder Details:\n${codOrder}`;
+    
+    if (location) {
+        message += `\n\nLocation: https://www.google.com/maps?q=${location.latitude},${location.longitude}`;
+    } else if (locationError) {
+        message += `\n\nLocation Error: ${locationError}`;
+    }
+
     const encodedMessage = encodeURIComponent(message);
     const ownerWhatsappUrl = `https://wa.me/919310364770?text=${encodedMessage}`;
 
@@ -200,6 +244,14 @@ export default function AccountPage() {
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
+                         <div className="flex items-center justify-between mb-4">
+                           <Button variant="secondary" onClick={requestLocation}>
+                                <MapPin className="mr-2 h-4 w-4" />
+                                {location ? 'Refresh Location' : 'Get Location'}
+                           </Button>
+                           {location && <span className="text-sm text-green-600">Location captured!</span>}
+                           {locationError && <span className="text-sm text-destructive">Failed to get location.</span>}
+                        </div>
                         <Dialog>
                             <DialogTrigger asChild>
                                 <Button variant="outline" className="w-full bg-accent text-accent-foreground hover:bg-accent/90">

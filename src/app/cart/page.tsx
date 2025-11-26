@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import Image from 'next/image';
-import { ShoppingCart, Phone, IndianRupee, Trash2, Send, ChevronLeft } from "lucide-react";
+import { ShoppingCart, Phone, IndianRupee, Trash2, Send, ChevronLeft, MapPin } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
 import { useToast } from '@/hooks/use-toast';
@@ -24,6 +24,46 @@ export default function CartPage() {
     const { toast } = useToast();
     const [customerName, setCustomerName] = useState('');
     const [paymentMethod, setPaymentMethod] = useState('phone');
+    const [location, setLocation] = useState<{ latitude: number; longitude: number } | null>(null);
+    const [locationError, setLocationError] = useState<string | null>(null);
+
+
+    const requestLocation = () => {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              setLocation({
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude,
+              });
+              setLocationError(null);
+              toast({
+                title: 'Location Captured',
+                description: 'Your location has been successfully captured for delivery.',
+              });
+            },
+            (error) => {
+              setLocationError(error.message);
+              toast({
+                variant: 'destructive',
+                title: 'Location Error',
+                description: 'Could not get your location. Please enable location services in your browser.',
+              });
+            }
+          );
+        } else {
+          setLocationError('Geolocation is not supported by this browser.');
+           toast({
+                variant: 'destructive',
+                title: 'Location Error',
+                description: 'Geolocation is not supported by this browser.',
+            });
+        }
+    };
+    
+    useEffect(() => {
+        requestLocation();
+    }, []);
 
     const {subtotal, total} = getCartItemDetails();
     
@@ -54,6 +94,13 @@ export default function CartPage() {
                 return;
              }
              message = `New COD Order from Foodie Kingdom:\n\nCustomer Name: ${customerName}\n\nItems:\n${orderDetails}\n\nTotal: ₹${total.toFixed(2)}\n\nPayment Method: Cash on Delivery`;
+             
+             if (location) {
+                message += `\n\nLocation: https://www.google.com/maps?q=${location.latitude},${location.longitude}`;
+             } else if (locationError) {
+                message += `\n\nLocation Error: ${locationError}`;
+             }
+
              const encodedMessage = encodeURIComponent(message);
              ownerWhatsappUrl = `https://wa.me/919310364770?text=${encodedMessage}`;
              const deliveryCodWhatsappUrl = `https://wa.me/918178480946?text=${encodedMessage}`;
@@ -212,6 +259,16 @@ export default function CartPage() {
                                     <Send className="mr-2 h-4 w-4" />
                                     {paymentMethod === 'cod' ? 'Place COD Order' : 'Proceed to Pay'}
                                 </Button>
+                                {paymentMethod === 'cod' && (
+                                    <div className="flex items-center justify-between mt-4">
+                                       <Button variant="secondary" onClick={requestLocation}>
+                                            <MapPin className="mr-2 h-4 w-4" />
+                                            {location ? 'Refresh Location' : 'Get Location'}
+                                       </Button>
+                                       {location && <span className="text-sm text-green-600">Location captured!</span>}
+                                       {locationError && <span className="text-sm text-destructive">Failed to get location.</span>}
+                                    </div>
+                                )}
                             </CardContent>
                         </Card>
                     </div>
@@ -232,4 +289,5 @@ export default function CartPage() {
   );
 
     
+
 
