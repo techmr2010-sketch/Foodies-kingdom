@@ -9,7 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import Image from 'next/image';
-import { ShoppingCart, Phone, IndianRupee, Trash2, Send, ChevronLeft, MapPin } from "lucide-react";
+import { ShoppingCart, Phone, IndianRupee, Trash2, Send, ChevronLeft, MapPin, AlertCircle } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
 import { useToast } from '@/hooks/use-toast';
@@ -246,9 +246,13 @@ export default function CartPage() {
                                             />
                                         </div>
                                     )}
-                                    <p className="text-sm text-muted-foreground mt-2">
-                                        By clicking on the button Procced to Pay you will directly go to the deliviery boy whatshapp no. Then you wiil enter your full address and click on send Button
-                                    </p>
+                                    <Alert variant="default" className="bg-accent/50 border-primary/50">
+                                        <AlertCircle className="h-4 w-4" />
+                                        <AlertTitle className='font-semibold text-primary'>Important Information</AlertTitle>
+                                        <AlertDescription className="text-accent-foreground">
+                                            By clicking on the button Procced to Pay you will directly go to the owener whatshapp no. Then you wiil enter your name ,Full address and product screenshot then, click on send Button
+                                        </AlertDescription>
+                                    </Alert>
                                 </div>
                                 
                                 <Button 
@@ -287,7 +291,4 @@ export default function CartPage() {
         <Footer />
     </div>
   );
-
-    
-
-
+}
