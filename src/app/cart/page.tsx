@@ -82,7 +82,6 @@ export default function CartPage() {
         let ownerWhatsappUrl;
         
         const upiLink = `upi://pay?pa=9310364770@paytm&pn=Foodie%20Kingdom&am=${total.toFixed(2)}&cu=INR`;
-        const deliveryWhatsappUrl = `https://wa.me/918178480946?text=${encodeURIComponent(`New Order from Foodie Kingdom:\n\nItems:\n${orderDetails}\n\nTotal: ₹${total.toFixed(2)}\n\nPayment Method: Prepaid (UPI)`)}`;
 
         if (paymentMethod === 'cod') {
              if (!customerName) {
@@ -103,27 +102,21 @@ export default function CartPage() {
 
              const encodedMessage = encodeURIComponent(message);
              ownerWhatsappUrl = `https://wa.me/919310364770?text=${encodedMessage}`;
-             const deliveryCodWhatsappUrl = `https://wa.me/918178480946?text=${encodedMessage}`;
-             window.open(deliveryCodWhatsappUrl, '_blank');
         } else {
-             // For UPI, first send to delivery partner
-             window.open(deliveryWhatsappUrl, '_blank');
-
-             // Then prepare message for owner and redirect to UPI
-             message = `Payment confirmation for order:\n\nItems:\n${orderDetails}\n\nTotal: ₹${total.toFixed(2)}`;
+             message = `New UPI Order from Foodie Kingdom:\n\nItems:\n${orderDetails}\n\nTotal: ₹${total.toFixed(2)}\n\nPayment Method: Prepaid (UPI)`;
              const encodedMessage = encodeURIComponent(message);
              ownerWhatsappUrl = `https://wa.me/919310364770?text=${encodedMessage}`;
         }
        
+        window.open(ownerWhatsappUrl, '_blank');
+        
         if (paymentMethod === 'phone') {
             window.location.href = upiLink;
         }
         
-        window.open(ownerWhatsappUrl, '_blank');
-        
         toast({
             title: "Order Placed!",
-            description: "Your order details have been sent. The delivery partner will coordinate with you.",
+            description: "Your order details have been sent.",
         });
         
         clearCart();

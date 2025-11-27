@@ -249,6 +249,4 @@ export const restaurantPartners = [
     { name: 'Foodies', location: 'Andrews Ganj, Near Moolchand Metro Station', specialty: 'Multi-cuisine', owner: 'Prem' },
 ];
 
-export const deliveryPartners = [
-    { name: 'Mohit', phone: '8178480946', vehicle: 'Cycle' },
-];
+export const deliveryPartners: { name: string; phone: string; vehicle: string }[] = [];
