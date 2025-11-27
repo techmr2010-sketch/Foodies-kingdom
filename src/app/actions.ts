@@ -1,3 +1,4 @@
+
 'use server';
 import { personalizedDishRecommendations } from '@/ai/flows/personalized-dish-recommendations';
 
@@ -13,14 +14,16 @@ const userProfiles = {
   },
 };
 
-export async function getRecommendations() {
+export async function getRecommendations(userId?: string, history?: string[], preferences?: string) {
   try {
-    // In a real app, you would get the logged-in user's ID
-    const userId = 'user-123'; 
-    const userProfile = userProfiles[userId as keyof typeof userProfiles] || { orderHistory: [], dietaryPreferences: 'any' };
+    
+    const userProfile = { 
+        orderHistory: history || [], 
+        dietaryPreferences: preferences || 'any' 
+    };
 
     const recommendations = await personalizedDishRecommendations({
-      userId: userId,
+      userId: userId || 'anonymous',
       orderHistory: userProfile.orderHistory,
       dietaryPreferences: userProfile.dietaryPreferences,
       popularLocalChoices: ['Chicken Fried Rice', 'Roll Egg', 'Samosa', 'Biryani Veg'],

@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -7,27 +8,34 @@ import MenuItemCard from './menu-item-card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Skeleton } from '@/components/ui/skeleton';
 import { Sparkles } from 'lucide-react';
+import { useUser } from '@/context/user-context';
 
 export default function Recommendations() {
   const [recommendedItems, setRecommendedItems] = useState<typeof menuData>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { user } = useUser();
 
   useEffect(() => {
     const fetchRecommendations = async () => {
       setIsLoading(true);
-      const dishNames = await getRecommendations();
+      // Mock order history for recommendations for now
+      const mockHistory = ['Biryani Non Veg', 'Momos Non Veg Steam'];
+      const mockPrefs = 'non-vegetarian';
+      
+      const dishNames = await getRecommendations(user?.phone, mockHistory, mockPrefs);
+
       if (dishNames.length > 0) {
         const items = menuData.filter(item => dishNames.includes(item.name));
         setRecommendedItems(items);
       } else {
-        // Fallback to some popular items if AI fails
+        // Fallback to some popular items if AI fails or returns nothing
         setRecommendedItems(menuData.filter(item => ['1', '4', '5', '11'].includes(item.id)));
       }
       setIsLoading(false);
     };
 
     fetchRecommendations();
-  }, []);
+  }, [user]);
 
   return (
     <section id="recommendations" className="bg-card py-12">
@@ -50,7 +58,7 @@ export default function Recommendations() {
                 ))}
             </div>
         ) : (
-             <Carousel opts={{ align: "start", loop: true }} className="w-full">
+             <Carousel opts={{ align: "start", loop: recommendedItems.length > 3 }} className="w-full">
                 <CarouselContent>
                     {recommendedItems.map((item, index) => (
                     <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3 xl:basis-1/4">

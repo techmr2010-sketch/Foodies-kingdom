@@ -14,6 +14,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
 import { useToast } from '@/hooks/use-toast';
 import { useCart } from '@/context/cart-context';
+import { useUser } from '@/context/user-context';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Icons } from '@/components/icons';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -21,53 +22,28 @@ import Link from 'next/link';
 
 export default function CartPage() {
     const { cartItems, removeFromCart, clearCart, getCartItemDetails } = useCart();
+    const { user } = useUser();
     const { toast } = useToast();
     const [customerName, setCustomerName] = useState('');
     const [paymentMethod, setPaymentMethod] = useState('phone');
-    const [location, setLocation] = useState<{ latitude: number; longitude: number } | null>(null);
-    const [locationError, setLocationError] = useState<string | null>(null);
 
-
-    const requestLocation = () => {
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(
-            (position) => {
-              setLocation({
-                latitude: position.coords.latitude,
-                longitude: position.coords.longitude,
-              });
-              setLocationError(null);
-              toast({
-                title: 'Location Captured',
-                description: 'Your location has been successfully captured for delivery.',
-              });
-            },
-            (error) => {
-              setLocationError(error.message);
-              toast({
-                variant: 'destructive',
-                title: 'Location Error',
-                description: 'Could not get your location. Please enable location services in your browser.',
-              });
-            }
-          );
-        } else {
-          setLocationError('Geolocation is not supported by this browser.');
-           toast({
-                variant: 'destructive',
-                title: 'Location Error',
-                description: 'Geolocation is not supported by this browser.',
-            });
-        }
-    };
-    
     useEffect(() => {
-        requestLocation();
-    }, []);
+        if (user) {
+            setCustomerName(user.name);
+        }
+    }, [user]);
 
     const {subtotal, total} = getCartItemDetails();
     
     const handlePlaceOrder = () => {
+        if (!user) {
+            toast({
+                variant: "destructive",
+                title: "Not Signed In",
+                description: "Please sign in or sign up to place an order.",
+            });
+            return;
+        }
         if (cartItems.length === 0) {
              toast({
                 variant: "destructive",
@@ -88,22 +64,22 @@ export default function CartPage() {
                 toast({
                     variant: "destructive",
                     title: "Name Missing",
-                    description: "Please enter your name for Cash on Delivery.",
+                    description: "Something went wrong, your name is not available.",
                 });
                 return;
              }
-             message = `New COD Order from Foodie Kingdom:\n\nCustomer Name: ${customerName}\n\nItems:\n${orderDetails}\n\nTotal: ₹${total.toFixed(2)}\n\nPayment Method: Cash on Delivery`;
+             message = `New COD Order from Foodie Kingdom:\n\nCustomer Name: ${customerName}\nPhone: ${user.phone}\n\nItems:\n${orderDetails}\n\nTotal: ₹${total.toFixed(2)}\n\nPayment Method: Cash on Delivery`;
              
-             if (location) {
-                message += `\n\nLocation: https://www.google.com/maps?q=${location.latitude},${location.longitude}`;
-             } else if (locationError) {
-                message += `\n\nLocation Error: ${locationError}`;
+             if (user.location) {
+                message += `\n\nLocation: https://www.google.com/maps?q=${user.location.latitude},${user.location.longitude}`;
+             } else {
+                message += `\n\nLocation not provided.`;
              }
 
              const encodedMessage = encodeURIComponent(message);
              ownerWhatsappUrl = `https://wa.me/919310364770?text=${encodedMessage}`;
         } else {
-             message = `New UPI Order from Foodie Kingdom:\n\nItems:\n${orderDetails}\n\nTotal: ₹${total.toFixed(2)}\n\nPayment Method: Prepaid (UPI)`;
+             message = `New UPI Order from Foodie Kingdom:\n\nCustomer: ${customerName} (${user.phone})\nItems:\n${orderDetails}\n\nTotal: ₹${total.toFixed(2)}\n\nPayment Method: Prepaid (UPI)`;
              const encodedMessage = encodeURIComponent(message);
              ownerWhatsappUrl = `https://wa.me/919310364770?text=${encodedMessage}`;
         }
@@ -120,7 +96,6 @@ export default function CartPage() {
         });
         
         clearCart();
-        setCustomerName('');
     };
 
   return (
@@ -226,19 +201,6 @@ export default function CartPage() {
 
                                 
                                 <div className="space-y-4">
-                                    {paymentMethod === 'cod' && (
-                                        <div>
-                                            <Label htmlFor="cod-name" className="mb-2 block">Your Name</Label>
-                                            <Input
-                                                id="cod-name"
-                                                type="text"
-                                                placeholder="Enter your name"
-                                                value={customerName}
-                                                onChange={(e) => setCustomerName(e.target.value)}
-                                                required
-                                            />
-                                        </div>
-                                    )}
                                     <Alert variant="default" className="bg-accent/50 border-primary/50">
                                         <AlertCircle className="h-4 w-4" />
                                         <AlertTitle className='font-semibold text-primary'>Important Information</AlertTitle>
@@ -246,26 +208,25 @@ export default function CartPage() {
                                             By clicking on the button Procced to Pay you will directly go to the owener whatshapp no. Then you wiil enter your name ,Full address and product screenshot then, click on send Button
                                         </AlertDescription>
                                     </Alert>
+                                     {user && (
+                                        <div className="text-sm p-3 rounded-md bg-muted/50">
+                                            <p>Ordering as: <span className="font-semibold">{user.name}</span></p>
+                                            <p>Contact: <span className="font-semibold">{user.phone}</span></p>
+                                            {user.location && <p className='text-green-600 font-semibold'>Location is active.</p>}
+                                        </div>
+                                    )}
                                 </div>
                                 
                                 <Button 
                                     className="w-full text-lg" 
                                     size="lg" 
                                     onClick={handlePlaceOrder} 
+                                    disabled={!user}
                                 >
                                     <Send className="mr-2 h-4 w-4" />
                                     {paymentMethod === 'cod' ? 'Place COD Order' : 'Proceed to Pay'}
                                 </Button>
-                                {paymentMethod === 'cod' && (
-                                    <div className="flex items-center justify-between mt-4">
-                                       <Button variant="secondary" onClick={requestLocation}>
-                                            <MapPin className="mr-2 h-4 w-4" />
-                                            {location ? 'Refresh Location' : 'Get Location'}
-                                       </Button>
-                                       {location && <span className="text-sm text-green-600">Location captured!</span>}
-                                       {locationError && <span className="text-sm text-destructive">Failed to get location.</span>}
-                                    </div>
-                                )}
+
                             </CardContent>
                         </Card>
                     </div>

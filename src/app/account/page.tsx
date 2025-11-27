@@ -5,7 +5,7 @@ import Header from '@/components/header';
 import Footer from '@/components/footer';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { IndianRupee, ChevronLeft, Send, Home, MapPin, CheckCircle } from 'lucide-react';
+import { IndianRupee, ChevronLeft, Send, Home, MapPin, CheckCircle, User } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/dialog";
 import { Textarea } from '@/components/ui/textarea';
 import { Icons } from '@/components/icons';
+import { useUser } from '@/context/user-context';
 
 
 const initialOrders = [
@@ -67,53 +68,18 @@ const formatDate = (dateString: string) => {
 export default function AccountPage() {
   const [amount, setAmount] = useState('');
   const { toast } = useToast();
-  const [codName, setCodName] = useState('');
-  const [codAddress, setCodAddress] = useState('');
   const [codOrder, setCodOrder] = useState('');
   const [isClient, setIsClient] = useState(false);
-  const [location, setLocation] = useState<{ latitude: number; longitude: number } | null>(null);
-  const [locationError, setLocationError] = useState<string | null>(null);
   const [orders, setOrders] = useState(initialOrders);
-
-
-  const requestLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setLocation({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-          });
-          setLocationError(null);
-          toast({
-            title: 'Location Captured',
-            description: 'Your location has been successfully captured.',
-          });
-        },
-        (error) => {
-          setLocationError(error.message);
-          toast({
-            variant: 'destructive',
-            title: 'Location Error',
-            description: 'Could not get your location. Please enable location services.',
-          });
-        }
-      );
-    } else {
-      setLocationError('Geolocation is not supported by this browser.');
-      toast({
-        variant: 'destructive',
-        title: 'Location Error',
-        description: 'Geolocation is not supported by this browser.',
-      });
-    }
-  };
+  const { user, openSignUpModal } = useUser();
 
 
   useEffect(() => {
     setIsClient(true);
-    requestLocation();
-  }, []);
+    if (!user) {
+        openSignUpModal();
+    }
+  }, [user, openSignUpModal]);
 
 
   const handleQuickPay = () => {
@@ -135,7 +101,11 @@ export default function AccountPage() {
   };
 
   const handleCodSubmit = () => {
-    if (!codName || !codAddress || !codOrder) {
+    if (!user) {
+        toast({ variant: 'destructive', title: 'Not Signed In', description: 'Please sign in to place an order.'});
+        return;
+    }
+    if (!codOrder) {
       toast({
         variant: "destructive",
         title: "Information Missing",
@@ -143,12 +113,12 @@ export default function AccountPage() {
       });
       return;
     }
-    let message = `New COD Order from Foodie Kingdom:\n\nCustomer Name: ${codName}\nAddress: ${codAddress}\n\nOrder Details:\n${codOrder}`;
+    let message = `New COD Order from Foodie Kingdom:\n\nCustomer Name: ${user.name}\nAddress: Manual entry required\nPhone: ${user.phone}\n\nOrder Details:\n${codOrder}`;
     
-    if (location) {
-        message += `\n\nLocation: https://www.google.com/maps?q=${location.latitude},${location.longitude}`;
-    } else if (locationError) {
-        message += `\n\nLocation Error: ${locationError}`;
+    if (user.location) {
+        message += `\n\nLocation: https://www.google.com/maps?q=${user.location.latitude},${user.location.longitude}`;
+    } else {
+        message += `\n\nLocation Error: Not provided.`;
     }
 
     const encodedMessage = encodeURIComponent(message);
@@ -163,8 +133,6 @@ export default function AccountPage() {
 
     // Close the dialog and clear fields
     document.getElementById('close-cod-dialog')?.click();
-    setCodName('');
-    setCodAddress('');
     setCodOrder('');
   }
 
@@ -183,6 +151,25 @@ export default function AccountPage() {
   const pendingOrders = orders.filter(o => o.status !== 'Delivered');
   const deliveredOrders = orders.filter(o => o.status === 'Delivered');
 
+  if (!isClient) {
+      return null; // Or a loading spinner
+  }
+  
+  if (!user) {
+    return (
+        <div className="flex flex-col min-h-screen">
+            <Header />
+            <main className="flex-grow container mx-auto px-4 py-12 flex flex-col items-center justify-center text-center">
+                <User className="h-24 w-24 text-muted-foreground mb-4" />
+                <h1 className="text-3xl font-bold mb-2">Please Sign In</h1>
+                <p className="text-muted-foreground mb-6">You need to be signed in to view your account details.</p>
+                <Button onClick={openSignUpModal}>Sign Up / Sign In</Button>
+            </main>
+            <Footer />
+        </div>
+    )
+  }
+
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
@@ -199,7 +186,7 @@ export default function AccountPage() {
         <div className="grid md:grid-cols-2 gap-8">
             <div>
                  <h2 className="text-2xl font-bold font-headline mb-4">Pending Orders</h2>
-                {isClient && pendingOrders.length > 0 ? (
+                {pendingOrders.length > 0 ? (
                     <div className="space-y-6">
                     {pendingOrders.map((order) => (
                         <Card key={order.id}>
@@ -234,7 +221,7 @@ export default function AccountPage() {
                 )}
 
                 <h2 className="text-2xl font-bold font-headline mt-12 mb-4">Delivered Orders</h2>
-                {isClient && deliveredOrders.length > 0 ? (
+                {deliveredOrders.length > 0 ? (
                     <div className="space-y-6">
                     {deliveredOrders.map((order) => (
                         <Card key={order.id}>
@@ -266,8 +253,16 @@ export default function AccountPage() {
                 )}
             </div>
             <div>
-                <h2 className="text-2xl font-bold font-headline mb-4">Payments</h2>
-                <Card>
+                <h2 className="text-2xl font-bold font-headline mb-4">Actions</h2>
+                 <Card>
+                    <CardHeader>
+                        <CardTitle>Your Details</CardTitle>
+                        <CardDescription>
+                           Signed in as {user.name} ({user.phone}).
+                        </CardDescription>
+                    </CardHeader>
+                </Card>
+                <Card className="mt-8">
                     <CardHeader>
                         <CardTitle>Make a UPI Payment</CardTitle>
                         <CardDescription>
@@ -306,44 +301,24 @@ export default function AccountPage() {
                     <CardHeader>
                         <CardTitle>Cash on Delivery</CardTitle>
                         <CardDescription>
-                            Prefer to pay on delivery? Place your order here.
+                            Prefer to pay on delivery? Place your order here by describing what you want.
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
-                         <div className="flex items-center justify-between mb-4">
-                           <Button variant="secondary" onClick={requestLocation}>
-                                <MapPin className="mr-2 h-4 w-4" />
-                                {location ? 'Refresh Location' : 'Get Location'}
-                           </Button>
-                           {location && <span className="text-sm text-green-600">Location captured!</span>}
-                           {locationError && <span className="text-sm text-destructive">Failed to get location.</span>}
-                        </div>
                         <Dialog>
                             <DialogTrigger asChild>
                                 <Button variant="outline" className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
-                                    <Home className="mr-2 h-4 w-4" /> Place COD Order
+                                    <Home className="mr-2 h-4 w-4" /> Place Manual COD Order
                                 </Button>
                             </DialogTrigger>
                             <DialogContent className="sm:max-w-[425px]">
                                 <DialogHeader>
-                                <DialogTitle>Cash on Delivery Order</DialogTitle>
+                                <DialogTitle>Manual COD Order</DialogTitle>
                                 <DialogDescription>
-                                    Enter your details below. This will be sent to us via WhatsApp.
+                                    Enter your order details below. This will be sent to us via WhatsApp with your saved information.
                                 </DialogDescription>
                                 </DialogHeader>
                                 <div className="grid gap-4 py-4">
-                                <div className="grid grid-cols-4 items-center gap-4">
-                                    <Label htmlFor="cod-name" className="text-right">
-                                    Name
-                                    </Label>
-                                    <Input id="cod-name" value={codName} onChange={(e) => setCodName(e.target.value)} className="col-span-3" placeholder="Your full name" />
-                                </div>
-                                <div className="grid grid-cols-4 items-center gap-4">
-                                    <Label htmlFor="cod-address" className="text-right">
-                                    Address
-                                    </Label>
-                                    <Input id="cod-address" value={codAddress} onChange={(e) => setCodAddress(e.target.value)} className="col-span-3" placeholder="Your full delivery address"/>
-                                </div>
                                 <div className="grid grid-cols-4 items-center gap-4">
                                     <Label htmlFor="cod-order" className="text-right">
                                         Order
