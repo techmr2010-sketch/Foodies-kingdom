@@ -55,45 +55,33 @@ export default function CartPage() {
 
         const orderDetails = cartItems.map(item => `${item.quantity} x ${item.name} (${item.option})`).join('\n');
         let message;
-        let ownerWhatsappUrl;
         
         const upiLink = `upi://pay?pa=9310364770@paytm&pn=Foodie%20Kingdom&am=${total.toFixed(2)}&cu=INR`;
-
-        if (paymentMethod === 'cod') {
-             if (!customerName) {
-                toast({
-                    variant: "destructive",
-                    title: "Name Missing",
-                    description: "Something went wrong, your name is not available.",
-                });
-                return;
-             }
-             message = `New COD Order from Foodie Kingdom:\n\nCustomer Name: ${customerName}\nPhone: ${user.phone}\n\nItems:\n${orderDetails}\n\nTotal: ₹${total.toFixed(2)}\n\nPayment Method: Cash on Delivery`;
-             
-             if (user.location) {
-                message += `\n\nLocation: https://www.google.com/maps?q=${user.location.latitude},${user.location.longitude}`;
-             } else {
-                message += `\n\nLocation not provided.`;
-             }
-
-             const encodedMessage = encodeURIComponent(message);
-             ownerWhatsappUrl = `https://wa.me/919310364770?text=${encodedMessage}`;
-        } else {
-             message = `New UPI Order from Foodie Kingdom:\n\nCustomer: ${customerName} (${user.phone})\nItems:\n${orderDetails}\n\nTotal: ₹${total.toFixed(2)}\n\nPayment Method: Prepaid (UPI)`;
-             const encodedMessage = encodeURIComponent(message);
-             ownerWhatsappUrl = `https://wa.me/919310364770?text=${encodedMessage}`;
+        
+        let locationString = "Customer did not provide location.";
+        if (user.location) {
+            locationString = `https://www.google.com/maps?q=${user.location.latitude},${user.location.longitude}`;
         }
+        
+        message = `New Order from Foodie Kingdom:\n\nOrdering as: ${user.name}\nOrder Details:\n${orderDetails}\n\nTotal: ₹${total.toFixed(2)}\nContact: ${user.phone}\nLocation: ${locationString}\nPayment Method: ${paymentMethod === 'cod' ? 'Cash on Delivery' : 'Prepaid (UPI)'}`;
+        
+        const encodedMessage = encodeURIComponent(message);
+        const ownerWhatsappUrl = `https://wa.me/919310364770?text=${encodedMessage}`;
        
         window.open(ownerWhatsappUrl, '_blank');
         
         if (paymentMethod === 'phone') {
+            toast({
+                title: "Redirecting to UPI",
+                description: "Opening payment app and sending order to seller.",
+            });
             window.location.href = upiLink;
+        } else {
+            toast({
+                title: "Order Placed!",
+                description: "Your COD order details have been sent via WhatsApp.",
+            });
         }
-        
-        toast({
-            title: "Order Placed!",
-            description: "Your order details have been sent.",
-        });
         
         clearCart();
     };
