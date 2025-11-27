@@ -38,8 +38,8 @@
     },
     {
       "id": "momos-veg-fry",
-      "description": "Fried vegetable momos.",
-      "imageUrl": "https://images.unsplash.com/photo-1678846393718-4a9a0668f3a3?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "description": "Delicious, golden-fried vegetable momos.",
+      "imageUrl": "https://plus.unsplash.com/premium_photo-1664478229712-421b209d84e8?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       "imageHint": "fried momos"
     },
     {
@@ -62,8 +62,8 @@
     },
     {
       "id": "roll-egg",
-      "description": "Hearty egg roll.",
-      "imageUrl": "https://images.unsplash.com/photo-1607310752438-7a54a2f3f982?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "description": "Hearty egg roll with a crispy shell, similar to a spring roll.",
+      "imageUrl": "https://images.unsplash.com/photo-1611599539863-162985959a16?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       "imageHint": "egg roll"
     },
     {
