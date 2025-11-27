@@ -38,9 +38,9 @@
     },
     {
       "id": "momos-veg-fry",
-      "description": "Delicious, golden-fried vegetable momos.",
-      "imageUrl": "https://images.unsplash.com/photo-1695422899476-d3455a5b5840?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxGcmllZCUyMG1vbW9zfGVufDB8fHx8MTc2MzM5MjM5NHww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "fried momos"
+      "description": "Delicious, golden-orange fried vegetable momos.",
+      "imageUrl": "https://storage.googleapis.com/studio-ux-ch-team-red-us-central1-storage-4228/group_18_20240801-094709_981504_image.png",
+      "imageHint": "orange fried momos"
     },
     {
       "id": "momos-non-veg-steam",
@@ -63,7 +63,7 @@
     {
       "id": "roll-egg",
       "description": "Hearty egg roll with a crispy shell, similar to a spring roll.",
-      "imageUrl": "https://images.unsplash.com/photo-1611599539863-162985959a16?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "imageUrl": "https://storage.googleapis.com/studio-ux-ch-team-red-us-central1-storage-4228/group_18_20240801-094344_411135_image.png",
       "imageHint": "egg roll"
     },
     {
