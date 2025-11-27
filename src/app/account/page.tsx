@@ -5,7 +5,7 @@ import Header from '@/components/header';
 import Footer from '@/components/footer';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { IndianRupee, ChevronLeft, Send, Home, MapPin } from 'lucide-react';
+import { IndianRupee, ChevronLeft, Send, Home, MapPin, CheckCircle } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -26,7 +26,17 @@ import { Textarea } from '@/components/ui/textarea';
 import { Icons } from '@/components/icons';
 
 
-const previousOrders = [
+const initialOrders = [
+  {
+    id: 'FK-003',
+    date: '2024-08-02',
+    total: 180,
+    items: [
+      { name: 'Momos Non Veg Steam (Full)', quantity: 1 },
+      { name: 'French Fries (Full)', quantity: 1 },
+    ],
+    status: 'Pending',
+  },
   {
     id: 'FK-001',
     date: '2024-07-28',
@@ -63,6 +73,8 @@ export default function AccountPage() {
   const [isClient, setIsClient] = useState(false);
   const [location, setLocation] = useState<{ latitude: number; longitude: number } | null>(null);
   const [locationError, setLocationError] = useState<string | null>(null);
+  const [orders, setOrders] = useState(initialOrders);
+
 
   const requestLocation = () => {
     if (navigator.geolocation) {
@@ -156,6 +168,21 @@ export default function AccountPage() {
     setCodOrder('');
   }
 
+  const markAsDelivered = (orderId: string) => {
+    setOrders(prevOrders => 
+      prevOrders.map(order => 
+        order.id === orderId ? { ...order, status: 'Delivered' } : order
+      )
+    );
+    toast({
+        title: "Order Updated",
+        description: `Order ${orderId} has been marked as delivered.`,
+    });
+  };
+
+  const pendingOrders = orders.filter(o => o.status !== 'Delivered');
+  const deliveredOrders = orders.filter(o => o.status === 'Delivered');
+
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
@@ -171,33 +198,72 @@ export default function AccountPage() {
         
         <div className="grid md:grid-cols-2 gap-8">
             <div>
-                <h2 className="text-2xl font-bold font-headline mb-4">Order History</h2>
-                <div className="space-y-6">
-                {isClient && previousOrders.map((order) => (
-                    <Card key={order.id}>
-                    <CardHeader className="flex flex-row justify-between items-start">
-                        <div>
-                        <CardTitle>Order {order.id}</CardTitle>
-                        <CardDescription>Date: {formatDate(order.date)}</CardDescription>
-                        </div>
-                        <div className="text-right">
-                            <p className="font-bold text-lg flex items-center justify-end"><IndianRupee className="h-5 w-5 mr-1" />{order.total.toFixed(2)}</p>
-                            <p className="text-sm text-green-600 font-semibold">{order.status}</p>
-                        </div>
-                    </CardHeader>
-                    <CardContent>
-                        <Separator className="my-4" />
-                        <ul className="space-y-2">
-                        {order.items.map((item, index) => (
-                            <li key={index} className="flex justify-between text-muted-foreground">
-                            <span>{item.quantity} x {item.name}</span>
-                            </li>
-                        ))}
-                        </ul>
-                    </CardContent>
-                    </Card>
-                ))}
-                </div>
+                 <h2 className="text-2xl font-bold font-headline mb-4">Pending Orders</h2>
+                {isClient && pendingOrders.length > 0 ? (
+                    <div className="space-y-6">
+                    {pendingOrders.map((order) => (
+                        <Card key={order.id}>
+                        <CardHeader className="flex flex-row justify-between items-start">
+                            <div>
+                            <CardTitle>Order {order.id}</CardTitle>
+                            <CardDescription>Date: {formatDate(order.date)}</CardDescription>
+                            </div>
+                            <div className="text-right">
+                                <p className="font-bold text-lg flex items-center justify-end"><IndianRupee className="h-5 w-5 mr-1" />{order.total.toFixed(2)}</p>
+                                <p className="text-sm text-yellow-600 font-semibold">{order.status}</p>
+                            </div>
+                        </CardHeader>
+                        <CardContent>
+                            <ul className="space-y-2 mb-4">
+                            {order.items.map((item, index) => (
+                                <li key={index} className="flex justify-between text-muted-foreground">
+                                <span>{item.quantity} x {item.name}</span>
+                                </li>
+                            ))}
+                            </ul>
+                            <Separator className="my-4" />
+                            <Button onClick={() => markAsDelivered(order.id)} className="w-full mt-4">
+                                <CheckCircle className="mr-2 h-4 w-4" /> Mark as Delivered
+                            </Button>
+                        </CardContent>
+                        </Card>
+                    ))}
+                    </div>
+                ) : (
+                    <p className="text-muted-foreground">No pending orders.</p>
+                )}
+
+                <h2 className="text-2xl font-bold font-headline mt-12 mb-4">Delivered Orders</h2>
+                {isClient && deliveredOrders.length > 0 ? (
+                    <div className="space-y-6">
+                    {deliveredOrders.map((order) => (
+                        <Card key={order.id}>
+                        <CardHeader className="flex flex-row justify-between items-start">
+                            <div>
+                            <CardTitle>Order {order.id}</CardTitle>
+                            <CardDescription>Date: {formatDate(order.date)}</CardDescription>
+                            </div>
+                            <div className="text-right">
+                                <p className="font-bold text-lg flex items-center justify-end"><IndianRupee className="h-5 w-5 mr-1" />{order.total.toFixed(2)}</p>
+                                <p className="text-sm text-green-600 font-semibold">{order.status}</p>
+                            </div>
+                        </CardHeader>
+                        <CardContent>
+                            <Separator className="my-4" />
+                            <ul className="space-y-2">
+                            {order.items.map((item, index) => (
+                                <li key={index} className="flex justify-between text-muted-foreground">
+                                <span>{item.quantity} x {item.name}</span>
+                                </li>
+                            ))}
+                            </ul>
+                        </CardContent>
+                        </Card>
+                    ))}
+                    </div>
+                ) : (
+                    <p className="text-muted-foreground">No delivered orders yet.</p>
+                )}
             </div>
             <div>
                 <h2 className="text-2xl font-bold font-headline mb-4">Payments</h2>
