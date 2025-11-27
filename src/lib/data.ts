@@ -108,19 +108,6 @@ export const menuData: MenuItem[] = [
     location: 'Lajpat Nagar, New Delhi',
   },
   {
-    id: '8',
-    name: 'Momos Non Veg Fry',
-    type: 'non-veg',
-    category: ['momos', 'non-veg', 'starter'],
-    options: [
-      { name: 'Half', price: 80 },
-      { name: 'Full', price: 130 },
-    ],
-    imageId: 'momos-non-veg-fry',
-    restaurant: 'Momo Magic',
-    location: 'Lajpat Nagar, New Delhi',
-  },
-  {
     id: '9',
     name: 'Veg Roll',
     type: 'veg',
