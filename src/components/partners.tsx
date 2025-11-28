@@ -54,7 +54,7 @@ export default function Partners() {
             <Card className="border-secondary bg-secondary/10">
                 <CardHeader>
                   <CardTitle className="font-headline text-2xl text-secondary-foreground flex items-center gap-2">
-                    <Briefcase className="h-6 w-6" />
+                    <Award className="h-6 w-6" />
                     Mohit
                   </CardTitle>
                   <CardDescription>Account Manager</CardDescription>
