@@ -243,7 +243,6 @@ export const foodCategories = [
 ];
 
 export const restaurantPartners = [
-    { name: 'Biryani Blues', location: 'Moolchand, New Delhi', specialty: 'Biryani', owner: 'N/A' },
     { name: 'Wok Hei', location: 'Moolchand, New Delhi', specialty: 'Chinese', owner: 'N/A' },
     { name: 'Momo Magic', location: 'Lajpat Nagar, New Delhi', specialty: 'Momos', owner: 'N/A' },
     { name: 'Foodies', location: 'Andrews Ganj, Near Moolchand Metro Station', specialty: 'Multi-cuisine', owner: 'Prem' },

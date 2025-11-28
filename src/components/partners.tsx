@@ -3,31 +3,52 @@
 
 import { restaurantPartners, deliveryPartners } from '@/lib/data';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from './ui/card';
-import { Building, MapPin, Utensils, User, Phone, Bike, Crown, Award } from 'lucide-react';
+import { Building, MapPin, Utensils, User, Phone, Bike, Crown, Award, Briefcase } from 'lucide-react';
 
 export default function Partners() {
   return (
     <section id="partners" className="container mx-auto px-4 py-12">
       <div className="flex items-center gap-2 mb-8">
         <Building className="h-8 w-8 text-primary" />
-        <h2 className="text-3xl font-bold font-headline tracking-tight">Our Partners</h2>
+        <h2 className="text-3xl font-bold font-headline tracking-tight">Our Team & Partners</h2>
       </div>
       <div className="space-y-8">
-        <Card className="border-primary bg-primary/5">
-            <CardHeader>
-              <CardTitle className="font-headline text-2xl text-primary flex items-center gap-2">
-                <Crown className="h-6 w-6" />
-                Parikshit Pathak
-              </CardTitle>
-              <CardDescription className="text-primary/80">C.E.O of Foodie Kingdom</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              <div className="flex items-center text-foreground">
-                <Phone className="h-4 w-4 mr-2 text-primary" />
-                <span>+91 9821073025</span>
-              </div>
-            </CardContent>
-          </Card>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Card className="border-primary bg-primary/5">
+                <CardHeader>
+                  <CardTitle className="font-headline text-2xl text-primary flex items-center gap-2">
+                    <Crown className="h-6 w-6" />
+                    Parikshit Pathak
+                  </CardTitle>
+                  <CardDescription className="text-primary/80">C.E.O of Foodie Kingdom</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <div className="flex items-center text-foreground">
+                    <Phone className="h-4 w-4 mr-2 text-primary" />
+                    <span>+91 9821073025</span>
+                  </div>
+                </CardContent>
+              </Card>
+            <Card className="border-secondary bg-secondary/10">
+                <CardHeader>
+                  <CardTitle className="font-headline text-2xl text-secondary-foreground flex items-center gap-2">
+                    <Briefcase className="h-6 w-6" />
+                    Mohit
+                  </CardTitle>
+                  <CardDescription>Account Manager</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                   <div className="flex items-center text-muted-foreground">
+                        <MapPin className="h-4 w-4 mr-2" />
+                        <span>H-175, Molorband, Tajpur near Badarpur</span>
+                    </div>
+                  <div className="flex items-center text-muted-foreground">
+                    <Phone className="h-4 w-4 mr-2" />
+                    <span>+91 9971874905</span>
+                  </div>
+                </CardContent>
+            </Card>
+        </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {restaurantPartners.map((partner) => (
