@@ -13,7 +13,7 @@ export default function Partners() {
         <h2 className="text-3xl font-bold font-headline tracking-tight">Our Team & Partners</h2>
       </div>
       <div className="space-y-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <Card className="border-primary bg-primary/5">
                 <CardHeader>
                   <CardTitle className="font-headline text-2xl text-primary flex items-center gap-2">
@@ -45,6 +45,25 @@ export default function Partners() {
                   <div className="flex items-center text-muted-foreground">
                     <Phone className="h-4 w-4 mr-2" />
                     <span>+91 9971874905</span>
+                  </div>
+                </CardContent>
+            </Card>
+            <Card className="border-secondary bg-secondary/10">
+                <CardHeader>
+                  <CardTitle className="font-headline text-2xl text-secondary-foreground flex items-center gap-2">
+                    <Briefcase className="h-6 w-6" />
+                    Samrat
+                  </CardTitle>
+                  <CardDescription>Restaurant Manager</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                   <div className="flex items-center text-muted-foreground">
+                        <MapPin className="h-4 w-4 mr-2" />
+                        <span>saurabh vihar,jaitpur near Badarpur(110044)</span>
+                    </div>
+                  <div className="flex items-center text-muted-foreground">
+                    <Phone className="h-4 w-4 mr-2" />
+                    <span>+91 99714 04565</span>
                   </div>
                 </CardContent>
             </Card>
