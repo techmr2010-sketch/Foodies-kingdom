@@ -18,7 +18,7 @@ type CartContextType = {
   addToCart: (item: Omit<CartItem, 'id' | 'quantity'> & { quantity?: number }) => void;
   removeFromCart: (id: string) => void;
   clearCart: () => void;
-  getCartItemDetails: () => { subtotal: number; total: number };
+  getCartItemDetails: (orderCount: number) => { subtotal: number; deliveryFee: number; total: number };
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -55,11 +55,19 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     setCartItems([]);
   };
 
-  const getCartItemDetails = () => {
+  const getCartItemDetails = (orderCount: number) => {
     const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
-    const deliveryFee = 0; // Free delivery!
+    
+    let deliveryFee = 0;
+    if (orderCount >= 4) { // 5th order and onwards (0-indexed means 4)
+        deliveryFee = 25;
+    } else if (orderCount === 3) { // 4th order (0-indexed means 3)
+        deliveryFee = 15;
+    }
+    // For orderCount 0, 1, 2, deliveryFee remains 0 (free)
+
     const total = subtotal + deliveryFee;
-    return { subtotal, total };
+    return { subtotal, deliveryFee, total };
   }
 
   return (

@@ -20,6 +20,7 @@ type User = {
   name: string;
   phone: string;
   location: { latitude: number; longitude: number } | null;
+  orderCount: number;
 };
 
 type UserContextType = {
@@ -27,6 +28,7 @@ type UserContextType = {
   signIn: (phone: string) => boolean;
   signUp: (name: string, phone: string, location: { latitude: number, longitude: number } | null) => void;
   signOut: () => void;
+  incrementOrderCount: () => void;
   openSignInModal: () => void;
   openSignUpModal: () => void;
 };
@@ -53,6 +55,10 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         const storedUser = localStorage.getItem('foodie-user');
         if (storedUser) {
             const parsedUser = JSON.parse(storedUser);
+            // Ensure orderCount exists
+            if (!('orderCount' in parsedUser)) {
+              parsedUser.orderCount = 0;
+            }
             setUser(parsedUser);
             // If user has no location, ask again
             if (!parsedUser.location) {
@@ -125,6 +131,10 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         if (storedUser) {
             const parsedUser = JSON.parse(storedUser);
             if (parsedUser.phone === phone) {
+                // Ensure orderCount exists
+                if (!('orderCount' in parsedUser)) {
+                  parsedUser.orderCount = 0;
+                }
                 setUser(parsedUser);
                 toast({ title: "Sign In Successful!", description: `Welcome back, ${parsedUser.name}!` });
                 setIsSignInModalOpen(false);
@@ -149,7 +159,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         toast({ variant: 'destructive', title: 'Location Required', description: 'Please allow location access to sign up.' });
         return;
     }
-    const newUser: User = { name, phone, location };
+    const newUser: User = { name, phone, location, orderCount: 0 };
     try {
         localStorage.setItem('foodie-user', JSON.stringify(newUser));
         setUser(newUser);
@@ -172,6 +182,21 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const incrementOrderCount = () => {
+    setUser(currentUser => {
+        if (currentUser) {
+            const updatedUser = { ...currentUser, orderCount: currentUser.orderCount + 1 };
+            try {
+                localStorage.setItem('foodie-user', JSON.stringify(updatedUser));
+            } catch (error) {
+                console.error("Could not update user in localStorage", error);
+            }
+            return updatedUser;
+        }
+        return null;
+    });
+  };
+
   const handleSignUpSubmit = () => {
     signUp(signUpName, signUpPhone, signUpLocation);
   }
@@ -181,7 +206,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   }
 
   return (
-    <UserContext.Provider value={{ user, signIn, signUp, signOut, openSignInModal: () => setIsSignInModalOpen(true), openSignUpModal: () => setIsSignUpModalOpen(true) }}>
+    <UserContext.Provider value={{ user, signIn, signUp, signOut, incrementOrderCount, openSignInModal: () => setIsSignInModalOpen(true), openSignUpModal: () => setIsSignUpModalOpen(true) }}>
       {children}
       <Dialog open={isSignUpModalOpen} onOpenChange={setIsSignUpModalOpen}>
         <DialogContent className="sm:max-w-[425px]">

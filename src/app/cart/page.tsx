@@ -22,7 +22,7 @@ import Link from 'next/link';
 
 export default function CartPage() {
     const { cartItems, removeFromCart, clearCart, getCartItemDetails } = useCart();
-    const { user } = useUser();
+    const { user, incrementOrderCount } = useUser();
     const { toast } = useToast();
     const [customerName, setCustomerName] = useState('');
     const [paymentMethod, setPaymentMethod] = useState('phone');
@@ -33,7 +33,7 @@ export default function CartPage() {
         }
     }, [user]);
 
-    const {subtotal, total} = getCartItemDetails();
+    const {subtotal, deliveryFee, total} = getCartItemDetails(user?.orderCount ?? 0);
     
     const handlePlaceOrder = () => {
         if (!user) {
@@ -63,12 +63,14 @@ export default function CartPage() {
             locationString = `https://www.google.com/maps?q=${user.location.latitude},${user.location.longitude}`;
         }
         
-        message = `New Order from Foodie Kingdom:\n\nOrdering as: ${user.name}\nOrder Details:\n${orderDetails}\n\nTotal: ₹${total.toFixed(2)}\nContact: ${user.phone}\nLocation: ${locationString}\nPayment Method: ${paymentMethod === 'cod' ? 'Cash on Delivery' : 'Prepaid (UPI)'}`;
+        message = `New Order from Foodie Kingdom:\n\nOrdering as: ${user.name}\nOrder Details:\n${orderDetails}\n\nSubtotal: ₹${subtotal.toFixed(2)}\nDelivery Fee: ₹${deliveryFee.toFixed(2)}\nTotal: ₹${total.toFixed(2)}\nContact: ${user.phone}\nLocation: ${locationString}\nPayment Method: ${paymentMethod === 'cod' ? 'Cash on Delivery' : 'Prepaid (UPI)'}`;
         
         const encodedMessage = encodeURIComponent(message);
         const ownerWhatsappUrl = `https://wa.me/919310364770?text=${encodedMessage}`;
        
         window.open(ownerWhatsappUrl, '_blank');
+        
+        incrementOrderCount();
         
         if (paymentMethod === 'phone') {
             toast({
@@ -151,8 +153,13 @@ export default function CartPage() {
                                     </div>
                                     <div className="flex justify-between">
                                         <p className="text-muted-foreground">Delivery</p>
-                                        <p className="text-primary font-semibold">FREE</p>
+                                        {deliveryFee > 0 ? (
+                                            <p className="flex items-center"><IndianRupee className="h-4 w-4 mr-1" />{deliveryFee.toFixed(2)}</p>
+                                        ) : (
+                                            <p className="text-primary font-semibold">FREE</p>
+                                        )}
                                     </div>
+                                    <Separator />
                                     <div className="flex justify-between font-bold text-xl">
                                         <p>Total</p>
                                         <p className="flex items-center"><IndianRupee className="h-5 w-5 mr-1" />{total.toFixed(2)}</p>
@@ -201,6 +208,7 @@ export default function CartPage() {
                                             <p>Ordering as: <span className="font-semibold">{user.name}</span></p>
                                             <p>Contact: <span className="font-semibold">{user.phone}</span></p>
                                             {user.location && <p className='text-green-600 font-semibold'>Location is active.</p>}
+                                            <p>Total Orders: <span className="font-semibold">{user.orderCount}</span></p>
                                         </div>
                                     )}
                                 </div>

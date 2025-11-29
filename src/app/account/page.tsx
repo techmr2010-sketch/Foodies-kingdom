@@ -258,7 +258,7 @@ export default function AccountPage() {
                     <CardHeader>
                         <CardTitle>Your Details</CardTitle>
                         <CardDescription>
-                           Signed in as {user.name} ({user.phone}).
+                           Signed in as {user.name} ({user.phone}). You have placed {user.orderCount} orders.
                         </CardDescription>
                     </CardHeader>
                 </Card>
