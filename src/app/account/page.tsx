@@ -5,7 +5,7 @@ import Header from '@/components/header';
 import Footer from '@/components/footer';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { IndianRupee, ChevronLeft, Send, Home, MapPin, CheckCircle, User } from 'lucide-react';
+import { IndianRupee, ChevronLeft, Send, Home, CheckCircle, User } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -26,38 +26,19 @@ import { Textarea } from '@/components/ui/textarea';
 import { Icons } from '@/components/icons';
 import { useUser } from '@/context/user-context';
 
+type OrderItem = {
+    name: string;
+    quantity: number;
+};
 
-const initialOrders = [
-  {
-    id: 'FK-003',
-    date: '2024-08-02',
-    total: 180,
-    items: [
-      { name: 'Momos Non Veg Steam (Full)', quantity: 1 },
-      { name: 'French Fries (Full)', quantity: 1 },
-    ],
-    status: 'Pending',
-  },
-  {
-    id: 'FK-001',
-    date: '2024-07-28',
-    total: 260,
-    items: [
-      { name: 'Biryani Non Veg (Full)', quantity: 1 },
-      { name: 'Momos Veg Fry (Half)', quantity: 1 },
-    ],
-    status: 'Delivered',
-  },
-  {
-    id: 'FK-002',
-    date: '2024-07-25',
-    total: 150,
-    items: [
-      { name: 'Biryani Veg (Full)', quantity: 1 },
-    ],
-    status: 'Delivered',
-  },
-];
+type Order = {
+    id: string;
+    date: string;
+    total: number;
+    items: OrderItem[];
+    status: 'Pending' | 'Delivered';
+};
+
 
 const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -70,7 +51,7 @@ export default function AccountPage() {
   const { toast } = useToast();
   const [codOrder, setCodOrder] = useState('');
   const [isClient, setIsClient] = useState(false);
-  const [orders, setOrders] = useState(initialOrders);
+  const [orders, setOrders] = useState<Order[]>([]);
   const { user, openSignUpModal, incrementOrderCount } = useUser();
 
 
@@ -78,8 +59,32 @@ export default function AccountPage() {
     setIsClient(true);
     if (!user) {
         openSignUpModal();
+    } else {
+        // Load orders from localStorage for the specific user
+        try {
+            const storedOrders = localStorage.getItem(`orders-${user.phone}`);
+            if (storedOrders) {
+                setOrders(JSON.parse(storedOrders));
+            } else {
+                setOrders([]);
+            }
+        } catch (error) {
+            console.error("Failed to load orders from localStorage", error);
+            setOrders([]);
+        }
     }
   }, [user, openSignUpModal]);
+  
+  // Effect to save orders to localStorage whenever they change
+  useEffect(() => {
+      if (user && isClient) {
+          try {
+              localStorage.setItem(`orders-${user.phone}`, JSON.stringify(orders));
+          } catch (error) {
+              console.error("Failed to save orders to localStorage", error);
+          }
+      }
+  }, [orders, user, isClient]);
 
 
   const handleQuickPay = () => {
@@ -125,6 +130,16 @@ export default function AccountPage() {
     const ownerWhatsappUrl = `https://wa.me/919310364770?text=${encodedMessage}`;
 
     window.open(ownerWhatsappUrl, '_blank');
+    
+    // Create and save the new order
+    const newOrder: Order = {
+        id: `FK-${Math.random().toString(36).substr(2, 5).toUpperCase()}`,
+        date: new Date().toISOString(),
+        total: 0, // Manual orders have unknown total
+        items: [{ name: codOrder, quantity: 1 }],
+        status: 'Pending',
+    };
+    setOrders(prevOrders => [newOrder, ...prevOrders]);
 
     toast({
         title: "COD Order Placed!",
@@ -197,7 +212,9 @@ export default function AccountPage() {
                             <CardDescription>Date: {formatDate(order.date)}</CardDescription>
                             </div>
                             <div className="text-right">
-                                <p className="font-bold text-lg flex items-center justify-end"><IndianRupee className="h-5 w-5 mr-1" />{order.total.toFixed(2)}</p>
+                                {order.total > 0 && (
+                                    <p className="font-bold text-lg flex items-center justify-end"><IndianRupee className="h-5 w-5 mr-1" />{order.total.toFixed(2)}</p>
+                                )}
                                 <p className="text-sm text-yellow-600 font-semibold">{order.status}</p>
                             </div>
                         </CardHeader>
@@ -232,7 +249,9 @@ export default function AccountPage() {
                             <CardDescription>Date: {formatDate(order.date)}</CardDescription>
                             </div>
                             <div className="text-right">
-                                <p className="font-bold text-lg flex items-center justify-end"><IndianRupee className="h-5 w-5 mr-1" />{order.total.toFixed(2)}</p>
+                                {order.total > 0 && (
+                                    <p className="font-bold text-lg flex items-center justify-end"><IndianRupee className="h-5 w-5 mr-1" />{order.total.toFixed(2)}</p>
+                                )}
                                 <p className="text-sm text-green-600 font-semibold">{order.status}</p>
                             </div>
                         </CardHeader>
@@ -343,4 +362,5 @@ export default function AccountPage() {
       <Footer />
     </div>
   );
-}
+
+    

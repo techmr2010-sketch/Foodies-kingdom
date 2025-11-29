@@ -20,6 +20,14 @@ import { Icons } from '@/components/icons';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import Link from 'next/link';
 
+type Order = {
+    id: string;
+    date: string;
+    total: number;
+    items: { name: string; quantity: number; }[];
+    status: 'Pending' | 'Delivered';
+};
+
 export default function CartPage() {
     const { cartItems, removeFromCart, clearCart, getCartItemDetails } = useCart();
     const { user } = useUser();
@@ -52,6 +60,33 @@ export default function CartPage() {
             });
             return;
         }
+        
+        // Save the order to localStorage
+        try {
+            const storedOrdersRaw = localStorage.getItem(`orders-${user.phone}`);
+            const storedOrders: Order[] = storedOrdersRaw ? JSON.parse(storedOrdersRaw) : [];
+            
+            const newOrder: Order = {
+                id: `FK-${Math.random().toString(36).substr(2, 5).toUpperCase()}`,
+                date: new Date().toISOString(),
+                total: total,
+                items: cartItems.map(item => ({ name: `${item.name} (${item.option})`, quantity: item.quantity })),
+                status: 'Pending',
+            };
+
+            const updatedOrders = [newOrder, ...storedOrders];
+            localStorage.setItem(`orders-${user.phone}`, JSON.stringify(updatedOrders));
+
+        } catch (error) {
+            console.error("Failed to save order to localStorage", error);
+            toast({
+                variant: "destructive",
+                title: "Order Failed",
+                description: "Could not save your order. Please try again.",
+            });
+            return;
+        }
+
 
         const orderDetails = cartItems.map(item => `${item.quantity} x ${item.name} (${item.option})`).join('\n');
         let message;
@@ -239,4 +274,5 @@ export default function CartPage() {
         <Footer />
     </div>
   );
-}
+
+    
