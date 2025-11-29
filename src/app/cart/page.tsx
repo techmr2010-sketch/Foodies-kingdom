@@ -22,7 +22,7 @@ import Link from 'next/link';
 
 export default function CartPage() {
     const { cartItems, removeFromCart, clearCart, getCartItemDetails } = useCart();
-    const { user, incrementOrderCount } = useUser();
+    const { user } = useUser();
     const { toast } = useToast();
     const [customerName, setCustomerName] = useState('');
     const [paymentMethod, setPaymentMethod] = useState('phone');
@@ -69,9 +69,7 @@ export default function CartPage() {
         const ownerWhatsappUrl = `https://wa.me/919310364770?text=${encodedMessage}`;
        
         window.open(ownerWhatsappUrl, '_blank');
-        
-        incrementOrderCount();
-        
+                
         if (paymentMethod === 'phone') {
             toast({
                 title: "Redirecting to UPI",
@@ -208,7 +206,7 @@ export default function CartPage() {
                                             <p>Ordering as: <span className="font-semibold">{user.name}</span></p>
                                             <p>Contact: <span className="font-semibold">{user.phone}</span></p>
                                             {user.location && <p className='text-green-600 font-semibold'>Location is active.</p>}
-                                            <p>Total Orders: <span className="font-semibold">{user.orderCount}</span></p>
+                                            <p>Total Delivered Orders: <span className="font-semibold">{user.orderCount}</span></p>
                                         </div>
                                     )}
                                 </div>

@@ -71,7 +71,7 @@ export default function AccountPage() {
   const [codOrder, setCodOrder] = useState('');
   const [isClient, setIsClient] = useState(false);
   const [orders, setOrders] = useState(initialOrders);
-  const { user, openSignUpModal } = useUser();
+  const { user, openSignUpModal, incrementOrderCount } = useUser();
 
 
   useEffect(() => {
@@ -142,9 +142,10 @@ export default function AccountPage() {
         order.id === orderId ? { ...order, status: 'Delivered' } : order
       )
     );
+    incrementOrderCount();
     toast({
-        title: "Order Updated",
-        description: `Order ${orderId} has been marked as delivered.`,
+        title: "Order Delivered!",
+        description: `Order ${orderId} marked as delivered. Customer order count updated.`,
     });
   };
 
