@@ -26,6 +26,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Icons } from '@/components/icons';
 import { useUser } from '@/context/user-context';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 
 type OrderItem = {
@@ -259,80 +260,86 @@ export default function AccountPage() {
                     </CardContent>
                 </Card>
 
-                <Card>
+                 <Card>
                     <CardHeader>
-                        <CardTitle>Make a UPI Payment</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="amount">Amount</Label>
-                            <div className="relative">
-                                <IndianRupee className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                                <Input 
-                                    id="amount"
-                                    type="number" 
-                                    placeholder="Enter amount" 
-                                    value={amount}
-                                    onChange={(e) => setAmount(e.target.value)}
-                                    className="pl-10"
-                                />
-                            </div>
-                        </div>
-                        <p className="text-xs text-muted-foreground text-center">
-                           Pay to <span className="font-semibold text-foreground">9310364770@paytm</span>
-                        </p>
-                    </CardContent>
-                     <CardFooter className="flex-col gap-4">
-                         <div className="flex items-center justify-center gap-4">
-                            <Icons.paytm className="h-6" />
-                            <Icons.gpay className="h-6" />
-                            <Icons.phonepe className="h-6" />
-                        </div>
-                        <Button onClick={handleQuickPay} className="w-full">
-                           <Send className="mr-2 h-4 w-4" /> Proceed to Pay
-                        </Button>
-                    </CardFooter>
-                </Card>
-
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Cash on Delivery</CardTitle>
-                         <CardDescription>
-                            Place an order by describing what you want.
+                        <CardTitle>Payments</CardTitle>
+                        <CardDescription>
+                            Use UPI for quick payments or place a manual order.
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <Dialog>
-                            <DialogTrigger asChild>
-                                <Button variant="outline" className="w-full">
-                                    <Home className="mr-2 h-4 w-4" /> Place Manual COD Order
-                                </Button>
-                            </DialogTrigger>
-                            <DialogContent className="sm:max-w-[425px]">
-                                <DialogHeader>
-                                <DialogTitle>Manual COD Order</DialogTitle>
-                                <DialogDescription>
-                                    Enter your order details below. This will be sent to us via WhatsApp with your saved information.
-                                </DialogDescription>
-                                </DialogHeader>
-                                <div className="grid gap-4 py-4">
-                                <div className="grid grid-cols-4 items-center gap-4">
-                                    <Label htmlFor="cod-order" className="text-right">
-                                        Order
-                                    </Label>
-                                    <Textarea id="cod-order" value={codOrder} onChange={(e) => setCodOrder(e.target.value)} className="col-span-3" placeholder="e.g., 1x Full Biryani, 2x Half Momos" />
+                        <Tabs defaultValue="upi" className="w-full">
+                            <TabsList className="grid w-full grid-cols-2">
+                                <TabsTrigger value="upi">Quick Pay (UPI)</TabsTrigger>
+                                <TabsTrigger value="cod">Manual Order</TabsTrigger>
+                            </TabsList>
+                            <TabsContent value="upi" className="pt-6">
+                                <div className="space-y-4">
+                                    <div className="space-y-2">
+                                        <Label htmlFor="amount">Amount</Label>
+                                        <div className="relative">
+                                            <IndianRupee className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                                            <Input 
+                                                id="amount"
+                                                type="number" 
+                                                placeholder="Enter amount" 
+                                                value={amount}
+                                                onChange={(e) => setAmount(e.target.value)}
+                                                className="pl-10"
+                                            />
+                                        </div>
+                                    </div>
+                                    <p className="text-xs text-muted-foreground text-center">
+                                       Pay to <span className="font-semibold text-foreground">9310364770@paytm</span>
+                                    </p>
+                                     <div className="flex items-center justify-center gap-4 pt-2">
+                                        <Icons.paytm className="h-6" />
+                                        <Icons.gpay className="h-6" />
+                                        <Icons.phonepe className="h-6" />
+                                    </div>
+                                    <Button onClick={handleQuickPay} className="w-full">
+                                       <Send className="mr-2 h-4 w-4" /> Proceed to Pay
+                                    </Button>
                                 </div>
-                                </div>
-                                <DialogFooter>
-                                  <DialogClose asChild>
-                                    <Button type="button" variant="ghost" id="close-cod-dialog">Cancel</Button>
-                                  </DialogClose>
-                                <Button type="button" onClick={handleCodSubmit}>Submit Order</Button>
-                                </DialogFooter>
-                            </DialogContent>
-                        </Dialog>
+                            </TabsContent>
+                            <TabsContent value="cod" className="pt-6">
+                                <Dialog>
+                                    <DialogTrigger asChild>
+                                        <Button variant="outline" className="w-full">
+                                            <Home className="mr-2 h-4 w-4" /> Place Manual COD Order
+                                        </Button>
+                                    </DialogTrigger>
+                                    <DialogContent className="sm:max-w-[425px]">
+                                        <DialogHeader>
+                                        <DialogTitle>Manual COD Order</DialogTitle>
+                                        <DialogDescription>
+                                            Enter your order details below. This will be sent to us via WhatsApp with your saved information.
+                                        </DialogDescription>
+                                        </DialogHeader>
+                                        <div className="grid gap-4 py-4">
+                                        <div className="grid grid-cols-4 items-center gap-4">
+                                            <Label htmlFor="cod-order" className="text-right">
+                                                Order
+                                            </Label>
+                                            <Textarea id="cod-order" value={codOrder} onChange={(e) => setCodOrder(e.target.value)} className="col-span-3" placeholder="e.g., 1x Full Biryani, 2x Half Momos" />
+                                        </div>
+                                        </div>
+                                        <DialogFooter>
+                                          <DialogClose asChild>
+                                            <Button type="button" variant="ghost" id="close-cod-dialog">Cancel</Button>
+                                          </DialogClose>
+                                        <Button type="button" onClick={handleCodSubmit}>Submit Order</Button>
+                                        </DialogFooter>
+                                    </DialogContent>
+                                </Dialog>
+                                <p className="text-xs text-muted-foreground mt-4 text-center">
+                                    Describe your order and send it to us via WhatsApp.
+                                </p>
+                            </TabsContent>
+                        </Tabs>
                     </CardContent>
                 </Card>
+
             </div>
             <div className="md:col-span-2">
                  <h2 className="text-2xl font-bold font-headline mb-4">Pending Orders</h2>
@@ -410,4 +417,6 @@ export default function AccountPage() {
       <Footer />
     </div>
   );
+    
+
     
