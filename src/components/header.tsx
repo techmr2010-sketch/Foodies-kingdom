@@ -1,7 +1,7 @@
 
 'use client';
 import Link from 'next/link';
-import { ChefHat, User, ShoppingCart, LogOut, LogIn, LayoutDashboard } from 'lucide-react';
+import { ChefHat, User, ShoppingCart, LogOut, LogIn, LayoutDashboard, IndianRupee } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Cart from '@/components/cart';
 import {
@@ -76,6 +76,12 @@ export default function Header() {
                   <Link href="/cart">
                     <ShoppingCart className="mr-2 h-4 w-4" />
                     <span>My Cart</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/account">
+                    <IndianRupee className="mr-2 h-4 w-4" />
+                    <span>Payments</span>
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
