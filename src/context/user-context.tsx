@@ -21,6 +21,7 @@ type User = {
   phone: string;
   location: { latitude: number; longitude: number } | null;
   orderCount: number;
+  profilePicture: string | null;
 };
 
 type UserContextType = {
@@ -29,6 +30,7 @@ type UserContextType = {
   signUp: (name: string, phone: string, location: { latitude: number, longitude: number } | null) => void;
   signOut: () => void;
   incrementOrderCount: () => void;
+  updateProfilePicture: (picture: string) => void;
   openSignInModal: () => void;
   openSignUpModal: () => void;
 };
@@ -55,9 +57,12 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         const storedUser = localStorage.getItem('foodie-user');
         if (storedUser) {
             const parsedUser = JSON.parse(storedUser);
-            // Ensure orderCount exists
+            // Ensure orderCount and profilePicture exists
             if (!('orderCount' in parsedUser)) {
               parsedUser.orderCount = 0;
+            }
+            if (!('profilePicture' in parsedUser)) {
+                parsedUser.profilePicture = null;
             }
             setUser(parsedUser);
             // If user has no location, ask again
@@ -131,9 +136,12 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         if (storedUser) {
             const parsedUser = JSON.parse(storedUser);
             if (parsedUser.phone === phone) {
-                // Ensure orderCount exists
+                // Ensure orderCount and profilePicture exists
                 if (!('orderCount' in parsedUser)) {
                   parsedUser.orderCount = 0;
+                }
+                 if (!('profilePicture' in parsedUser)) {
+                    parsedUser.profilePicture = null;
                 }
                 setUser(parsedUser);
                 toast({ title: "Sign In Successful!", description: `Welcome back, ${parsedUser.name}!` });
@@ -159,7 +167,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         toast({ variant: 'destructive', title: 'Location Required', description: 'Please allow location access to sign up.' });
         return;
     }
-    const newUser: User = { name, phone, location, orderCount: 0 };
+    const newUser: User = { name, phone, location, orderCount: 0, profilePicture: null };
     try {
         localStorage.setItem('foodie-user', JSON.stringify(newUser));
         setUser(newUser);
@@ -180,6 +188,23 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     } catch (error) {
         toast({ variant: "destructive", title: "Error", description: "Could not sign out." });
     }
+  };
+  
+  const updateProfilePicture = (picture: string) => {
+    setUser(currentUser => {
+        if (currentUser) {
+            const updatedUser = { ...currentUser, profilePicture: picture };
+            try {
+                localStorage.setItem('foodie-user', JSON.stringify(updatedUser));
+                toast({ title: "Profile Picture Updated", description: "Your new picture has been saved." });
+            } catch (error) {
+                console.error("Could not update profile picture in localStorage", error);
+                toast({ variant: "destructive", title: "Error", description: "Could not save your picture." });
+            }
+            return updatedUser;
+        }
+        return null;
+    });
   };
 
   const incrementOrderCount = () => {
@@ -206,7 +231,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   }
 
   return (
-    <UserContext.Provider value={{ user, signIn, signUp, signOut, incrementOrderCount, openSignInModal: () => setIsSignInModalOpen(true), openSignUpModal: () => setIsSignUpModalOpen(true) }}>
+    <UserContext.Provider value={{ user, signIn, signUp, signOut, incrementOrderCount, updateProfilePicture, openSignInModal: () => setIsSignInModalOpen(true), openSignUpModal: () => setIsSignUpModalOpen(true) }}>
       {children}
       <Dialog open={isSignUpModalOpen} onOpenChange={setIsSignUpModalOpen}>
         <DialogContent className="sm:max-w-[425px]">

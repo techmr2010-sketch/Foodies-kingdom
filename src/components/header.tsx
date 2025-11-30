@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useUser } from '@/context/user-context';
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 
 export default function Header() {
   const { user, signOut, openSignInModal, openSignUpModal } = useUser();
@@ -42,25 +43,34 @@ export default function Header() {
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon">
-                  <User className="h-6 w-6" />
-                  <span className="sr-only">Open user menu</span>
+                 <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                    <Avatar className="h-8 w-8">
+                       <AvatarImage src={user.profilePicture || ''} alt={user.name} />
+                       <AvatarFallback>{user.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                    </Avatar>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Hi, {user.name}</DropdownMenuLabel>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel className="font-normal">
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-sm font-medium leading-none">{user.name}</p>
+                    <p className="text-xs leading-none text-muted-foreground">
+                      {user.phone}
+                    </p>
+                  </div>
+                </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Link href="/cart">
-                    <ShoppingCart className="mr-2 h-4 w-4" />
-                    <span>Cart</span>
+                  <Link href="/account">
+                    <User className="mr-2 h-4 w-4" />
+                    <span>My Account</span>
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link href="/account">Order History</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/account">Payment</Link>
+                  <Link href="/cart">
+                    <ShoppingCart className="mr-2 h-4 w-4" />
+                    <span>My Cart</span>
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link href="/help">Help Centre</Link>

@@ -3,14 +3,14 @@
 
 import Header from '@/components/header';
 import Footer from '@/components/footer';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { IndianRupee, ChevronLeft, Send, Home, CheckCircle, User } from 'lucide-react';
+import { IndianRupee, ChevronLeft, Send, Home, CheckCircle, User as UserIcon, Camera } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import {
   Dialog,
@@ -25,6 +25,8 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 import { Icons } from '@/components/icons';
 import { useUser } from '@/context/user-context';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+
 
 type OrderItem = {
     name: string;
@@ -52,7 +54,8 @@ export default function AccountPage() {
   const [codOrder, setCodOrder] = useState('');
   const [isClient, setIsClient] = useState(false);
   const [orders, setOrders] = useState<Order[]>([]);
-  const { user, openSignUpModal, incrementOrderCount } = useUser();
+  const { user, openSignUpModal, incrementOrderCount, updateProfilePicture } = useUser();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
 
   useEffect(() => {
@@ -85,6 +88,18 @@ export default function AccountPage() {
           }
       }
   }, [orders, user, isClient]);
+
+  const handleProfilePictureChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64String = reader.result as string;
+        updateProfilePicture(base64String);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
 
   const handleQuickPay = () => {
@@ -176,7 +191,7 @@ export default function AccountPage() {
         <div className="flex flex-col min-h-screen">
             <Header />
             <main className="flex-grow container mx-auto px-4 py-12 flex flex-col items-center justify-center text-center">
-                <User className="h-24 w-24 text-muted-foreground mb-4" />
+                <UserIcon className="h-24 w-24 text-muted-foreground mb-4" />
                 <h1 className="text-3xl font-bold mb-2">Please Sign In</h1>
                 <p className="text-muted-foreground mb-6">You need to be signed in to view your account details.</p>
                 <Button onClick={openSignUpModal}>Sign Up / Sign In</Button>
@@ -199,8 +214,127 @@ export default function AccountPage() {
             <h1 className="text-3xl font-bold font-headline ml-4">My Account</h1>
         </div>
         
-        <div className="grid md:grid-cols-2 gap-8">
-            <div>
+        <div className="grid md:grid-cols-3 gap-8">
+             <div className="md:col-span-1 space-y-8">
+                <Card>
+                    <CardHeader className="items-center text-center">
+                        <div className="relative">
+                            <Avatar className="w-24 h-24 text-lg">
+                                <AvatarImage src={user.profilePicture || ''} alt={user.name} />
+                                <AvatarFallback>
+                                    {user.name.split(' ').map(n => n[0]).join('')}
+                                </AvatarFallback>
+                            </Avatar>
+                             <Button 
+                                size="icon" 
+                                className="absolute -bottom-2 -right-2 rounded-full h-8 w-8"
+                                onClick={() => fileInputRef.current?.click()}
+                            >
+                                <Camera className="h-4 w-4" />
+                                <span className="sr-only">Change profile picture</span>
+                            </Button>
+                            <input 
+                                type="file"
+                                ref={fileInputRef}
+                                onChange={handleProfilePictureChange}
+                                className="hidden"
+                                accept="image/*"
+                            />
+                        </div>
+                        <CardTitle className="mt-4">{user.name}</CardTitle>
+                        <CardDescription>{user.phone}</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                         <Separator />
+                         <div className="text-sm text-muted-foreground mt-4 space-y-2">
+                             <div className="flex justify-between">
+                                 <span>Total Orders</span>
+                                 <span className="font-semibold text-foreground">{user.orderCount}</span>
+                             </div>
+                             <div className="flex justify-between">
+                                 <span>Member Since</span>
+                                 <span className="font-semibold text-foreground">{'Today'}</span>
+                             </div>
+                         </div>
+                    </CardContent>
+                </Card>
+
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Make a UPI Payment</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="amount">Amount</Label>
+                            <div className="relative">
+                                <IndianRupee className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                                <Input 
+                                    id="amount"
+                                    type="number" 
+                                    placeholder="Enter amount" 
+                                    value={amount}
+                                    onChange={(e) => setAmount(e.target.value)}
+                                    className="pl-10"
+                                />
+                            </div>
+                        </div>
+                        <p className="text-xs text-muted-foreground text-center">
+                           Pay to <span className="font-semibold text-foreground">9310364770@paytm</span>
+                        </p>
+                    </CardContent>
+                     <CardFooter className="flex-col gap-4">
+                         <div className="flex items-center justify-center gap-4">
+                            <Icons.paytm className="h-6" />
+                            <Icons.gpay className="h-6" />
+                            <Icons.phonepe className="h-6" />
+                        </div>
+                        <Button onClick={handleQuickPay} className="w-full">
+                           <Send className="mr-2 h-4 w-4" /> Proceed to Pay
+                        </Button>
+                    </CardFooter>
+                </Card>
+
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Cash on Delivery</CardTitle>
+                         <CardDescription>
+                            Place an order by describing what you want.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <Dialog>
+                            <DialogTrigger asChild>
+                                <Button variant="outline" className="w-full">
+                                    <Home className="mr-2 h-4 w-4" /> Place Manual COD Order
+                                </Button>
+                            </DialogTrigger>
+                            <DialogContent className="sm:max-w-[425px]">
+                                <DialogHeader>
+                                <DialogTitle>Manual COD Order</DialogTitle>
+                                <DialogDescription>
+                                    Enter your order details below. This will be sent to us via WhatsApp with your saved information.
+                                </DialogDescription>
+                                </DialogHeader>
+                                <div className="grid gap-4 py-4">
+                                <div className="grid grid-cols-4 items-center gap-4">
+                                    <Label htmlFor="cod-order" className="text-right">
+                                        Order
+                                    </Label>
+                                    <Textarea id="cod-order" value={codOrder} onChange={(e) => setCodOrder(e.target.value)} className="col-span-3" placeholder="e.g., 1x Full Biryani, 2x Half Momos" />
+                                </div>
+                                </div>
+                                <DialogFooter>
+                                  <DialogClose asChild>
+                                    <Button type="button" variant="ghost" id="close-cod-dialog">Cancel</Button>
+                                  </DialogClose>
+                                <Button type="button" onClick={handleCodSubmit}>Submit Order</Button>
+                                </DialogFooter>
+                            </DialogContent>
+                        </Dialog>
+                    </CardContent>
+                </Card>
+            </div>
+            <div className="md:col-span-2">
                  <h2 className="text-2xl font-bold font-headline mb-4">Pending Orders</h2>
                 {pendingOrders.length > 0 ? (
                     <div className="space-y-6">
@@ -238,7 +372,7 @@ export default function AccountPage() {
                     <p className="text-muted-foreground">No pending orders.</p>
                 )}
 
-                <h2 className="text-2xl font-bold font-headline mt-12 mb-4">Delivered Orders</h2>
+                <h2 className="text-2xl font-bold font-headline mt-12 mb-4">Order History</h2>
                 {deliveredOrders.length > 0 ? (
                     <div className="space-y-6">
                     {deliveredOrders.map((order) => (
@@ -256,7 +390,6 @@ export default function AccountPage() {
                             </div>
                         </CardHeader>
                         <CardContent>
-                            <Separator className="my-4" />
                             <ul className="space-y-2">
                             {order.items.map((item, index) => (
                                 <li key={index} className="flex justify-between text-muted-foreground">
@@ -272,95 +405,9 @@ export default function AccountPage() {
                     <p className="text-muted-foreground">No delivered orders yet.</p>
                 )}
             </div>
-            <div>
-                <h2 className="text-2xl font-bold font-headline mb-4">Actions</h2>
-                 <Card>
-                    <CardHeader>
-                        <CardTitle>Your Details</CardTitle>
-                        <CardDescription>
-                           Signed in as {user.name} ({user.phone}). You have placed {user.orderCount} orders.
-                        </CardDescription>
-                    </CardHeader>
-                </Card>
-                <Card className="mt-8">
-                    <CardHeader>
-                        <CardTitle>Make a UPI Payment</CardTitle>
-                        <CardDescription>
-                            Enter the amount you wish to pay. We'll redirect you to your UPI app.
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="amount">Amount</Label>
-                            <div className="relative">
-                                <IndianRupee className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                                <Input 
-                                    id="amount"
-                                    type="number" 
-                                    placeholder="Enter amount" 
-                                    value={amount}
-                                    onChange={(e) => setAmount(e.target.value)}
-                                    className="pl-10"
-                                />
-                            </div>
-                        </div>
-                        <div className="flex items-center justify-center gap-4">
-                            <Icons.paytm className="h-6" />
-                            <Icons.gpay className="h-6" />
-                            <Icons.phonepe className="h-6" />
-                        </div>
-                         <p className="text-sm text-muted-foreground">
-                            You will be asked to pay to UPI ID: <span className="font-semibold text-foreground">9310364770@paytm</span>
-                        </p>
-                        <Button onClick={handleQuickPay} className="w-full">
-                           <Send className="mr-2 h-4 w-4" /> Proceed to Pay
-                        </Button>
-                    </CardContent>
-                </Card>
-                 <Card className="mt-8">
-                    <CardHeader>
-                        <CardTitle>Cash on Delivery</CardTitle>
-                        <CardDescription>
-                            Prefer to pay on delivery? Place your order here by describing what you want.
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <Dialog>
-                            <DialogTrigger asChild>
-                                <Button variant="outline" className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
-                                    <Home className="mr-2 h-4 w-4" /> Place Manual COD Order
-                                </Button>
-                            </DialogTrigger>
-                            <DialogContent className="sm:max-w-[425px]">
-                                <DialogHeader>
-                                <DialogTitle>Manual COD Order</DialogTitle>
-                                <DialogDescription>
-                                    Enter your order details below. This will be sent to us via WhatsApp with your saved information.
-                                </DialogDescription>
-                                </DialogHeader>
-                                <div className="grid gap-4 py-4">
-                                <div className="grid grid-cols-4 items-center gap-4">
-                                    <Label htmlFor="cod-order" className="text-right">
-                                        Order
-                                    </Label>
-                                    <Textarea id="cod-order" value={codOrder} onChange={(e) => setCodOrder(e.target.value)} className="col-span-3" placeholder="e.g., 1x Full Biryani, 2x Half Momos" />
-                                </div>
-                                </div>
-                                <DialogFooter>
-                                  <DialogClose asChild>
-                                    <Button type="button" variant="ghost" id="close-cod-dialog">Cancel</Button>
-                                  </DialogClose>
-                                <Button type="button" onClick={handleCodSubmit}>Submit Order</Button>
-                                </DialogFooter>
-                            </DialogContent>
-                        </Dialog>
-                    </CardContent>
-                </Card>
-            </div>
         </div>
       </main>
       <Footer />
     </div>
   );
-
     
