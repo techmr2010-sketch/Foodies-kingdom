@@ -5,28 +5,13 @@ import Header from '@/components/header';
 import Footer from '@/components/footer';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { IndianRupee, ChevronLeft, Send, Home, CheckCircle, User as UserIcon, Camera } from 'lucide-react';
+import { IndianRupee, ChevronLeft, CheckCircle, User as UserIcon, Camera } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { useState, useEffect, useRef } from 'react';
 import { useToast } from '@/hooks/use-toast';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-  DialogFooter,
-  DialogClose,
-} from "@/components/ui/dialog";
-import { Textarea } from '@/components/ui/textarea';
-import { Icons } from '@/components/icons';
 import { useUser } from '@/context/user-context';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 
 type OrderItem = {
@@ -50,9 +35,7 @@ const formatDate = (dateString: string) => {
 }
 
 export default function AccountPage() {
-  const [amount, setAmount] = useState('');
   const { toast } = useToast();
-  const [codOrder, setCodOrder] = useState('');
   const [isClient, setIsClient] = useState(false);
   const [orders, setOrders] = useState<Order[]>([]);
   const { user, openSignUpModal, incrementOrderCount, updateProfilePicture } = useUser();
@@ -101,71 +84,6 @@ export default function AccountPage() {
       reader.readAsDataURL(file);
     }
   };
-
-
-  const handleQuickPay = () => {
-    const paymentAmount = parseFloat(amount);
-    if (!paymentAmount || paymentAmount <= 0) {
-      toast({
-        variant: 'destructive',
-        title: 'Invalid Amount',
-        description: 'Please enter a valid amount to pay.',
-      });
-      return;
-    }
-    const upiLink = `upi://pay?pa=9310364770@paytm&pn=Foodie%20Kingdom&am=${paymentAmount.toFixed(2)}&cu=INR`;
-    window.location.href = upiLink;
-    toast({
-      title: 'Redirecting to UPI',
-      description: `Opening payment app to pay ₹${paymentAmount.toFixed(2)}.`,
-    });
-  };
-
-  const handleCodSubmit = () => {
-    if (!user) {
-        toast({ variant: 'destructive', title: 'Not Signed In', description: 'Please sign in to place an order.'});
-        return;
-    }
-    if (!codOrder) {
-      toast({
-        variant: "destructive",
-        title: "Information Missing",
-        description: "Please fill in all the details for the COD order.",
-      });
-      return;
-    }
-    let message = `New COD Order from Foodie Kingdom:\n\nCustomer Name: ${user.name}\nAddress: Manual entry required\nPhone: ${user.phone}\n\nOrder Details:\n${codOrder}`;
-    
-    if (user.location) {
-        message += `\n\nLocation: https://www.google.com/maps?q=${user.location.latitude},${user.location.longitude}`;
-    } else {
-        message += `\n\nLocation Error: Not provided.`;
-    }
-
-    const encodedMessage = encodeURIComponent(message);
-    const ownerWhatsappUrl = `https://wa.me/919310364770?text=${encodedMessage}`;
-
-    window.open(ownerWhatsappUrl, '_blank');
-    
-    // Create and save the new order
-    const newOrder: Order = {
-        id: `FK-${Math.random().toString(36).substr(2, 5).toUpperCase()}`,
-        date: new Date().toISOString(),
-        total: 0, // Manual orders have unknown total
-        items: [{ name: codOrder, quantity: 1 }],
-        status: 'Pending',
-    };
-    setOrders(prevOrders => [newOrder, ...prevOrders]);
-
-    toast({
-        title: "COD Order Placed!",
-        description: "Your order details have been sent.",
-    });
-
-    // Close the dialog and clear fields
-    document.getElementById('close-cod-dialog')?.click();
-    setCodOrder('');
-  }
 
   const markAsDelivered = (orderId: string) => {
     setOrders(prevOrders => 

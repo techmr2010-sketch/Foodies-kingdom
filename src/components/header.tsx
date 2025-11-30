@@ -86,7 +86,7 @@ export default function Header() {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link href="/account">
+                  <Link href="/payments">
                     <IndianRupee className="mr-2 h-4 w-4" />
                     <span>Payments</span>
                   </Link>
