@@ -41,6 +41,7 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 // For this demo, we'll store multiple users in a single localStorage item.
 const getUsers = (): { [phone: string]: User } => {
     try {
+        if (typeof window === 'undefined') return {};
         const users = localStorage.getItem('foodie-users');
         return users ? JSON.parse(users) : {};
     } catch (error) {
@@ -51,6 +52,7 @@ const getUsers = (): { [phone: string]: User } => {
 
 const saveUsers = (users: { [phone: string]: User }) => {
     try {
+        if (typeof window === 'undefined') return;
         localStorage.setItem('foodie-users', JSON.stringify(users));
     } catch (error) {
         console.error("Failed to save users to localStorage", error);
@@ -75,27 +77,21 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     try {
+        if (typeof window === 'undefined') return;
         const storedUserPhone = localStorage.getItem('foodie-active-user');
         if (storedUserPhone) {
             const users = getUsers();
             const activeUser = users[storedUserPhone];
             if (activeUser) {
                 setUser(activeUser);
-                // If user has no location, ask again
-                if (!activeUser.location) {
-                    requestLocation(setSignUpLocation, setSignUpLocationError, true);
-                }
             }
-        } else {
-            // If no user, prompt for sign-up after a short delay
-            setTimeout(() => {
-                setIsSignUpModalOpen(true);
-            }, 2000);
         }
     } catch (error) {
         console.error("Failed to parse user from localStorage", error);
-        localStorage.removeItem('foodie-users');
-        localStorage.removeItem('foodie-active-user');
+        if (typeof window !== 'undefined') {
+            localStorage.removeItem('foodie-users');
+            localStorage.removeItem('foodie-active-user');
+        }
     }
   }, []);
 
@@ -155,7 +151,9 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
         if (existingUser) {
             setUser(existingUser);
-            localStorage.setItem('foodie-active-user', phone);
+            if (typeof window !== 'undefined') {
+              localStorage.setItem('foodie-active-user', phone);
+            }
             toast({ title: "Sign In Successful!", description: `Welcome back, ${existingUser.name}!` });
             setIsSignInModalOpen(false);
             setSignInPhone('');
@@ -195,7 +193,9 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     saveUsers(users);
     
     setUser(newUser);
-    localStorage.setItem('foodie-active-user', phone);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('foodie-active-user', phone);
+    }
 
     toast({ title: "Sign Up Successful!", description: `Welcome, ${name}!` });
     setIsSignUpModalOpen(false);
@@ -205,7 +205,9 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
   const signOut = () => {
     try {
-        localStorage.removeItem('foodie-active-user');
+        if (typeof window !== 'undefined') {
+            localStorage.removeItem('foodie-active-user');
+        }
         setUser(null);
         toast({ title: "Signed Out", description: "You have been successfully signed out." });
     } catch (error) {
