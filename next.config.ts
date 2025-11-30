@@ -42,6 +42,9 @@ const nextConfig: NextConfig = {
       }
     ],
   },
+   experimental: {
+    memoryBasedWorkers: false,
+  },
 };
 
 export default nextConfig;
