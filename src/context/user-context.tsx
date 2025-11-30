@@ -37,6 +37,27 @@ type UserContextType = {
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
+// In a real app, this would be a database.
+// For this demo, we'll store multiple users in a single localStorage item.
+const getUsers = (): { [phone: string]: User } => {
+    try {
+        const users = localStorage.getItem('foodie-users');
+        return users ? JSON.parse(users) : {};
+    } catch (error) {
+        console.error("Failed to parse users from localStorage", error);
+        return {};
+    }
+}
+
+const saveUsers = (users: { [phone: string]: User }) => {
+    try {
+        localStorage.setItem('foodie-users', JSON.stringify(users));
+    } catch (error) {
+        console.error("Failed to save users to localStorage", error);
+    }
+}
+
+
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
@@ -54,20 +75,16 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     try {
-        const storedUser = localStorage.getItem('foodie-user');
-        if (storedUser) {
-            const parsedUser = JSON.parse(storedUser);
-            // Ensure orderCount and profilePicture exists
-            if (!('orderCount' in parsedUser)) {
-              parsedUser.orderCount = 0;
-            }
-            if (!('profilePicture' in parsedUser)) {
-                parsedUser.profilePicture = null;
-            }
-            setUser(parsedUser);
-            // If user has no location, ask again
-            if (!parsedUser.location) {
-                requestLocation(setSignUpLocation, setSignUpLocationError, true);
+        const storedUserPhone = localStorage.getItem('foodie-active-user');
+        if (storedUserPhone) {
+            const users = getUsers();
+            const activeUser = users[storedUserPhone];
+            if (activeUser) {
+                setUser(activeUser);
+                // If user has no location, ask again
+                if (!activeUser.location) {
+                    requestLocation(setSignUpLocation, setSignUpLocationError, true);
+                }
             }
         } else {
             // If no user, prompt for sign-up after a short delay
@@ -77,7 +94,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         }
     } catch (error) {
         console.error("Failed to parse user from localStorage", error);
-        localStorage.removeItem('foodie-user');
+        localStorage.removeItem('foodie-users');
+        localStorage.removeItem('foodie-active-user');
     }
   }, []);
 
@@ -98,12 +116,12 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
             });
           }
           // If user already exists, update their location in localStorage
-          const storedUser = localStorage.getItem('foodie-user');
-          if(storedUser) {
-            const parsedUser = JSON.parse(storedUser);
-            const updatedUser = { ...parsedUser, location: newLocation };
-            localStorage.setItem('foodie-user', JSON.stringify(updatedUser));
-            setUser(updatedUser);
+          if (user) {
+                const users = getUsers();
+                const updatedUser = { ...users[user.phone], location: newLocation };
+                users[user.phone] = updatedUser;
+                saveUsers(users);
+                setUser(updatedUser);
           }
         },
         (error) => {
@@ -132,24 +150,18 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
   const signIn = (phone: string): boolean => {
     try {
-        const storedUser = localStorage.getItem('foodie-user');
-        if (storedUser) {
-            const parsedUser = JSON.parse(storedUser);
-            if (parsedUser.phone === phone) {
-                // Ensure orderCount and profilePicture exists
-                if (!('orderCount' in parsedUser)) {
-                  parsedUser.orderCount = 0;
-                }
-                 if (!('profilePicture' in parsedUser)) {
-                    parsedUser.profilePicture = null;
-                }
-                setUser(parsedUser);
-                toast({ title: "Sign In Successful!", description: `Welcome back, ${parsedUser.name}!` });
-                setIsSignInModalOpen(false);
-                setSignInPhone('');
-                return true;
-            }
+        const users = getUsers();
+        const existingUser = users[phone];
+
+        if (existingUser) {
+            setUser(existingUser);
+            localStorage.setItem('foodie-active-user', phone);
+            toast({ title: "Sign In Successful!", description: `Welcome back, ${existingUser.name}!` });
+            setIsSignInModalOpen(false);
+            setSignInPhone('');
+            return true;
         }
+        
         toast({ variant: "destructive", title: "Sign In Failed", description: "No account found with this phone number. Please sign up." });
         return false;
     } catch(error) {
@@ -167,22 +179,33 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         toast({ variant: 'destructive', title: 'Location Required', description: 'Please allow location access to sign up.' });
         return;
     }
-    const newUser: User = { name, phone, location, orderCount: 0, profilePicture: null };
-    try {
-        localStorage.setItem('foodie-user', JSON.stringify(newUser));
-        setUser(newUser);
-        toast({ title: "Sign Up Successful!", description: `Welcome, ${name}!` });
+
+    const users = getUsers();
+    if(users[phone]) {
+        toast({ variant: "destructive", title: "Account Exists", description: "An account with this phone number already exists. Please sign in." });
         setIsSignUpModalOpen(false);
-        setSignUpName('');
-        setSignUpPhone('');
-    } catch (error) {
-        toast({ variant: 'destructive', title: 'Sign Up Failed', description: 'Could not save your details.' });
+        setIsSignInModalOpen(true);
+        setSignInPhone(phone);
+        return;
     }
+
+    const newUser: User = { name, phone, location, orderCount: 0, profilePicture: null };
+    
+    users[phone] = newUser;
+    saveUsers(users);
+    
+    setUser(newUser);
+    localStorage.setItem('foodie-active-user', phone);
+
+    toast({ title: "Sign Up Successful!", description: `Welcome, ${name}!` });
+    setIsSignUpModalOpen(false);
+    setSignUpName('');
+    setSignUpPhone('');
   };
 
   const signOut = () => {
     try {
-        localStorage.removeItem('foodie-user');
+        localStorage.removeItem('foodie-active-user');
         setUser(null);
         toast({ title: "Signed Out", description: "You have been successfully signed out." });
     } catch (error) {
@@ -193,14 +216,11 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const updateProfilePicture = (picture: string) => {
     setUser(currentUser => {
         if (currentUser) {
+            const users = getUsers();
             const updatedUser = { ...currentUser, profilePicture: picture };
-            try {
-                localStorage.setItem('foodie-user', JSON.stringify(updatedUser));
-                toast({ title: "Profile Picture Updated", description: "Your new picture has been saved." });
-            } catch (error) {
-                console.error("Could not update profile picture in localStorage", error);
-                toast({ variant: "destructive", title: "Error", description: "Could not save your picture." });
-            }
+            users[currentUser.phone] = updatedUser;
+            saveUsers(users);
+            toast({ title: "Profile Picture Updated", description: "Your new picture has been saved." });
             return updatedUser;
         }
         return null;
@@ -210,12 +230,10 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const incrementOrderCount = () => {
     setUser(currentUser => {
         if (currentUser) {
+            const users = getUsers();
             const updatedUser = { ...currentUser, orderCount: currentUser.orderCount + 1 };
-            try {
-                localStorage.setItem('foodie-user', JSON.stringify(updatedUser));
-            } catch (error) {
-                console.error("Could not update user in localStorage", error);
-            }
+            users[currentUser.phone] = updatedUser;
+            saveUsers(users);
             return updatedUser;
         }
         return null;
