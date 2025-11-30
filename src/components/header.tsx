@@ -1,7 +1,7 @@
 
 'use client';
 import Link from 'next/link';
-import { ChefHat, User, ShoppingCart, LogOut, LogIn } from 'lucide-react';
+import { ChefHat, User, ShoppingCart, LogOut, LogIn, LayoutDashboard } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Cart from '@/components/cart';
 import {
@@ -60,6 +60,12 @@ export default function Header() {
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
+                 <DropdownMenuItem asChild>
+                  <Link href="/dashboard">
+                    <LayoutDashboard className="mr-2 h-4 w-4" />
+                    <span>Dashboard</span>
+                  </Link>
+                </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link href="/account">
                     <User className="mr-2 h-4 w-4" />
