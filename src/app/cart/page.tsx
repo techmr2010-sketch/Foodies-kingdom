@@ -94,14 +94,14 @@ export default function CartPage() {
         const orderDetails = cartItems.map(item => `${item.quantity} x ${item.name} (${item.option})`).join('\n');
         let message;
         
-        const upiLink = `upi://pay?pa=9310364770@paytm&pn=Delhi%20Foodie%20Kingdom&am=${total.toFixed(2)}&cu=INR`;
+        const upiLink = `upi://pay?pa=9310364770@paytm&pn=Foodies%20Kingdom&am=${total.toFixed(2)}&cu=INR`;
         
         let locationString = "Customer did not provide location.";
         if (user.location) {
             locationString = `https://www.google.com/maps?q=${user.location.latitude},${user.location.longitude}`;
         }
         
-        message = `New Order from Delhi Foodie Kingdom:\n\nOrdering as: ${user.name}\nOrder Details:\n${orderDetails}\n\nSubtotal: ₹${subtotal.toFixed(2)}\nDelivery Fee: ₹${deliveryFee.toFixed(2)}\nTotal: ₹${total.toFixed(2)}\nContact: ${user.phone}\nLocation: ${locationString}\nPayment Method: ${paymentMethod === 'cod' ? 'Cash on Delivery' : 'Prepaid (UPI)'}`;
+        message = `New Order from Foodies Kingdom:\n\nOrdering as: ${user.name}\nOrder Details:\n${orderDetails}\n\nSubtotal: ₹${subtotal.toFixed(2)}\nDelivery Fee: ₹${deliveryFee.toFixed(2)}\nTotal: ₹${total.toFixed(2)}\nContact: ${user.phone}\nLocation: ${locationString}\nPayment Method: ${paymentMethod === 'cod' ? 'Cash on Delivery' : 'Prepaid (UPI)'}`;
         
         const encodedMessage = encodeURIComponent(message);
         const ownerWhatsappUrl = `https://wa.me/919310364770?text=${encodedMessage}`;
@@ -279,4 +279,5 @@ export default function CartPage() {
   );
 
     
+
 

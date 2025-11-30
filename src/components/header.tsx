@@ -27,8 +27,8 @@ export default function Header() {
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2">
           <FoodieKingdomLogo className="h-10 w-10" />
-          <span className="text-xl font-bold font-headline hidden sm:inline-block">
-            Delhi Foodie Kingdom
+          <span className="text-lg sm:text-xl font-bold font-headline">
+            Foodies Kingdom
           </span>
         </Link>
         <div className="flex items-center gap-2">

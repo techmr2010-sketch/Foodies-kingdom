@@ -19,7 +19,7 @@ export const FoodieKingdomLogo = (props: React.SVGProps<SVGSVGElement>) => (
     <g fontSize="10" fontFamily="serif" fill="#5C3D1E">
       <text>
         <textPath xlinkHref="#circlePath" startOffset="50%" textAnchor="middle">
-          DELHI FOODIE KINGDOM
+          FOODIES KINGDOM
         </textPath>
       </text>
     </g>

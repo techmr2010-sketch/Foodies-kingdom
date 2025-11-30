@@ -7,7 +7,7 @@ export default function Footer() {
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
           <div>
-            <h3 className="text-xl font-bold text-primary mb-2 font-headline">Delhi Foodie Kingdom</h3>
+            <h3 className="text-xl font-bold text-primary mb-2 font-headline">Foodies Kingdom</h3>
             <p className="text-muted-foreground">Fast, seamless food ordering from local restaurants.</p>
           </div>
           <div>
@@ -28,7 +28,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="text-center text-muted-foreground mt-8 pt-8 border-t">
-          <p>&copy; {new Date().getFullYear()} Delhi Foodie Kingdom. All Rights Reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Foodies Kingdom. All Rights Reserved.</p>
         </div>
       </div>
     </footer>
