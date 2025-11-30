@@ -47,6 +47,26 @@ const processOrderDataForChart = (orders: Order[]) => {
     return dailyData;
 };
 
+const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+        return (
+            <div className="p-2 bg-background border rounded-md shadow-lg">
+                <p className="label font-bold">{`${label}`}</p>
+                {payload.map((pld: any, index: number) => (
+                    <div key={index} style={{ color: pld.fill }}>
+                        {pld.dataKey === 'revenue' 
+                            ? `${pld.name}: ₹${pld.value.toFixed(2)}`
+                            : `${pld.name}: ${pld.value}`
+                        }
+                    </div>
+                ))}
+            </div>
+        );
+    }
+
+    return null;
+};
+
 export default function DashboardPage() {
     const { user, openSignUpModal } = useUser();
     const [orders, setOrders] = useState<Order[]>([]);
@@ -152,12 +172,7 @@ export default function DashboardPage() {
                                     <XAxis dataKey="date" />
                                     <YAxis yAxisId="left" orientation="left" stroke="hsl(var(--primary))" />
                                     <YAxis yAxisId="right" orientation="right" stroke="hsl(var(--accent))" />
-                                    <Tooltip
-                                        contentStyle={{
-                                            backgroundColor: 'hsl(var(--background))',
-                                            borderColor: 'hsl(var(--border))'
-                                        }}
-                                    />
+                                    <Tooltip content={<CustomTooltip />} />
                                     <Legend />
                                     <Bar yAxisId="left" dataKey="orders" fill="hsl(var(--primary))" name="Orders" />
                                     <Bar yAxisId="right" dataKey="revenue" fill="hsl(var(--accent))" name="Revenue (₹)" />
