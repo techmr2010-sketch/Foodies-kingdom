@@ -3,7 +3,7 @@
     {
       "id": "logo",
       "description": "Foodie Kingdom app logo",
-      "imageUrl": "https://storage.googleapis.com/studio-ux-ch-team-red-us-central1-storage-4228/foodie-kingdom-logo.png",
+      "imageUrl": "https://storage.googleapis.com/studio-ux-ch-team-red-us-central1-storage-4228/group_18_20240801-102558_464977_image.png",
       "imageHint": "app logo"
     },
     {
@@ -51,7 +51,7 @@
     {
       "id": "momos-non-veg-steam",
       "description": "Steamed chicken momos.",
-      "imageUrl": "https://images.unsplash.com/photo-1653769342321-7e7a356e6dfc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxtb21vcyUyMGR1bXBsaW5nfGVufDB8fHx8MTc2MzM4MzA1OHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1653769342321-7e7a356e6dfc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxtb21vcyUyMGR1bXBsaW5nfGVufDB8fHx8MTc2MzM4MzA1OHww&ixlibrb-4.1.0&q=80&w=1080",
       "imageHint": "momos dumpling"
     },
     {
@@ -93,19 +93,19 @@
     {
       "id": "maggi",
       "description": "Instant Maggi noodles.",
-      "imageUrl": "https://images.unsplash.com/photo-1685209743819-dab6a8a853e7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxtYWdnaSUyMG5vb2RsZXN8ZW58MHx8fHwxNzYzMzgzMDU4fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1685209743819-dab6a8a853e7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxtYWdnaSUyMG5vb2RsZXN8ZW58MHx8fHwxNzYzMzgzMDU4fDA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "maggi noodles"
     },
     {
       "id": "samosa",
       "description": "Crispy fried samosas.",
-      "imageUrl": "https://images.unsplash.com/photo-1627670381055-487000952cb0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzYW1vc2ElMjBzbmFja3xlbnwwfHx8fDE3NjMzODMwNTh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1627670381055-487000952cb0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzYW1vc2ElMjBzbmFja3xlbnwwfHx8fDE3NjMzODMwNTh8MA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "samosa snack"
     },
     {
       "id": "bread-pakoda",
       "description": "Fried bread pakoda.",
-      "imageUrl": "https://images.unsplash.com/photo-1605189361149-8db06ad7baf6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxiamVhZCUyMHBha29yYXxlbnwwfHx8fDE3NjMzODMwNTh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1605189361149-8db06ad7baf6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxiamVhZCUyMHBha29yYXxlbnwwfHx8fDE3NjMzODMwNTh8MA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "bread pakora"
     }
   ]
