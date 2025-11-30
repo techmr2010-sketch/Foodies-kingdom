@@ -30,7 +30,7 @@ type Order = {
 
 export default function CartPage() {
     const { cartItems, removeFromCart, clearCart, getCartItemDetails } = useCart();
-    const { user } = useUser();
+    const { user, openSignUpModal } = useUser();
     const { toast } = useToast();
     const [customerName, setCustomerName] = useState('');
     const [paymentMethod, setPaymentMethod] = useState('phone');
@@ -38,8 +38,10 @@ export default function CartPage() {
     useEffect(() => {
         if (user) {
             setCustomerName(user.name);
+        } else {
+             openSignUpModal();
         }
-    }, [user]);
+    }, [user, openSignUpModal]);
 
     const {subtotal, deliveryFee, total} = getCartItemDetails(user?.orderCount ?? 0);
     
@@ -50,6 +52,7 @@ export default function CartPage() {
                 title: "Not Signed In",
                 description: "Please sign in or sign up to place an order.",
             });
+            openSignUpModal();
             return;
         }
         if (cartItems.length === 0) {
