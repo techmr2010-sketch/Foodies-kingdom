@@ -1,12 +1,6 @@
 {
   "placeholderImages": [
     {
-      "id": "logo",
-      "description": "Foodie Kingdom app logo",
-      "imageUrl": "https://storage.googleapis.com/studio-ux-ch-team-red-us-central1-storage-4228/group_18_20240801-102558_464977_image.png",
-      "imageHint": "app logo"
-    },
-    {
       "id": "hero",
       "description": "A vibrant collage of various delicious food items.",
       "imageUrl": "https://images.unsplash.com/photo-1713288971605-92a285c20f56?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxmb29kJTIwY29sbGFnZXxlbnwwfHx8fDE3NjMzNzk4NzR8MA&ixlib=rb-4.1.0&q=80&w=1080",
@@ -93,19 +87,19 @@
     {
       "id": "maggi",
       "description": "Instant Maggi noodles.",
-      "imageUrl": "https://images.unsplash.com/photo-1685209743819-dab6a8a853e7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxtYWdnaSUyMG5vb2RsZXN8ZW58MHx8fHwxNzYzMzgzMDU4fDA&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1685209743819-dab6a8a853e7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxtYWdnaSUyMG5vb2RsZXN8ZW58MHx8fHwxNzYzMzgzMDU4fDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "maggi noodles"
     },
     {
       "id": "samosa",
       "description": "Crispy fried samosas.",
-      "imageUrl": "https://images.unsplash.com/photo-1627670381055-487000952cb0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzYW1vc2ElMjBzbmFja3xlbnwwfHx8fDE3NjMzODMwNTh8MA&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1627670381055-487000952cb0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzYW1vc2ElMjBzbmFja3xlbnwwfHx8fDE3NjMzODMwNTh8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "samosa snack"
     },
     {
       "id": "bread-pakoda",
       "description": "Fried bread pakoda.",
-      "imageUrl": "https://images.unsplash.com/photo-1605189361149-8db06ad7baf6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxiamVhZCUyMHBha29yYXxlbnwwfHx8fDE3NjMzODMwNTh8MA&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1605189361149-8db06ad7baf6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxiamVhZCUyMHBha29yYXxlbnwwfHx8fDE3NjMzODMwNTh8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "bread pakora"
     }
   ]
