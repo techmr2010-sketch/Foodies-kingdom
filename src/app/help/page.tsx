@@ -19,7 +19,7 @@ export default function HelpPage() {
     const orderId = (form.elements.namedItem('orderId') as HTMLInputElement).value;
     const message = (form.elements.namedItem('message') as HTMLTextAreaElement).value;
 
-    const query = `Query from Foodie Kingdom:\nName: ${name}\nEmail: ${email}\nOrder ID: ${orderId || 'N/A'}\nMessage: ${message}`;
+    const query = `Query from Delhi Foodie Kingdom:\nName: ${name}\nEmail: ${email}\nOrder ID: ${orderId || 'N/A'}\nMessage: ${message}`;
     const encodedQuery = encodeURIComponent(query);
     const whatsappUrl = `https://wa.me/919310364770?text=${encodedQuery}`;
     

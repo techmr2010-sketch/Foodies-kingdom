@@ -60,7 +60,7 @@ export default function PaymentsPage() {
       });
       return;
     }
-    const upiLink = `upi://pay?pa=9310364770@paytm&pn=Foodie%20Kingdom&am=${paymentAmount.toFixed(2)}&cu=INR`;
+    const upiLink = `upi://pay?pa=9310364770@paytm&pn=Delhi%20Foodie%20Kingdom&am=${paymentAmount.toFixed(2)}&cu=INR`;
     window.location.href = upiLink;
     toast({
       title: 'Redirecting to UPI',
@@ -81,7 +81,7 @@ export default function PaymentsPage() {
       });
       return;
     }
-    let message = `New COD Order from Foodie Kingdom:\n\nCustomer Name: ${user.name}\nAddress: Manual entry required\nPhone: ${user.phone}\n\nOrder Details:\n${codOrder}`;
+    let message = `New COD Order from Delhi Foodie Kingdom:\n\nCustomer Name: ${user.name}\nAddress: Manual entry required\nPhone: ${user.phone}\n\nOrder Details:\n${codOrder}`;
     
     if (user.location) {
         message += `\n\nLocation: https://www.google.com/maps?q=${user.location.latitude},${user.location.longitude}`;

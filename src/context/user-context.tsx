@@ -256,7 +256,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       <Dialog open={isSignUpModalOpen} onOpenChange={setIsSignUpModalOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Welcome to Foodie Kingdom!</DialogTitle>
+            <DialogTitle>Welcome to Delhi Foodie Kingdom!</DialogTitle>
             <DialogDescription>
               Create an account to get started. It only takes a minute.
             </DialogDescription>

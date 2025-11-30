@@ -6,7 +6,7 @@ import { UserProvider } from '@/context/user-context';
 import BottomNav from '@/components/bottom-nav';
 
 export const metadata: Metadata = {
-  title: 'Foodie Kingdom',
+  title: 'Delhi Foodie Kingdom',
   description: 'A fast, seamless food ordering experience.',
 };
 

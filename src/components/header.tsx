@@ -31,7 +31,7 @@ export default function Header() {
              </div>
           
           <span className="text-2xl font-bold font-headline">
-            Foodie Kingdom
+            Delhi Foodie Kingdom
           </span>
         </Link>
         <div className="flex items-center gap-2">

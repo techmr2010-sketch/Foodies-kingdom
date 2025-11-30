@@ -19,7 +19,7 @@ export default function Hero() {
       <div className="absolute inset-0 bg-black/50" />
       <div className="relative z-10 p-4">
         <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-accent font-headline">
-          Welcome to Foodie Kingdom
+          Welcome to Delhi Foodie Kingdom
         </h1>
         <p className="mt-4 text-lg md:text-xl max-w-2xl mx-auto text-primary-foreground italic">
           "We don't need your money, we need your help... to eat all this delicious food!"
