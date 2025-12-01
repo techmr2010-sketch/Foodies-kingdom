@@ -23,7 +23,7 @@ export default function Footer() {
             <div className="flex justify-center md:justify-start gap-4">
               <a href="#" className="text-muted-foreground hover:text-primary"><Icons.twitter className="h-6 w-6" /></a>
               <a href="#" className="text-muted-foreground hover:text-primary"><Icons.facebook className="h-6 w-6" /></a>
-              <a href="#" className="text-muted-foreground hover:text-primary"><Icons.instagram className="h-6 w-6" /></a>
+              <a href="https://www.instagram.com/pathakji98210" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary"><Icons.instagram className="h-6 w-6" /></a>
             </div>
           </div>
         </div>
