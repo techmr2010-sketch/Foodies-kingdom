@@ -21,30 +21,62 @@ export default function Header() {
   
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto flex h-16 items-center justify-between px-4">
-        <div className="flex items-center gap-6">
+      <div className="container mx-auto flex h-auto flex-col items-start justify-between px-4 py-2 md:h-16 md:flex-row md:items-center md:py-0">
+        <div className="flex w-full items-center justify-between md:w-auto">
           <Link href="/" className="flex items-center gap-2">
             <FoodieKingdomLogo className="h-10 w-10" />
-            <span className="hidden text-lg font-bold font-headline sm:inline-block">
+            <span className="text-lg font-bold font-headline">
               Foodies Kingdom
             </span>
           </Link>
-          <nav className="hidden items-center gap-4 md:flex">
-            <Button variant="link" asChild className="px-0">
-              <Link href="/#menu">Menu</Link>
-            </Button>
-            <Button variant="link" asChild className="px-0">
-              <Link href="/#recommendations">For You</Link>
-            </Button>
-            <Button variant="link" asChild className="px-0">
-              <Link href="/#partners">Partners</Link>
-            </Button>
-          </nav>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="hidden md:flex">
-             <Cart />
+          <div className="flex items-center gap-2 md:hidden">
+            <Cart />
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                   <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                      <Avatar className="h-8 w-8">
+                         <AvatarImage src={user.profilePicture || ''} alt={user.name} />
+                         <AvatarFallback>{user.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                      </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuLabel className="font-normal">
+                    <div className="flex flex-col space-y-1">
+                      <p className="text-sm font-medium leading-none">{user.name}</p>
+                      <p className="text-xs leading-none text-muted-foreground">
+                        {user.phone}
+                      </p>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={signOut}>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Sign Out</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+                <Button onClick={openSignUpModal} size="sm">Sign Up</Button>
+            )}
           </div>
+        </div>
+        
+        <nav className="mt-2 flex w-full items-center gap-4 md:mt-0 md:w-auto">
+          <Button variant="link" asChild className="px-0">
+            <Link href="/#menu">Menu</Link>
+          </Button>
+          <Button variant="link" asChild className="px-0">
+            <Link href="/#recommendations">For You</Link>
+          </Button>
+          <Button variant="link" asChild className="px-0">
+            <Link href="/#partners">Partners</Link>
+          </Button>
+        </nav>
+        
+        <div className="hidden items-center gap-2 md:flex">
+          <Cart />
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -105,9 +137,6 @@ export default function Header() {
               <Button onClick={openSignUpModal}>Sign Up</Button>
             </div>
           )}
-           <div className="md:hidden">
-              <Cart />
-           </div>
         </div>
       </div>
     </header>
