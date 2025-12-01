@@ -55,7 +55,7 @@ Dish Name: {{{dishName}}}
     *   **Ingredients:** Paneer – 250 g, Tomato purée – 1 cup, Butter – 2 tbsp, Cream – ¼ cup, Ginger-garlic paste – 1 tbsp, Garam masala – 1 tsp, Salt – to taste.
     *   **Method:** Cook tomato gravy, add paneer cubes, finish with butter + cream.
 
-*   **Veg Biryani**
+*   **Biryani (Veg)**
     *   **Ingredients:** Basmati rice – 2 cups, Mixed veggies – 2 cups, Yogurt – ½ cup, Biryani masala – 2 tbsp, Saffron milk – ¼ cup, Ghee – 2 tbsp.
     *   **Method:** Layer rice + veggies, drizzle saffron milk, cook on dum 20 min.
 
@@ -70,7 +70,7 @@ Dish Name: {{{dishName}}}
 *   **Chicken Fried Rice**
     *   **Method:** Same as veg fried rice, add 1 cup diced cooked chicken.
 
-*   **Veg Momos (Steam)**
+*   **Momos (Veg Steam)**
     *   **Ingredients:** Maida – 2 cups, Water – as needed, Cabbage + carrot (grated) – 2 cups, Soy sauce – 1 tbsp, Garlic – 1 tbsp chopped, Salt – to taste.
     *   **Method:** Make dough, fill with veg mix, steam 12 min.
 
@@ -89,6 +89,28 @@ Dish Name: {{{dishName}}}
 *   **Bread Pakora**
     *   **Ingredients:** Bread slices, spiced potato filling, gram flour batter.
     *   **Method:** Stuff bread, dip in batter, deep fry.
+
+*   **Veg Roll**
+    *   **Ingredients:** Paratha, sautéed veggies, chutney.
+    *   **Method:** Place filling on paratha, roll tight.
+
+*   **Egg Roll**
+    *   **Ingredients:** Paratha, beaten egg, onion, chutney.
+    *   **Method:** Cook paratha with egg on one side, add filling, roll.
+
+*   **Chilly Potato**
+    *   **Ingredients:** Fried potato fingers, capsicum, onion, garlic, soy sauce, chili sauce.
+    *   **Method:** Toss fried potatoes with sauces + veggies.
+
+*   **Chilly Potato (Honey)**
+    *   **Method:** Same as above, add honey at the end for glaze.
+
+*   **Noodles**
+    *   **Ingredients:** Boiled noodles, veggies, soy sauce, vinegar, chili sauce.
+    *   **Method:** Stir-fry garlic + veggies, add noodles + sauces, toss.
+
+*   **Maggi**
+    *   **Method:** Cook Maggi noodles with tastemaker + water, add veggies if desired.
 ---
 
 Please provide the recipe in markdown format, including a list of ingredients with quantities and step-by-step instructions.
