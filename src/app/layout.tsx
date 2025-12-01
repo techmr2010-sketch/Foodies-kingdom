@@ -4,6 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { CartProvider } from '@/context/cart-context';
 import { UserProvider } from '@/context/user-context';
 import BottomNav from '@/components/bottom-nav';
+import HelplineFab from '@/components/helpline-fab';
 
 export const metadata: Metadata = {
   title: 'Foodies Kingdom',
@@ -28,6 +29,7 @@ export default function RootLayout({
             {children}
             <Toaster />
             <BottomNav />
+            <HelplineFab />
           </CartProvider>
         </UserProvider>
       </body>
