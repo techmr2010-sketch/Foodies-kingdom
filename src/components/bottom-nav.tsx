@@ -1,8 +1,9 @@
+
 'use client';
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, User, ShoppingCart, LifeBuoy } from 'lucide-react';
+import { LayoutDashboard, User, ShoppingCart, MessageSquareQuote } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useCart } from '@/context/cart-context';
 
@@ -10,7 +11,7 @@ const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/account', label: 'Account', icon: User },
   { href: '/cart', label: 'Cart', icon: ShoppingCart },
-  { href: '/help', label: 'Help', icon: LifeBuoy },
+  { href: '/help', label: 'Help', icon: MessageSquareQuote },
 ];
 
 export default function BottomNav() {
