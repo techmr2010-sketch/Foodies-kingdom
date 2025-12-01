@@ -19,7 +19,7 @@ export default function HelplineFab() {
     <div className="fixed bottom-20 right-4 z-50 md:bottom-6 md:right-6">
       <Button
         size="icon"
-        className="rounded-full h-14 w-14 bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg"
+        className="rounded-full h-14 w-14 bg-blue-500 hover:bg-blue-600 text-white shadow-lg"
         onClick={handleCall}
         aria-label="Call Helpline"
       >
