@@ -2,15 +2,16 @@
 'use client';
 
 import { Button } from "@/components/ui/button";
-import { Phone } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useState, useRef, useEffect } from "react";
 import type { MouseEvent, TouchEvent } from 'react';
+import { CeoAvatar } from "./ceo-avatar";
 
 export default function HelplineFab() {
   const { toast } = useToast();
   const fabRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [hasDragged, setHasDragged] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [offset, setOffset] = useState({ x: 0, y: 0 });
 
@@ -26,18 +27,23 @@ export default function HelplineFab() {
     }
   }, []);
 
-  const handleCall = () => {
-    // Prevent triggering call when dragging ends
-    if (isDragging) return;
-    window.location.href = 'tel:9821073025';
+  const handleClick = () => {
+    // Prevent triggering click if a drag happened
+    if (hasDragged) {
+        setHasDragged(false);
+        return;
+    }
+    const whatsappUrl = `https://wa.me/9821073025`;
+    window.open(whatsappUrl, '_blank');
     toast({
-        title: "Calling Helpline",
-        description: "Opening your phone's dialer..."
+        title: "Opening WhatsApp",
+        description: "Redirecting to chat with the CEO..."
     })
   };
 
   const handleDragStart = (e: MouseEvent | TouchEvent) => {
     if (fabRef.current) {
+        setHasDragged(false);
         const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
         const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
         const fabRect = fabRef.current.getBoundingClientRect();
@@ -55,6 +61,7 @@ export default function HelplineFab() {
     if (!isDragging || !fabRef.current) return;
 
     e.preventDefault();
+    setHasDragged(true); // A move has occurred, so it's a drag
 
     const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
     const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
@@ -75,10 +82,7 @@ export default function HelplineFab() {
   };
 
   const handleDragEnd = () => {
-    // Use a timeout to distinguish between a click and a drag-end
-    setTimeout(() => {
-        setIsDragging(false);
-    }, 50);
+    setIsDragging(false);
   };
   
   useEffect(() => {
@@ -117,15 +121,11 @@ export default function HelplineFab() {
       }}
       onMouseDown={handleDragStart}
       onTouchStart={handleDragStart}
+      onClick={handleClick}
     >
-      <Button
-        size="icon"
-        className="rounded-full h-14 w-14 bg-gradient-to-br from-sky-400 to-emerald-400 hover:from-sky-500 hover:to-emerald-500 text-white shadow-lg"
-        onClick={handleCall}
-        aria-label="Call Helpline"
-      >
-        <Phone className="h-7 w-7" />
-      </Button>
+      <div className="h-20 w-20" aria-label="Chat with CEO on WhatsApp">
+        <CeoAvatar />
+      </div>
     </div>
   );
 }
