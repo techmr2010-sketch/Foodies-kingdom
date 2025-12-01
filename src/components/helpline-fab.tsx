@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect, MouseEvent, TouchEvent } from 'react';
+import Link from 'next/link';
 
 const AvatarLogo = () => (
   <svg
@@ -65,98 +66,96 @@ export default function HelplineFab() {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
+  const [wasDragged, setWasDragged] = useState(false);
 
   useEffect(() => {
     // Start in bottom right corner
-    setPosition({ x: window.innerWidth - 80, y: window.innerHeight - 80 });
+    setPosition({ x: window.innerWidth - 80, y: window.innerHeight - 150 });
   }, []);
 
-  const handleMouseDown = (e: MouseEvent<HTMLDivElement>) => {
-    if (fabRef.current) {
-      setIsDragging(true);
-      setOffset({
-        x: e.clientX - fabRef.current.getBoundingClientRect().left,
-        y: e.clientY - fabRef.current.getBoundingClientRect().top,
-      });
-    }
-  };
-
-  const handleTouchStart = (e: TouchEvent<HTMLDivElement>) => {
+  const handleDragStart = (clientX: number, clientY: number) => {
     if (fabRef.current) {
         setIsDragging(true);
-        const touch = e.touches[0];
+        setWasDragged(false);
         setOffset({
-            x: touch.clientX - fabRef.current.getBoundingClientRect().left,
-            y: touch.clientY - fabRef.current.getBoundingClientRect().top,
+            x: clientX - fabRef.current.getBoundingClientRect().left,
+            y: clientY - fabRef.current.getBoundingClientRect().top,
         });
     }
   };
 
-  const handleMouseMove = (e: globalThis.MouseEvent) => {
-    if (isDragging) {
-      e.preventDefault();
+  const handleDragMove = (clientX: number, clientY: number) => {
+     if (isDragging) {
+      setWasDragged(true);
       setPosition({
-        x: e.clientX - offset.x,
-        y: e.clientY - offset.y,
+        x: clientX - offset.x,
+        y: clientY - offset.y,
       });
     }
-  };
-  
-  const handleTouchMove = (e: globalThis.TouchEvent) => {
-    if (isDragging) {
-        const touch = e.touches[0];
-        setPosition({
-            x: touch.clientX - offset.x,
-            y: touch.clientY - offset.y,
-        });
-    }
-  };
+  }
 
-
-  const handleMouseUp = () => {
+  const handleDragEnd = () => {
     setIsDragging(false);
   };
   
-  const handleTouchEnd = () => {
-    setIsDragging(false);
-  };
+  // Mouse events
+  const onMouseDown = (e: MouseEvent<HTMLDivElement>) => handleDragStart(e.clientX, e.clientY);
+  const onMouseMove = (e: globalThis.MouseEvent) => handleDragMove(e.clientX, e.clientY);
+  const onMouseUp = () => handleDragEnd();
+
+  // Touch events
+  const onTouchStart = (e: TouchEvent<HTMLDivElement>) => handleDragStart(e.touches[0].clientX, e.touches[0].clientY);
+  const onTouchMove = (e: globalThis.TouchEvent) => handleDragMove(e.touches[0].clientX, e.touches[0].clientY);
+  const onTouchEnd = () => handleDragEnd();
 
   useEffect(() => {
     if (isDragging) {
-      window.addEventListener('mousemove', handleMouseMove);
-      window.addEventListener('mouseup', handleMouseUp);
-      window.addEventListener('touchmove', handleTouchMove);
-      window.addEventListener('touchend', handleTouchEnd);
+      window.addEventListener('mousemove', onMouseMove);
+      window.addEventListener('mouseup', onMouseUp);
+      window.addEventListener('touchmove', onTouchMove);
+      window.addEventListener('touchend', onTouchEnd);
     } else {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
-      window.removeEventListener('touchmove', handleTouchMove);
-      window.removeEventListener('touchend', handleTouchEnd);
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onMouseUp);
+      window.removeEventListener('touchmove', onTouchMove);
+      window.removeEventListener('touchend', onTouchEnd);
     }
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
-      window.removeEventListener('touchmove', handleTouchMove);
-      window.removeEventListener('touchend', handleTouchEnd);
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onMouseUp);
+      window.removeEventListener('touchmove', onTouchMove);
+      window.removeEventListener('touchend', onTouchEnd);
     };
   }, [isDragging, offset]);
 
+
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (wasDragged) {
+      e.preventDefault();
+    }
+  }
+
   return (
-    <div
-      ref={fabRef}
-      className="fixed z-50 rounded-full cursor-grab active:cursor-grabbing shadow-lg"
-      style={{
-        left: `${position.x}px`,
-        top: `${position.y}px`,
-        width: '64px',
-        height: '64px',
-        touchAction: 'none', // Prevent scrolling on mobile while dragging
-      }}
-      onMouseDown={handleMouseDown}
-      onTouchStart={handleTouchStart}
-    >
-      <AvatarLogo />
-    </div>
+    <Link href="/recipe-finder" passHref legacyBehavior>
+      <a onClick={handleClick} draggable="false">
+        <div
+          ref={fabRef}
+          className="fixed z-50 rounded-full cursor-grab active:cursor-grabbing shadow-lg"
+          style={{
+            left: `${position.x}px`,
+            top: `${position.y}px`,
+            width: '64px',
+            height: '64px',
+            touchAction: 'none', // Prevent scrolling on mobile while dragging
+          }}
+          onMouseDown={onMouseDown}
+          onTouchStart={onTouchStart}
+          onDragStart={(e) => e.preventDefault()}
+        >
+          <AvatarLogo />
+        </div>
+      </a>
+    </Link>
   );
 }

@@ -1,6 +1,7 @@
 
 'use server';
 import { personalizedDishRecommendations } from '@/ai/flows/personalized-dish-recommendations';
+import { findRecipe } from '@/ai/flows/recipe-finder-flow';
 
 // A map to store mock user order history and preferences
 const userProfiles = {
@@ -41,4 +42,17 @@ export async function getRecommendations(userId?: string, history?: string[], pr
     // Return an empty array or a default set of recommendations in case of an error
     return [];
   }
+}
+
+export async function getRecipe(dishName: string) {
+    try {
+        if (!dishName) {
+            return { recipe: '' };
+        }
+        const result = await findRecipe({ dishName });
+        return result;
+    } catch (error) {
+        console.error("Error fetching recipe:", error);
+        return { recipe: 'Sorry, I could not find a recipe for that dish. Please try another one.' };
+    }
 }
