@@ -123,7 +123,7 @@ export default function HelplineFab() {
       onTouchStart={handleDragStart}
       onClick={handleClick}
     >
-      <div className="h-20 w-20" aria-label="Chat with CEO on WhatsApp">
+      <div className="h-16 w-16" aria-label="Chat with CEO on WhatsApp">
         <CeoAvatar />
       </div>
     </div>
