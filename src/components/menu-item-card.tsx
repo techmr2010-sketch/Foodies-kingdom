@@ -96,9 +96,16 @@ export default function MenuItemCard({ item }: MenuItemCardProps) {
               ))}
             </SelectContent>
           </Select>
-          <span className="font-semibold text-lg text-foreground flex items-center">
-            <IndianRupee className="h-5 w-5 mr-1" />{selectedOption.price}
-          </span>
+          <div className="flex items-baseline gap-2">
+            <span className="font-semibold text-lg text-foreground flex items-center">
+              <IndianRupee className="h-5 w-5 mr-1" />{selectedOption.price}
+            </span>
+            {selectedOption.originalPrice && (
+              <span className="text-sm text-muted-foreground line-through flex items-center">
+                <IndianRupee className="h-4 w-4 mr-0.5" />{selectedOption.originalPrice}
+              </span>
+            )}
+          </div>
         </div>
       </CardContent>
       <CardFooter className="p-4 pt-0">
