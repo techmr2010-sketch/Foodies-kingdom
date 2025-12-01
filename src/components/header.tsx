@@ -19,104 +19,95 @@ import { FoodieKingdomLogo } from './logo';
 export default function Header() {
   const { user, signOut, openSignInModal, openSignUpModal } = useUser();
   
-
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto flex h-auto flex-col items-start justify-between px-4 py-2 md:h-16 md:flex-row md:items-center md:py-0">
-        <div className="flex w-full items-center justify-between">
+      <div className="container mx-auto flex h-16 items-center justify-between px-4">
+        <div className="flex items-center gap-6">
           <Link href="/" className="flex items-center gap-2">
             <FoodieKingdomLogo className="h-10 w-10" />
-            <span className="text-lg font-bold font-headline sm:text-xl">
+            <span className="hidden text-lg font-bold font-headline sm:inline-block">
               Foodies Kingdom
             </span>
           </Link>
-          <div className="flex items-center gap-2">
-             <div className="md:hidden">
-                <Cart />
-             </div>
-             {user ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                   <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                      <Avatar className="h-8 w-8">
-                         <AvatarImage src={user.profilePicture || ''} alt={user.name} />
-                         <AvatarFallback>{user.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                      </Avatar>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuLabel className="font-normal">
-                    <div className="flex flex-col space-y-1">
-                      <p className="text-sm font-medium leading-none">{user.name}</p>
-                      <p className="text-xs leading-none text-muted-foreground">
-                        {user.phone}
-                      </p>
-                    </div>
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                   <DropdownMenuItem asChild>
-                    <Link href="/dashboard">
-                      <LayoutDashboard className="mr-2 h-4 w-4" />
-                      <span>Dashboard</span>
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/account">
-                      <User className="mr-2 h-4 w-4" />
-                      <span>My Account</span>
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/cart">
-                      <ShoppingCart className="mr-2 h-4 w-4" />
-                      <span>My Cart</span>
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/payments">
-                      <IndianRupee className="mr-2 h-4 w-4" />
-                      <span>Payments</span>
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/help">Help Centre</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={signOut}>
-                    <LogOut className="mr-2 h-4 w-4" />
-                    <span>Sign Out</span>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            ) : (
-                <div className='flex items-center gap-2 md:hidden'>
-                    <Button variant="ghost" onClick={openSignInModal}>Sign In</Button>
-                    <Button onClick={openSignUpModal}>Sign Up</Button>
-                </div>
-            )}
-          </div>
+          <nav className="hidden items-center gap-4 md:flex">
+            <Button variant="link" asChild className="px-0">
+              <Link href="/#menu">Menu</Link>
+            </Button>
+            <Button variant="link" asChild className="px-0">
+              <Link href="/#recommendations">For You</Link>
+            </Button>
+            <Button variant="link" asChild className="px-0">
+              <Link href="/#partners">Partners</Link>
+            </Button>
+          </nav>
         </div>
-        <div className="flex w-full items-center justify-between">
-            <nav className="mt-2 flex w-full gap-4 md:mt-0 md:w-auto">
-                <Button variant="link" asChild className="px-0">
-                <Link href="/#menu">Menu</Link>
+        <div className="flex items-center gap-2">
+          <div className="hidden md:flex">
+             <Cart />
+          </div>
+          {user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                 <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                    <Avatar className="h-8 w-8">
+                       <AvatarImage src={user.profilePicture || ''} alt={user.name} />
+                       <AvatarFallback>{user.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                    </Avatar>
                 </Button>
-                <Button variant="link" asChild className="px-0">
-                <Link href="/#recommendations">For You</Link>
-                </Button>
-                <Button variant="link" asChild className="px-0">
-                <Link href="/#partners">Partners</Link>
-                </Button>
-            </nav>
-            <div className="hidden items-center gap-2 md:flex">
-                <Cart />
-                 {user ? null : (
-                    <div className='flex items-center gap-2'>
-                        <Button variant="ghost" onClick={openSignInModal}>Sign In</Button>
-                        <Button onClick={openSignUpModal}>Sign Up</Button>
-                    </div>
-                )}
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel className="font-normal">
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-sm font-medium leading-none">{user.name}</p>
+                    <p className="text-xs leading-none text-muted-foreground">
+                      {user.phone}
+                    </p>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                 <DropdownMenuItem asChild>
+                  <Link href="/dashboard">
+                    <LayoutDashboard className="mr-2 h-4 w-4" />
+                    <span>Dashboard</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/account">
+                    <User className="mr-2 h-4 w-4" />
+                    <span>My Account</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                   <Link href="/cart">
+                    <ShoppingCart className="mr-2 h-4 w-4" />
+                    <span>My Cart</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/payments">
+                    <IndianRupee className="mr-2 h-4 w-4" />
+                    <span>Payments</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/help">Help Centre</Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={signOut}>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Sign Out</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <div className='hidden items-center gap-2 md:flex'>
+              <Button variant="ghost" onClick={openSignInModal}>Sign In</Button>
+              <Button onClick={openSignUpModal}>Sign Up</Button>
             </div>
+          )}
+           <div className="md:hidden">
+              <Cart />
+           </div>
         </div>
       </div>
     </header>
