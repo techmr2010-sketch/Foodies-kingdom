@@ -20,12 +20,15 @@ export default function Header() {
   const { user, signOut, openSignInModal, openSignUpModal } = useUser();
   
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b bg-gradient-to-r from-orange-100 to-blue-100">
       <div className="container mx-auto flex h-auto flex-col items-start justify-between px-4 py-2 md:h-16 md:flex-row md:items-center md:py-0">
         <div className="flex w-full items-center justify-between md:w-auto">
           <Link href="/" className="flex items-center gap-2">
             <FoodieKingdomLogo className="h-10 w-10" />
-            <span className="text-lg font-bold font-headline">
+            <span className="text-lg font-bold font-headline hidden md:inline">
+              Foodies Kingdom
+            </span>
+             <span className="text-lg font-bold font-headline md:hidden">
               Foodies Kingdom
             </span>
           </Link>
