@@ -26,10 +26,10 @@ const AvatarLogo = () => (
     </defs>
 
     {/* Main circle with border */}
-    <circle cx="60" cy="60" r="58" fill="#E9D5FF" stroke="#8B5CF6" strokeWidth="4" />
+    <circle cx="60" cy="60" r="58" fill="#FFEFE0" stroke="#F97316" strokeWidth="4" />
 
     {/* Face */}
-    <circle cx="60" cy="65" r="30" fill="#F3E8FF" />
+    <circle cx="60" cy="65" r="30" fill="#FFF7ED" />
 
     {/* Hair */}
     <path
@@ -81,8 +81,10 @@ export default function HelplineFab() {
   const [isDragging, setIsDragging] = useState(false);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [wasDragged, setWasDragged] = useState(false);
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
+    setIsClient(true);
     // Start in bottom right corner
     setPosition({ x: window.innerWidth - 80, y: window.innerHeight - 150 });
   }, []);
@@ -148,6 +150,10 @@ export default function HelplineFab() {
       window.removeEventListener('touchend', onTouchEnd);
     };
   }, [isDragging, offset]);
+
+  if (!isClient) {
+    return null;
+  }
 
   return (
     <div
