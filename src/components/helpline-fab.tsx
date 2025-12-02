@@ -1,7 +1,8 @@
+
 'use client';
 
 import React, { useState, useRef, useEffect, MouseEvent, TouchEvent } from 'react';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const AvatarLogo = () => (
   <svg
@@ -75,6 +76,7 @@ const AvatarLogo = () => (
 
 export default function HelplineFab() {
   const fabRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
@@ -108,6 +110,12 @@ export default function HelplineFab() {
 
   const handleDragEnd = () => {
     setIsDragging(false);
+    // Use setTimeout to distinguish between drag and click
+    setTimeout(() => {
+      if (!wasDragged) {
+        router.push('/recipe-finder');
+      }
+    }, 0);
   };
   
   // Mouse events
@@ -142,32 +150,25 @@ export default function HelplineFab() {
   }, [isDragging, offset]);
 
 
-  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (wasDragged) {
-      e.preventDefault();
-    }
-  }
-
   return (
-    <Link href="/recipe-finder" passHref legacyBehavior>
-      <a onClick={handleClick} draggable="false">
-        <div
-          ref={fabRef}
-          className="fixed z-50 rounded-full cursor-grab active:cursor-grabbing shadow-lg"
-          style={{
-            left: `${position.x}px`,
-            top: `${position.y}px`,
-            width: '64px', // Reduced size
-            height: '64px', // Reduced size
-            touchAction: 'none', // Prevent scrolling on mobile while dragging
-          }}
-          onMouseDown={onMouseDown}
-          onTouchStart={onTouchStart}
-          onDragStart={(e) => e.preventDefault()}
-        >
-          <AvatarLogo />
-        </div>
-      </a>
-    </Link>
+    <div
+      ref={fabRef}
+      className="fixed z-50 rounded-full cursor-grab active:cursor-grabbing shadow-lg"
+      style={{
+        left: `${position.x}px`,
+        top: `${position.y}px`,
+        width: '64px', // Reduced size
+        height: '64px', // Reduced size
+        touchAction: 'none', // Prevent scrolling on mobile while dragging
+      }}
+      onMouseDown={onMouseDown}
+      onMouseUp={onMouseUp}
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
+      onDragStart={(e) => e.preventDefault()}
+    >
+      <AvatarLogo />
+    </div>
   );
 }
+
