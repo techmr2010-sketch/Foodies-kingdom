@@ -1,4 +1,3 @@
-
 'use client';
 
 import Link from 'next/link';
@@ -28,8 +27,8 @@ export default function BottomNav() {
             <Link href={href} key={href}>
               <div
                 className={cn(
-                  'flex flex-col items-center gap-1 text-muted-foreground w-20 relative',
-                  isActive && 'text-primary'
+                  'flex flex-col items-center gap-1 w-20 relative',
+                  isActive ? 'text-purple-700' : 'text-purple-500'
                 )}
               >
                 <Icon className="h-6 w-6" />
