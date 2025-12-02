@@ -28,8 +28,8 @@ export default function BottomNav() {
             <Link href={href} key={href}>
               <div
                 className={cn(
-                  'flex flex-col items-center gap-1 text-muted-foreground w-20 relative',
-                  isActive && 'text-primary'
+                  'flex flex-col items-center gap-1 text-purple-400 w-20 relative',
+                  isActive && 'text-purple-700'
                 )}
               >
                 <Icon className="h-6 w-6" />
