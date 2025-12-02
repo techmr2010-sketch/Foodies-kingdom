@@ -77,7 +77,7 @@ const AvatarLogo = () => (
 export default function HelplineFab() {
   const fabRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
-  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [position, setPosition] = useState<{ x: number; y: number } | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [wasDragged, setWasDragged] = useState(false);
@@ -149,6 +149,9 @@ export default function HelplineFab() {
     };
   }, [isDragging, offset]);
 
+  if (!position) {
+    return null;
+  }
 
   return (
     <div
@@ -171,4 +174,3 @@ export default function HelplineFab() {
     </div>
   );
 }
-
