@@ -77,13 +77,13 @@ const AvatarLogo = () => (
 export default function HelplineFab() {
   const fabRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
-  const [position, setPosition] = useState<{ x: number; y: number } | null>(null);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [wasDragged, setWasDragged] = useState(false);
 
   useEffect(() => {
-    // Start in bottom right corner, adjusted for smaller size
+    // Start in bottom right corner
     setPosition({ x: window.innerWidth - 80, y: window.innerHeight - 150 });
   }, []);
 
@@ -148,10 +148,6 @@ export default function HelplineFab() {
       window.removeEventListener('touchend', onTouchEnd);
     };
   }, [isDragging, offset]);
-
-  if (!position) {
-    return null;
-  }
 
   return (
     <div

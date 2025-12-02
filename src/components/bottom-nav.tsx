@@ -6,7 +6,6 @@ import { usePathname } from 'next/navigation';
 import { LayoutDashboard, User, ShoppingCart, MessageSquareQuote } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useCart } from '@/context/cart-context';
-import { useEffect, useState } from 'react';
 
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -19,11 +18,6 @@ export default function BottomNav() {
   const pathname = usePathname();
   const { cartItems } = useCart();
   const totalQuantity = cartItems.reduce((acc, item) => acc + item.quantity, 0);
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 bg-background border-t z-50 md:hidden">
@@ -35,7 +29,7 @@ export default function BottomNav() {
               <div
                 className={cn(
                   'flex flex-col items-center gap-1 text-muted-foreground w-20 relative',
-                  isClient && isActive && 'text-primary'
+                  isActive && 'text-primary'
                 )}
               >
                 <Icon className="h-6 w-6" />
