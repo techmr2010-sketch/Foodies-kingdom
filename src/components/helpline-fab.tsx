@@ -33,12 +33,24 @@ const AvatarLogo = () => (
     {/* Hair */}
     <path
       d="M35,60
-         Q50,40 85,60
+         Q50,45 85,60
          A30,30 0 0,0 85,60
-         L80,50
-         Q60,30 40,50 Z"
+         L80,55
+         Q60,35 40,55 Z"
       fill="#2d2d2d"
     />
+
+    {/* Chef's Hat */}
+    <g>
+      {/* Hat Band */}
+      <rect x="35" y="45" width="50" height="10" fill="white" stroke="#ccc" strokeWidth="1" />
+      {/* Hat Top */}
+      <path d="M 35 45 
+               Q 30 25, 45 25 
+               T 60 25 
+               T 75 25
+               Q 90 25, 85 45 Z" fill="white" stroke="#ccc" strokeWidth="1"/>
+    </g>
 
     {/* Glasses */}
     <circle cx="45" cy="65" r="10" stroke="#2d2d2d" strokeWidth="3" fill="none" />
@@ -69,7 +81,7 @@ export default function HelplineFab() {
   const [wasDragged, setWasDragged] = useState(false);
 
   useEffect(() => {
-    // Start in bottom right corner
+    // Start in bottom right corner, adjusted for smaller size
     setPosition({ x: window.innerWidth - 80, y: window.innerHeight - 150 });
   }, []);
 
@@ -145,8 +157,8 @@ export default function HelplineFab() {
           style={{
             left: `${position.x}px`,
             top: `${position.y}px`,
-            width: '64px',
-            height: '64px',
+            width: '64px', // Reduced size
+            height: '64px', // Reduced size
             touchAction: 'none', // Prevent scrolling on mobile while dragging
           }}
           onMouseDown={onMouseDown}
