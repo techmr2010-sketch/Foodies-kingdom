@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { IndianRupee } from 'lucide-react';
 import { Icons } from '@/components/icons';
 
@@ -12,10 +13,10 @@ export default function Footer() {
           </div>
           <div>
             <h4 className="font-semibold mb-2">Supported Payments</h4>
-            <div className="flex justify-center md:justify-start gap-4 text-muted-foreground">
+            <Link href="/payments" className="flex justify-center md:justify-start gap-4 text-muted-foreground hover:text-primary transition-colors">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-banknote"><rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg>
               <IndianRupee />
-            </div>
+            </Link>
             <p className="text-xs text-muted-foreground mt-2">COD & UPI</p>
           </div>
           <div>
