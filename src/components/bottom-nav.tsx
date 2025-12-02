@@ -35,9 +35,7 @@ export default function BottomNav() {
               <div
                 className={cn(
                   'flex flex-col items-center gap-1 text-muted-foreground w-20 relative',
-                  isClient && isActive && 'text-primary',
-                  isClient && !isActive && 'text-purple-400',
-                  isClient && isActive && 'text-purple-700'
+                  isClient && isActive && 'text-primary'
                 )}
               >
                 <Icon className="h-6 w-6" />
