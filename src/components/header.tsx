@@ -25,10 +25,10 @@ export default function Header() {
         <div className="flex w-full items-center justify-between md:w-auto">
           <Link href="/" className="flex items-center gap-2">
             <FoodieKingdomLogo className="h-10 w-10" />
-            <span className="text-lg font-bold font-headline hidden md:inline">
+            <span className="text-lg font-bold font-headline hidden md:inline bg-gradient-to-r from-orange-400 to-purple-400 bg-clip-text text-transparent">
               Foodies Kingdom
             </span>
-             <span className="text-lg font-bold font-headline md:hidden">
+             <span className="text-lg font-bold font-headline md:hidden bg-gradient-to-r from-orange-400 to-purple-400 bg-clip-text text-transparent">
               Foodies Kingdom
             </span>
           </Link>
