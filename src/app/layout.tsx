@@ -5,6 +5,10 @@ import { CartProvider } from '@/context/cart-context';
 import { UserProvider } from '@/context/user-context';
 import BottomNav from '@/components/bottom-nav';
 import HelplineFab from '@/components/helpline-fab';
+import { Inter } from 'next/font/google';
+import { cn } from '@/lib/utils';
+
+const inter = Inter({ subsets: ['latin'], variable: '--font-body' });
 
 export const metadata: Metadata = {
   title: 'Foodies Kingdom',
@@ -18,12 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-      </head>
-      <body className="font-body antialiased pb-16 md:pb-0">
+      <body className={cn("font-body antialiased pb-16 md:pb-0", inter.variable)}>
         <UserProvider>
           <CartProvider>
             {children}
