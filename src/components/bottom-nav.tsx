@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, User, ShoppingCart, MessageSquareQuote, Home } from 'lucide-react';
+import { LayoutDashboard, User, ShoppingCart, Home } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useCart } from '@/context/cart-context';
 import { useEffect, useState } from 'react';
@@ -12,7 +12,6 @@ const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/account', label: 'Account', icon: User },
   { href: '/cart', label: 'Cart', icon: ShoppingCart },
-  { href: '/help', label: 'Help', icon: MessageSquareQuote },
 ];
 
 export default function BottomNav() {
