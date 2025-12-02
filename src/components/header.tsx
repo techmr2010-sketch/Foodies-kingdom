@@ -66,7 +66,8 @@ export default function Header() {
           </div>
         </div>
         
-        <nav className="mt-2 flex w-full items-center gap-4 md:mt-0 md:w-auto">
+        {/* Mobile Navigation */}
+        <nav className="mt-2 flex w-full items-center gap-4 md:hidden">
           <Button variant="link" asChild className="px-0">
             <Link href="/#menu">Menu</Link>
           </Button>
@@ -78,7 +79,19 @@ export default function Header() {
           </Button>
         </nav>
         
+        {/* Desktop Navigation */}
         <div className="hidden items-center gap-2 md:flex">
+           <nav className="flex items-center gap-4">
+                <Button variant="link" asChild>
+                    <Link href="/#menu">Menu</Link>
+                </Button>
+                <Button variant="link" asChild>
+                    <Link href="/#recommendations">For You</Link>
+                </Button>
+                <Button variant="link" asChild>
+                    <Link href="/#partners">Partners</Link>
+                </Button>
+            </nav>
           <Cart />
           {user ? (
             <DropdownMenu>
