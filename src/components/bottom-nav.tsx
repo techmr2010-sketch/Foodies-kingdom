@@ -2,11 +2,13 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, User, ShoppingCart, MessageSquareQuote } from 'lucide-react';
+import { LayoutDashboard, User, ShoppingCart, MessageSquareQuote, Home } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useCart } from '@/context/cart-context';
+import { useEffect, useState } from 'react';
 
 const navItems = [
+  { href: '/', label: 'Home', icon: Home },
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/account', label: 'Account', icon: User },
   { href: '/cart', label: 'Cart', icon: ShoppingCart },
@@ -16,6 +18,12 @@ const navItems = [
 export default function BottomNav() {
   const pathname = usePathname();
   const { cartItems } = useCart();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   const totalQuantity = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
@@ -27,8 +35,8 @@ export default function BottomNav() {
             <Link href={href} key={href}>
               <div
                 className={cn(
-                  'flex flex-col items-center gap-1 w-20 relative',
-                  isActive ? 'text-purple-700' : 'text-purple-500'
+                  'flex flex-col items-center gap-1 text-muted-foreground w-20 relative',
+                  isClient && isActive && 'text-primary'
                 )}
               >
                 <Icon className="h-6 w-6" />
