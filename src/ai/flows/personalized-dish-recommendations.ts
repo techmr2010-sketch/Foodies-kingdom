@@ -20,10 +20,19 @@ export type PersonalizedDishRecommendationsInput = z.infer<
   typeof PersonalizedDishRecommendationsInputSchema
 >;
 
+const RecommendedDishSchema = z.object({
+  dishName: z.string().describe('The name of the recommended dish.'),
+  recipe: z
+    .string()
+    .describe(
+      'The detailed recipe for the dish, formatted in markdown. Include ingredients and step-by-step instructions.'
+    ),
+});
+
 const PersonalizedDishRecommendationsOutputSchema = z.object({
   recommendedDishes: z
-    .array(z.string())
-    .describe('An array of recommended dish names based on the input data.'),
+    .array(RecommendedDishSchema)
+    .describe('An array of recommended dishes with their names and recipes.'),
 });
 export type PersonalizedDishRecommendationsOutput = z.infer<
   typeof PersonalizedDishRecommendationsOutputSchema
@@ -39,15 +48,87 @@ const prompt = ai.definePrompt({
   name: 'personalizedDishRecommendationsPrompt',
   input: {schema: PersonalizedDishRecommendationsInputSchema},
   output: {schema: PersonalizedDishRecommendationsOutputSchema},
-  prompt: `You are a food recommendation expert.  Given a user's order history, dietary preferences, and popular local choices, you will recommend dishes that the user might enjoy.
+  prompt: `You are a food recommendation expert and master chef. Given a user's order history, dietary preferences, and popular local choices, you will recommend dishes that the user might enjoy and provide a detailed recipe for each.
 
 User ID: {{{userId}}}
 Order History: {{#if orderHistory}}{{#each orderHistory}}- {{{this}}}{{/each}}{{else}}No order history{{/if}}
 Dietary Preferences: {{{dietaryPreferences}}}
 Popular Local Choices: {{#if popularLocalChoices}}{{#each popularLocalChoices}}- {{{this}}}{{/each}}{{else}}No popular local choices{{/if}}
 
-Recommend dishes that the user might enjoy:
-`, // Ensure that the model outputs only relevant dish names, not conversational text.
+Recommend dishes that the user might enjoy and provide the recipe for each.
+---
+**Predefined Recipes (Use these if a recommended dish matches):**
+
+*   **Butter Chicken**
+    *   **Ingredients (serves 4):** Chicken (boneless) – 500 g, Yogurt – ½ cup, Ginger-garlic paste – 2 tbsp, Red chili powder – 1 tsp, Garam masala – 1 tsp, Butter – 3 tbsp, Tomato purée – 1 cup, Fresh cream – ½ cup, Salt – to taste.
+    *   **Method:** Marinate chicken in yogurt + spices 1 hr. Cook in butter + tomato purée. Add cream, simmer 10 min.
+
+*   **Pizza (Veg)**
+    *   **Ingredients (1 medium pizza):** Pizza base – 1, Pizza sauce – 3 tbsp, Mozzarella cheese – 1 cup grated, Veg toppings (capsicum, onion, tomato, corn) – 1 cup, Oregano + chili flakes – 1 tsp each.
+    *   **Method:** Spread sauce, add cheese + toppings, bake at 200°C for 12–15 min.
+
+*   **Paneer Butter Masala**
+    *   **Ingredients:** Paneer – 250 g, Tomato purée – 1 cup, Butter – 2 tbsp, Cream – ¼ cup, Ginger-garlic paste – 1 tbsp, Garam masala – 1 tsp, Salt – to taste.
+    *   **Method:** Cook tomato gravy, add paneer cubes, finish with butter + cream.
+
+*   **Biryani (Veg)**
+    *   **Ingredients:** Basmati rice – 2 cups, Mixed veggies – 2 cups, Yogurt – ½ cup, Biryani masala – 2 tbsp, Saffron milk – ¼ cup, Ghee – 2 tbsp.
+    *   **Method:** Layer rice + veggies, drizzle saffron milk, cook on dum 20 min.
+
+*   **Chicken Biryani**
+    *   **Ingredients:** Chicken – 500 g, Basmati rice – 2 cups, Yogurt – ½ cup, Biryani masala – 2 tbsp, Fried onions – 1 cup, Saffron milk – ¼ cup.
+    *   **Method:** Same method as veg biryani, replace veggies with marinated chicken.
+
+*   **Fried Rice (Veg)**
+    *   **Ingredients:** Cooked rice – 3 cups, Mixed veggies – 1½ cups, Soy sauce – 2 tbsp, Vinegar – 1 tbsp, Garlic – 1 tbsp chopped, Oil – 2 tbsp.
+    *   **Method:** Stir-fry garlic + veggies, add rice + sauces, toss well.
+
+*   **Chicken Fried Rice**
+    *   **Method:** Same as veg fried rice, add 1 cup diced cooked chicken.
+
+*   **Momos (Veg Steam)**
+    *   **Ingredients:** Maida – 2 cups, Water – as needed, Cabbage + carrot (grated) – 2 cups, Soy sauce – 1 tbsp, Garlic – 1 tbsp chopped, Salt – to taste.
+    *   **Method:** Make dough, fill with veg mix, steam 12 min.
+
+*   **Chicken Momos (Fry)**
+    *   **Ingredients:** Dough (maida) – 2 cups, Minced chicken – 250 g, Onion – ½ cup chopped, Garlic – 1 tbsp, Soy sauce – 1 tbsp.
+    *   **Method:** Fill, steam 10 min, then deep fry till golden.
+
+*   **French Fries**
+    *   **Ingredients:** Potatoes – 4 medium, Salt – 1 tsp, Oil – for frying.
+    *   **Method:** Cut sticks, soak in water 30 min, fry twice (blanch + crisp).
+
+*   **Samosa**
+    *   **Ingredients:** Dough (maida), filling (spiced potato + peas).
+    *   **Method:** Fill dough cones, seal, deep fry golden.
+
+*   **Bread Pakora**
+    *   **Ingredients:** Bread slices, spiced potato filling, gram flour batter.
+    *   **Method:** Stuff bread, dip in batter, deep fry.
+
+*   **Veg Roll**
+    *   **Ingredients:** Paratha, sautéed veggies, chutney.
+    *   **Method:** Place filling on paratha, roll tight.
+
+*   **Egg Roll**
+    *   **Ingredients:** Paratha, beaten egg, onion, chutney.
+    *   **Method:** Cook paratha with egg on one side, add filling, roll.
+
+*   **Chilly Potato**
+    *   **Ingredients:** Fried potato fingers, capsicum, onion, garlic, soy sauce, chili sauce.
+    *   **Method:** Toss fried potatoes with sauces + veggies.
+
+*   **Chilly Potato (Honey)**
+    *   **Method:** Same as above, add honey at the end for glaze.
+
+*   **Noodles**
+    *   **Ingredients:** Boiled noodles, veggies, soy sauce, vinegar, chili sauce.
+    *   **Method:** Stir-fry garlic + veggies, add noodles + sauces, toss.
+
+*   **Maggi**
+    *   **Method:** Cook Maggi noodles with tastemaker + water, add veggies if desired.
+---
+`,
 });
 
 const personalizedDishRecommendationsFlow = ai.defineFlow(

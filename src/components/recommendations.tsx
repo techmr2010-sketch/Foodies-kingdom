@@ -22,7 +22,9 @@ export default function Recommendations() {
       const mockHistory = ['Biryani Non Veg', 'Momos Non Veg Steam'];
       const mockPrefs = 'non-vegetarian';
       
-      const dishNames = await getRecommendations(user?.phone, mockHistory, mockPrefs);
+      const recommendations = await getRecommendations(user?.phone, mockHistory, mockPrefs);
+      const dishNames = recommendations.map(r => r.dishName);
+
 
       if (dishNames.length > 0) {
         const items = menuData.filter(item => dishNames.includes(item.name));
