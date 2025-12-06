@@ -1,3 +1,5 @@
+
+'use client';
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 
@@ -11,6 +13,7 @@ export default function Hero() {
           src={heroImage.imageUrl}
           alt={heroImage.description}
           fill
+          sizes="100vw"
           className="object-cover"
           data-ai-hint={heroImage.imageHint}
           priority

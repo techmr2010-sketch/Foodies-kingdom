@@ -1,3 +1,4 @@
+'use client';
 import Link from 'next/link';
 import { IndianRupee } from 'lucide-react';
 import { Icons } from '@/components/icons';

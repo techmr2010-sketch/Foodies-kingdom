@@ -1,3 +1,4 @@
+
 import type {Metadata} from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
@@ -5,10 +6,11 @@ import { CartProvider } from '@/context/cart-context';
 import { UserProvider } from '@/context/user-context';
 import BottomNav from '@/components/bottom-nav';
 import HelplineFab from '@/components/helpline-fab';
-import { Inter } from 'next/font/google';
+import { Inter, Lobster } from 'next/font/google';
 import { cn } from '@/lib/utils';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-body' });
+const lobster = Lobster({ weight: '400', subsets: ['latin'], variable: '--font-headline' });
 
 export const metadata: Metadata = {
   title: 'Foodies Kingdom',
@@ -22,7 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={cn("font-body antialiased pb-16 md:pb-0", inter.variable)}>
+      <body className={cn("font-body antialiased pb-16 md:pb-0", inter.variable, lobster.variable)}>
         <UserProvider>
           <CartProvider>
             {children}

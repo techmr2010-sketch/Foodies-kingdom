@@ -1,3 +1,6 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -65,6 +68,5 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: var(--font-body);
   }
 }
